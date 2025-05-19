@@ -284,7 +284,7 @@ php artisan serve
 npm run dev
 
 ```
-```markdown
+markdown
 # 📋 Daftar Tugas Tim Galeri Foto
 
 Halo tim! Ini daftar tugas yang harus kita kerjain berdasarkan rencana proyek **Galeri Foto**. Semua tugas harus selesai sesuai timeline (Minggu - Jumat, 19-23 Mei 2025). Yuk, kita bagi-bagi tugas biar semuanya kecepetan! 🚀
