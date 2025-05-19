@@ -1,114 +1,141 @@
-📸 Galeri Foto
-Halo bro, selamat datang di Galeri Foto! Ini aplikasi galeri foto kece berbasis Laravel buat ngatur dan pamerin foto-foto dengan gampang. Kamu bisa upload, atur, sampe arsipin foto, plus ada fitur canggih kayak bikin folder, operasi massal, dan login akun. Dibikin bareng tim, aplikasi ini punya tampilan oke, backend kuat, dan database yang rapi banget!
+# 📸 Galeri Foto
 
-🚀 Apa Itu Galeri Foto?
-Galeri Foto adalah aplikasi web yang nyimpen judul dan URL foto, trus ditampilin pake tag HTML <img>. Aplikasi ini support CRUD buat foto dan folder, plus fitur keren kayak upload banyak sekaligus, hapus massal, dan favorit. Databasenya namanya galeri dan dikelola pake XAMPP.
-Fitur Keren
+---
 
-Ngatur Foto:
-Upload foto satu-satu atau banyak sekaligus (judul otomatis dari nama file).
-Foto disimpen di folder proyek, URL-nya masuk database.
-Bisa lihat detail foto (nama, tanggal upload, ukuran).
-Tandain foto favorit, urutin dari terbaru ke terlama atau sebaliknya.
+Halo bro, selamat datang di **Galeri Foto**!  
+Ini aplikasi galeri foto kece berbasis Laravel buat ngatur dan pamerin foto-foto dengan gampang. Kamu bisa upload, atur, sampai arsipin foto, plus ada fitur canggih kayak bikin folder, operasi massal, dan login akun.
 
+Dibikin bareng tim, aplikasi ini punya tampilan oke, backend kuat, dan database yang rapi banget!
 
-Ngatur Folder:
-Bikin, edit, atau hapus folder (pake nama folder sebagai kunci).
-Pindahin foto ke folder yang udah ada atau bikin baru secara massal.
+---
 
+## 🚀 Apa Itu Galeri Foto?
 
-Cari & Arsip:
-Cari foto berdasarkan nama folder atau judul foto.
-Arsipin foto pake kata sandi biar aman.
+Galeri Foto adalah aplikasi web yang nyimpen judul dan URL foto, lalu ditampilin pake tag HTML `<img>`.  
+Aplikasi ini support CRUD buat foto dan folder, plus fitur keren seperti:  
+- Upload banyak sekaligus  
+- Hapus massal  
+- Tandain favorit  
+- Login akun  
+- Dan lain-lain  
 
+Database-nya bernama **galeri** dan dikelola pake XAMPP.
 
-Operasi Massal:
-Hapus banyak foto pake checkbox (bisa dibatalin).
-Upload banyak foto sekaligus, bisa dibatalin juga.
+---
 
+## 🌟 Fitur Keren
 
-Akun Pengguna:
-Bikin akun pake username dan kata sandi.
-Login aman pake Laravel Breeze.
+### Ngatur Foto
+- Upload satu atau banyak foto sekaligus (judul otomatis dari nama file).  
+- Foto disimpen di folder proyek, URL masuk database.  
+- Lihat detail foto: nama, tanggal upload, ukuran.  
+- Tandain favorit, urutin foto (terbaru-terlama).
 
+### Ngatur Folder
+- Bikin, edit, hapus folder (nama folder unik).  
+- Pindahin foto ke folder yang ada atau bikin folder baru massal.
 
-Urutin Foto:
-Urutin foto dari terbaru ke terlama atau terlama ke terbaru.
+### Cari & Arsip
+- Cari foto berdasarkan nama folder atau judul foto.  
+- Arsipin foto dengan kata sandi agar aman.
 
+### Operasi Massal
+- Hapus banyak foto dengan checkbox, bisa dibatalin.  
+- Upload banyak foto sekaligus, bisa dibatalin juga.
 
+### Akun Pengguna
+- Buat akun dengan username & password.  
+- Login aman dengan Laravel Breeze.
 
+### Urutin Foto
+- Urutkan foto dari terbaru ke terlama atau sebaliknya.
 
-🗄️ Struktur Database
-Database galeri dirancang buat ngelola foto, folder, pengguna, dan arsip dengan efisien. Ini skema tabelnya, lengkap sama kolom, kunci, dan relasinya.
+---
 
+## 🗄️ Struktur Database
 
+| Tabel    | Kolom                                               | Kunci                      |
+| -------- | -------------------------------------------------- | -------------------------- |
+| **users**   | id (PK, int), username (varchar), password (varchar) | PK: id                     |
+| **folders** | id (PK, int), name (varchar, unique)                  | PK: id                    |
+| **photos**  | id (PK, int), title (varchar), url (varchar), folder_id (FK, int), created_at (timestamp), size (int), is_favorite (boolean) | PK: id, FK: folder_id      |
+| **archives**| id (PK, int), photo_id (FK, int), password (varchar)  | PK: id, FK: photo_id       |
 
-Tabel
-Kolom
-Kunci
+### Relasi
+- **Users → Photos:** Satu pengguna bisa upload banyak foto (1-to-many).  
+- **Folders → Photos:** Satu folder punya banyak foto (1-to-many).  
+- **Photos → Archives:** Satu foto bisa diarsipin dengan kata sandi (1-to-1).
 
+> Skema lengkap dan relasi digambar di DrawIO supaya makin jelas.
 
+---
 
-users
-id (PK, int), username (varchar), password (varchar)
-Primary: id
+## 🛠️ Teknologi yang Dipake
 
+| Komponen     | Teknologi                        |
+| ------------ | ------------------------------- |
+| Framework    | Laravel (backend & Laravel Breeze) |
+| Database     | MySQL (dikelola dengan XAMPP)    |
+| Frontend     | Blade Templates, Tailwind CSS    |
+| Tools        | VS Code, Figma, DrawIO, GitHub, Word & Excel |
 
-folders
-id (PK, int), name (varchar, unique)
-Primary: id
+---
 
+## 👥 Tim & Tugasnya
 
-photos
-id (PK, int), title (varchar), url (varchar), folder_id (FK, int), created_at (timestamp), size (int), is_favorite (boolean)
-Primary: id, Foreign: folder_id
+| Nama                         | Peran                   | Tugas Utama                                                                 |
+| ----------------------------|-------------------------|----------------------------------------------------------------------------|
+| Eurecsan Dewantoro Putro     | Leader, Frontend, Designer | Pimpin proyek, desain UI/UX (Figma), koding frontend, flowchart & prototipe |
+| Nizar Retisalya Sulkazimah   | Database                 | Desain skema database, atur XAMPP, relasi tabel                           |
+| Gayuh Aza                   | Database, Frontend       | Bantu desain database, koding frontend                                   |
+| Ahmad Ediwan Ghani          | Backend, Tester, Frontend| Controller/model backend, test fitur, bantu frontend                     |
+| M. Arrizal Rahman Adi Laksono| Tester                   | Bikin test case, checklist, catat hasil & saran                          |
+| Tsabitah Sarah              | Designer                 | Desain layar UI/UX, bantu prototipe                                       |
 
+---
 
-archives
-id (PK, int), photo_id (FK, int), password (varchar)
-Primary: id, Foreign: photo_id
+## 📅 Jadwal Kerja (Minggu, 19 Mei 2025)
 
+| Hari       | Kegiatan                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| Minggu-Rabu| Desain UI/UX (layar, flowchart, prototipe), finalisasi database & relasi, frontend & backend coding, checklist testing |
+| Rabu       | Rapat tim via Zoom untuk cek progress                                                    |
+| Jumat      | Finalisasi desain UI/UX                                                                  |
 
-Relasi
+---
 
-Users ↔ Photos: Satu pengguna bisa upload banyak foto (satu-ke-banyak).
-Folders ↔ Photos: Satu folder bisa punya banyak foto (satu-ke-banyak).
-Photos ↔ Archives: Satu foto bisa diarsipin dengan kata sandi (satu-ke-satu).
+## 🧪 Rencana Testing
 
-Digambar pake DrawIO biar lebih jelas!
+- Uji semua fitur (CRUD, operasi massal, pencarian, login, dll).  
+- Buat checklist detail dan kriteria sukses.  
+- Catat hasil di Word/Excel.  
+- Kasih saran perbaikan bila ada bug.
 
-🛠️ Teknologi yang Dipake
+**Contoh Checklist:**
 
-Framework: Laravel (buat backend & login pake Laravel Breeze)
-Database: MySQL (dikelola pake XAMPP)
-Frontend: Blade templates, Tailwind CSS (buat styling kece)
-Tools:
-Visual Studio Code (buat koding frontend & backend)
-Figma (desain UI/UX)
-DrawIO (skema database)
-GitHub (nyimpen kode)
-Microsoft Word & Excel (laporan testing)
+| Fitur        | Kriteria Sukses                                      |
+| ------------ | --------------------------------------------------- |
+| Upload Foto  | File tersimpan di folder, URL masuk DB, waktu tercatat |
+| Hapus Massal | Checkbox dan tombol batal berfungsi dengan baik     |
+| Pencarian    | Hasil sesuai nama folder atau judul foto             |
 
+---
 
+## ⚙️ Cara Setup
 
+```bash
+git clone https://github.com/your-repo/galeri-foto.git
+cd galeri-foto
 
-👥 Tim & Tugasnya
+composer install
+npm install
 
+cp .env.example .env
+# Isi konfigurasi database di .env
 
+# Setup XAMPP, buat database 'galeri'
 
-Nama
-Peran
-Tugas
+php artisan migrate
 
-
-
-Eurecsan Dewantoro Putro
-Leader, Frontend, Designer
-Nge-lead proyek, desain UI/UX di Figma, koding frontend, bikin flowchart & prototipe
-
-
-Nizar Retisalya Sulkazimah
-Database
-Desain skema database, atur
-
-
+php artisan serve
+npm run dev
