@@ -140,6 +140,25 @@ php artisan migrate
 php artisan serve
 npm run dev
 ```
+```
+# 1. Cek status perubahan di local
+git status
+
+# 2. Tambahkan file yang ingin di-commit (semua perubahan)
+git add .
+
+# 3. Commit dengan pesan yang jelas dan deskriptif
+git commit -m "Tambah fitur upload foto dan buat folder"
+
+# 4. Pastikan kamu berada di branch yang benar (misal: main atau develop)
+git branch
+
+# 5. Push commit ke remote repository
+git push origin nama-branch
+
+# 6. Jika perlu buat branch baru, gunakan
+git checkout -b nama-branch-baru
+```
 ---
 
 ## 👥 Tim & Tugasnya
