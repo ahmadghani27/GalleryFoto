@@ -140,6 +140,7 @@ php artisan migrate
 php artisan serve
 npm run dev
 ```
+## 🏃‍♂️💨 Push code
 ```
 # 1. Cek status perubahan di local
 git status
