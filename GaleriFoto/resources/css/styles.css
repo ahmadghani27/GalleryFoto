@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Inter';
+    src: url("{{ asset('fonts/Inter-Regular.ttf') }}") format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+.f-inter {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
