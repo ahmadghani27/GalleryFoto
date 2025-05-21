@@ -24,25 +24,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // Validasi input dari form login (LoginRequest biasanya sudah ada rules)
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $request->authenticate();
 
-        // Autentikasi menggunakan username & password
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-            $request->session()->regenerate();
+        $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard', absolute: false));
-        }
-
-        // Jika gagal login, lempar error validasi ke view login
-        return back()->withErrors([
-            'username' => 'Username atau password salah.',
-        ]);
+        return redirect()->intended(route('dashboard', absolute: false));
     }
-
 
     /**
      * Destroy an authenticated session.
