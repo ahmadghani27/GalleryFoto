@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('role')->default('visitor'); // Role: visitor atau admin
+            $table->enum('role', ['visitor', 'admin'])->default('visitor'); // Role: visitor atau admin
             $table->rememberToken();
             $table->timestamps();
         });
