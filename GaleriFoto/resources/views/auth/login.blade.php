@@ -19,11 +19,11 @@
 
                 <!-- Username -->
                 <div class="flex flex-col gap-3">
-                    <label for="email" class="text-base font-medium text-neutral-900">Username</label>
-                    <input id="email" type="text" name="email" :value="old('email')" required autofocus
+                    <label for="username" class="text-base font-medium text-neutral-900">Username</label>
+                    <input id="username" type="text" name="username" :value="old('username')" required autofocus
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan username">
-                    <x-input-error :messages="$errors->get('email')" class="mt-1 text-sm text-red-500" />
+                    <x-input-error :messages="$errors->get('username')" class="mt-1 text-sm text-red-500" />
                 </div>
 
                 <!-- Password -->
