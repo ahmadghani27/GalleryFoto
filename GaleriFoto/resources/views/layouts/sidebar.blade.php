@@ -15,7 +15,7 @@
 <body class="antialiased f-inter">
     <div class="flex h-dvh">
         <div x-data="{open: true}" x-init="open = window.innerWidth >= 768" @resize.window="open = window.innerWidth >= 900" class="flex h-full w-full">
-            <aside :class="open ? 'w-64' : 'w-16'" class="bg-white text-black transition-all duration-300 ease-in-out flex flex-col border-r-1 border-gray-300">
+            <aside :class="open ? 'w-64' : 'w-16'" class="bg-white text-black transition-all duration-300 ease-in-out flex flex-col border-r-1 border-gray-300 ">
                 <div class="flex items-center justify-between p-4">
                     <span class="text-lg font-semibold text-[20px]" x-show="open">GaleriFoto</span>
                     <button @click="open = !open" class="flex  transition-all ease-in-out rounded">
