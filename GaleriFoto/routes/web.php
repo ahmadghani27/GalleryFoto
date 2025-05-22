@@ -6,12 +6,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/1', function () {
-    return view('layouts.sidebar');
-});
 // redirect agar langsung menuju ke halaman dashboard
-Route::get('/', function () {
-    return redirect('/dashboard');
+Route::get('/photo', function () {
+    return view('photo.index');
 });
 
 Route::get('/dashboard', function () {
