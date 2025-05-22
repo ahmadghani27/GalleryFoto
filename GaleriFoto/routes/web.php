@@ -11,9 +11,9 @@ Route::get('/photo', function () {
     return view('photo.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/foto', function () {
+    return view('menu.photo');
+})->middleware(['auth', 'verified'])->name('foto');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

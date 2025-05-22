@@ -34,22 +34,22 @@
     </div>
     <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
         <div class="aspect-square rounded-md overflow-hidden">
-            <img src="{{ asset('build/assets/img/sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
     </div>
 </div>
