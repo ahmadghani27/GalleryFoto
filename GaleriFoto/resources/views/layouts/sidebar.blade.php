@@ -6,79 +6,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Pixelora')</title>
 
     <!-- Scripts -->
     @vite(['resources/css/styles.css', 'resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="antialiased f-inter">
-    <div class="flex h-screen">
-        <div class="w-64 h-full px-2 py-8 bg-white inline-flex flex-col justify-start items-center gap-7 overflow-hidden">
-            <div class="self-stretch px-4 inline-flex justify-between items-center">
-                <div class="justify-start text-black text-2xl font-bold  ">Galeri Foto</div>
-                <div class="w-8 h-8 bg-zinc-300">
-                    <img src="{{ asset('build/assets/img/left_panel_close.png') }}" alt="Close button">
+    <div class="flex h-dvh">
+        <div x-data="{open: true}" x-init="open = window.innerWidth >= 768"  @resize.window="open = window.innerWidth >= 900" class="flex h-full w-full">
+            <aside :class="open ? 'w-64' : 'w-16'" class="bg-white text-black transition-all duration-300 ease-in-out flex flex-col border-r-1 border-gray-300"> 
+                <div class="flex items-center justify-between p-4">
+                    <span class="text-lg font-semibold text-[20px]" x-show="open">GaleriFoto</span>
+                    <button @click="open = !open" class="flex  transition-all ease-in-out rounded">
+                         <span class="material-symbols-outlined text-[32px]">left_panel_close</span>
+                    </button>
                 </div>
-            </div>
-            <div class="self-stretch flex flex-col justify-start items-start gap-4">
-                <div class="px-4 inline-flex justify-center items-center gap-2.5">
-                    <div class="text-center justify-start text-black/50 text-base font-semibold  ">MENU</div>
-                </div>
-                <div class="self-stretch flex flex-col justify-start items-start">
-                    <div class="self-stretch px-5 py-5 bg-zinc-100 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="active" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/foto_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Foto</div>
-                    </div>
-                    <div class="self-stretch px-5 py-5 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="folder_open" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/album_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Album</div>
-                    </div>
-                    <div class="self-stretch px-5 py-5 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="archive" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/arsip_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Arsip</div>
-                    </div>
-                    <div class="self-stretch px-5 py-5 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="love" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/favorit_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Favorit</div>
-                    </div>
-                </div>
-            </div>
-            <div class="self-stretch flex flex-col justify-start items-start gap-4">
-                <div class="px-4 inline-flex justify-center items-center gap-2.5">
-                    <div class="flex justify-center items-center gap-2.5">
-                        <div class="text-center justify-start text-black/50 text-base font-semibold  ">ANDA</div>
-                    </div>
-                </div>
-                <div class="self-stretch flex flex-col justify-start items-start">
-                    <div class="self-stretch px-5 py-5 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="account_box" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/akun_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Akun</div>
-                    </div>
-                    <div class="self-stretch px-5 py-5 rounded-2xl inline-flex justify-start items-center gap-5">
-                        <div data-property-1="exit_to_app" class="w-10 h-10 relative">
-                            <img src="{{ asset('build/assets/img/keluar_menu.png') }}" alt="Close button">
-                        </div>
-                        <div class="text-center justify-start text-black text-xl font-medium  ">Keluar</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <nav class="p-2 flex">
+                    <div class="flex-col w-full">
+                        <div class="text-[14px] text-slate-400 mb-2 px-2 font-semibold" x-show="open">MENU</div>
+                        <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-[32px]">image</span>
+                            <span class="text-[20px] font-medium">Foto</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-[32px]">folder_open</span>
+                            <span class="text-[20px] font-medium">Album</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-[32px]">archive</span>
+                            <span class="text-[20px] font-medium">Arsip</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-[32px]">favorite</span>
+                            <span class="text-[20px] font-medium">Favorit</span>
+                        </a>
+                        <div class="text-[14px] text-slate-400 mb-2 mt-4 px-2 font-semibold" x-show="open">ANDA</div>
+                        <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                            <span class="material-symbols-outlined text-[32px]">account_box</span>
+                            <span class="text-[20px] font-medium">Akun</span>
+                        </a>
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
 
-        <main class="flex-1 p-8 bg-gray-100">
-            <h1 class="text-2xl font-bold">Field untuk main</h1>
-            @yield('content')
-        </main>
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                                <span class="material-symbols-outlined text-[32px]">exit_to_app</span>
+                                <span class="text-[20px] font-medium">Keluar</span>
+                            </a>
+                        </form>
+                    </div>
+                </nav>
+            </aside>
+
+            <main class="flex-1 p-8 bg-gray-100">
+                @yield('content')
+            </main>
+        </div>
+        
     </div>
 
 </body>

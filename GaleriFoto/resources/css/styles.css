@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 @font-face {
     font-family: 'Inter';
     src: url("{{ asset('fonts/Inter-Regular.ttf') }}") format('truetype');
