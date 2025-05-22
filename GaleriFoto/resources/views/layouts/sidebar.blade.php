@@ -85,17 +85,9 @@
         </div>
 
         <!-- Main Content -->
-        <main class="flex-1 py-4 px-8 bg-gray-100 md:ml-64">
+        <main class="flex-1 bg-gray-100 md:ml-64">
             @yield('content')
         </main>
     </div>
-
-    <!-- JavaScript for Sidebar Toggle -->
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-        }
-    </script>
 </body>
 </html>
