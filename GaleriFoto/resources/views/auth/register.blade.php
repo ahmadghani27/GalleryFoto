@@ -25,13 +25,13 @@
 
 
                 <!-- Email -->
-                <!-- <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-3">
                     <label for="email" class="text-base font-medium text-neutral-900">Email</label>
                     <input id="email" type="email" name="email" :value="old('email')" required
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan email">
                     <x-input-error :messages="$errors->get('email')" class="mt-1 text-sm text-red-500" />
-                </div> -->
+                </div>
 
                 <!-- Password -->
                 <div class="flex flex-col gap-3">
