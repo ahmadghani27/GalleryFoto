@@ -51,13 +51,13 @@
 
                 <!-- Submit Button -->
                 <button type="submit"
-                    class="w-full py-5 bg-neutral-900 text-white font-bold text-base rounded-2xl hover:bg-neutral-800 transition">
+                    class="btn btn-neutral w-full py-6 bg-neutral-300 text-white font-bold text-base rounded-2xl hover:bg-neutral-800 transition">
                     Masuk
                 </button>
             </form>
 
             <!-- Register Link -->
-            <div class="mt-4 text-base text-neutral-900">
+            <div class="mt-4 text-base text-stone-900">
                 Belum punya akun?
                 <a href="{{ route('register') }}" class="font-semibold hover:underline">Buat akun</a>
             </div>

@@ -14,9 +14,10 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('photo.akun', [
             'user' => $request->user(),
         ]);
     }
@@ -31,10 +32,11 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+        
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('akun')->with('status', 'Username berhasil diperbarui');
     }
 
     /**
@@ -44,6 +46,9 @@ class ProfileController extends Controller
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
+        ],[
+            'password.required' => 'Kata sandi wajib diisi',
+            'password.current_password' => 'Kata sandi salah'
         ]);
 
         $user = $request->user();

@@ -10,3 +10,13 @@
 .f-inter {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+* {
+    font-size: 16px;
+    color: #121212;
+}
+
+.wrapper-old-username:has(input:disabled)  {
+    background-color: #f2f2f2;
+    color: #888;
+}
