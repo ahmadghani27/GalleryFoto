@@ -8,12 +8,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 // redirect agar langsung menuju ke halaman dashboard
-Route::get('/photo', function () {
+Route::get('/foto', function () {
     return view('photo.index');
 });
 
 Route::get('/foto', function () {
-    return view('photo.photo');
+    return view('photo.index');
 })->middleware(['auth', 'verified'])->name('foto');
 
 
