@@ -3,50 +3,51 @@
 @section('title', 'Akun')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">Informasi Akun</h1>
-    @if (session('status'))
-    <div class="toast toast-center" x-data="{ show: true }" x-show="show"  x-init="setTimeout(() => show = false, 5000)">
-        <div class="flex items-center alert bg-green-300 border-none">
-            <span>{{ session('status') }}</span>
-            <button type="button" class="flex text-sm hover:text-black text-gray-800" @click="show = false">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-    </div>
-    @endif
-    <div class="flex p-6 bg-white gap-8 flex-wrap rounded-md justify-between items-center">
-        <div class="flex gap-8">
-            <div class="flex-col">
-                <div class="text-[16px] opacity-50">Username</div>
-                <div class="text-[20px] font-medium">{{  $user->username }}</div>
-            </div>
-            <div>
-                <div class="text-[16px] opacity-50">Bergabung pada</div>
-                <div class="text-[20px] font-medium">{{ $user->created_at->translatedFormat('d F Y') }}</div>
+    <div class="p-8">
+        <h1 class="text-2xl font-bold mb-4">Informasi Akun</h1>
+        @if (session('status'))
+        <div class="toast toast-center" x-data="{ show: true }" x-show="show"  x-init="setTimeout(() => show = false, 5000)">
+            <div class="flex items-center alert bg-green-300 border-none">
+                <span>{{ session('status') }}</span>
+                <button type="button" class="flex text-sm hover:text-black text-gray-800" @click="show = false">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
         </div>
-        <div class="flex gap-8">
-            <button type="button" class="flex items-center gap-4 p-4 bg-white border-2 border-black rounded-md" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-username' }))">
-                <span class="material-symbols-outlined">edit</span>
-                <span class="">Ganti username</span>
-            </button>
-            <button type="button" class="flex items-center gap-4 p-4 bg-black rounded-md" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'reset-password' }))">
-                <span class="material-symbols-outlined text-white">cached</span>
-                <span class="text-white">Reset password</span>
-            </button>
-            
+        @endif
+        <div class="flex p-6 bg-white gap-8 flex-wrap rounded-md justify-between items-center">
+            <div class="flex gap-8">
+                <div class="flex-col">
+                    <div class="text-[16px] opacity-50">Username</div>
+                    <div class="text-[20px] font-medium">{{  $user->username }}</div>
+                </div>
+                <div>
+                    <div class="text-[16px] opacity-50">Bergabung pada</div>
+                    <div class="text-[20px] font-medium">{{ $user->created_at->translatedFormat('d F Y') }}</div>
+                </div>
+            </div>
+            <div class="flex gap-8">
+                <button type="button" class="flex items-center gap-4 p-4 bg-white border-2 border-black rounded-md" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-username' }))">
+                    <span class="material-symbols-outlined">edit</span>
+                    <span class="">Ganti username</span>
+                </button>
+                <button type="button" class="flex items-center gap-4 p-4 bg-black rounded-md" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'reset-password' }))">
+                    <span class="material-symbols-outlined text-white">cached</span>
+                    <span class="text-white">Reset password</span>
+                </button>
+                
+            </div>
         </div>
+
+        <h1 class="text-2xl font-bold mt-8 mb-4">Hapus Akun</h1>
+        <p class="text-gray-600 text-md">
+            Setelah akun Anda dihapus, semua sumber daya dan datanya akan dihapus secara permanen. Sebelum menghapus akun Anda, silakan unduh data atau informasi apa pun yang ingin Anda simpan
+        </p>
+
+        <button type="button" class="bg-red-600 px-6 py-3 rounded-md mt-4 text-white font-semibold text-sm"
+                onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'confirm-user-deletion' }))"
+        > HAPUS AKUN</button>
     </div>
-
-    <h1 class="text-2xl font-bold mt-8 mb-4">Hapus Akun</h1>
-    <p class="text-gray-600 text-md">
-        Setelah akun Anda dihapus, semua sumber daya dan datanya akan dihapus secara permanen. Sebelum menghapus akun Anda, silakan unduh data atau informasi apa pun yang ingin Anda simpan
-    </p>
-
-    <button type="button" class="bg-red-600 px-6 py-3 rounded-md mt-4 text-white font-semibold text-sm"
-            onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'confirm-user-deletion' }))"
-    > HAPUS AKUN</button>
-
     
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6"
