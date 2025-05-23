@@ -18,8 +18,8 @@
                 close
             </span>
         </div>
-        <!-- Bagian Filter dan Informasi -->
-        <div class="w-full flex justify-between items-center mt-3">
+
+        <article class="w-full flex justify-between items-center mt-3">
             <div class="text-black text-xl font-normal font-inter">Menampilkan 1 Foto</div>
             <div class="flex justify-end items-center gap-5">
                 <div x-data="{ open: false, selected: 'Terbaru' }" class="relative">
@@ -61,8 +61,8 @@
                     </span>
                 </div>
             </div>
-        </div>
-    </div>
+        </article>
+    </header>
 
     <div>
         <div class="self-stretch justify-start text-black text-xl font-medium f-inter">“Monyet”</div>
@@ -107,6 +107,6 @@
         <div class="aspect-square rounded-sm overflow-hidden">
             <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
         </div>
-    </div>
+    </section>
 </div>
 @endsection
