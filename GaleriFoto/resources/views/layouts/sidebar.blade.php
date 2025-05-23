@@ -49,7 +49,7 @@
                         </a>
                         <div class="text-[14px] text-slate-400 mb-2 mt-4 px-2 font-semibold" x-show="open">ANDA</div>
                         <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
-                        <a href="{{ route('akun') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                        <a href="{{ route('akun') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 transition-all ease-in-out {{ Route::is('akun') ? '!bg-slate-100' : '' }}">
                             <span class="material-symbols-outlined text-[32px]">account_box</span>
                             <span class="text-[20px] font-medium" x-show="open">Akun</span>
                         </a>
