@@ -99,3 +99,13 @@
     </div>
 </div>
 @endsection
+
+
+<!-- dibawah ini jika sudah dihubungkan dengan database -->
+    <!-- <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+        @foreach($photos as $photo)
+        <div class="aspect-square rounded-md overflow-hidden">
+            <img src="{{ asset($photo->path) }}" alt="{{ $photo->alt_text }}" class="w-full h-full object-cover min-w-[240px] max-w-[400px]">
+        </div>
+        @endforeach
+    </div> -->
