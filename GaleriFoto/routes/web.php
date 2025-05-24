@@ -4,13 +4,12 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 // redirect agar langsung menuju ke halaman dashboard
-Route::get('/foto', function () {
-    return view('photo.index');
+Route::get('/', function () {
+    return redirect('/login');
 });
+
+
 
 Route::get('/foto', function () {
     return view('photo.index');
