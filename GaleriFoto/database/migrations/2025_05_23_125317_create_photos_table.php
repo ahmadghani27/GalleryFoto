@@ -12,7 +12,10 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('user_username');
             $table->unsignedBigInteger('archive_id');
-            $table->text('file_path');
+            $table->string('file_path'); // Menyimpan path relatif ke file di storage
+            $table->string('file_name'); // Nama asli file
+            $table->string('mime_type'); // Tipe MIME (image/jpeg, image/png, dll)
+            $table->unsignedBigInteger('file_size'); // Ukuran file dalam bytes
             $table->text('caption')->nullable();
             $table->timestamps();
 

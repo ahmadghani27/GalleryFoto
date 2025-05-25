@@ -39,7 +39,7 @@
                             <span class="material-symbols-outlined text-[32px]">folder_open</span>
                             <span class="text-[20px] font-medium" x-show="open" x-show="open">Album</span>
                         </a>
-                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                        <a href="{{ route('arsip') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
                             <span class="material-symbols-outlined text-[32px]">archive</span>
                             <span class="text-[20px] font-medium" x-show="open">Arsip</span>
                         </a>

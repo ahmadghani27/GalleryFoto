@@ -114,28 +114,6 @@
         </div>
     </div>
 
-    <!-- Include Alpine JS -->
-    <!-- <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 max-w-full">
-        <div class="relative aspect-square bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"> -->
-    <!-- Gambar dengan overlay untuk keterangan -->
-    <!-- <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="absolute inset-0 w-full h-full object-cover"> -->
-
-    <!-- Keterangan yang menimpa bagian bawah -->
-    <!-- <div class="absolute bottom-0 left-0 right-0 p-4 bg-white">
-                <div class="flex justify-between items-center text-white">
-                    <div class="space-y-1">
-                        <h3 class="text-lg font-semibold">Kenangan</h3>
-                        <p class="text-sm opacity-90">Dibuat 25 Mei 2025</p>
-                    </div>
-                    <div class="flex items-center space-x-2"></div>>
-                        <span class="material-symbols-outlined cursor-pointer">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 @endsection
