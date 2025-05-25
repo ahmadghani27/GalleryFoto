@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $request->session()->regenerate();
 
-            return redirect('photo');
+            return redirect('foto');
 
         }
 

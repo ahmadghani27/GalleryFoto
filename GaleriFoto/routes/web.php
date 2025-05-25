@@ -5,17 +5,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-// redirect agar langsung menuju ke halaman dashboard
-Route::get('/photo', function () {
-    return view('photo.index');
+    return redirect()->route('login');
 });
 
 Route::get('/foto', function () {
-    return view('photo.photo');
+    return view('photo.foto');
 })->middleware(['auth', 'verified'])->name('foto');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');

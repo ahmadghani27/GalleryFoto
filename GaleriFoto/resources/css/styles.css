@@ -20,3 +20,19 @@
     background-color: #f2f2f2;
     color: #888;
 }
+
+.checkbox:checked:hover {
+    background-color:unset !important;
+}
+
+.checkbox:checked:focus {
+    background-color:unset !important;
+}
+
+.checkbox:checked:active {
+    background-color:unset !important;
+}
+
+.icon-filled {
+    font-variation-settings: 'FILL' 1;
+}
