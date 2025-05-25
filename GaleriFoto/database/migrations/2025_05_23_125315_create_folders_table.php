@@ -14,7 +14,10 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
 
-            $table->index('name');
+            $table->foreign('user_username')->references('username')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->index('name', 'user_username');
         });
     }
 

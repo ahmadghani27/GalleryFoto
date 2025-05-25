@@ -12,11 +12,17 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('user_username');
             $table->string('password');
-            $table->string('name');
             $table->text('file_path');
             $table->timestamps();
 
-            $table->index('name');
+            $table->foreign('user_username')->references('username')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('password')->references('password')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+                
+            $table->index('user_username');
         });
     }
 

@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('photos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user_username');
-            $table->unsignedBigInteger('archive_id')->nullable(); // Ubah menjadi nullable
+            $table->unsignedBigInteger('folder')->nullable(); // Ubah menjadi nullable
+            $table->boolean('archive')->default(false); // Ubah menjadi nullable
             $table->string('file_path');
             $table->string('file_name');
             $table->string('mime_type');
@@ -19,8 +20,14 @@ return new class extends Migration
             $table->text('caption')->nullable();
             $table->timestamps();
 
-            $table->index('user_username');
-            $table->index('file_name');
+            $table->foreign('user_username')->references('username')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('folder')->references('id')->on('folders')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+                
+            $table->index(['user_username', 'file_name']);
         });
     }
 
