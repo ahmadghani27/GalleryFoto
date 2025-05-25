@@ -1,0 +1,1 @@
+<li><a {{ $attributes->merge(['class' => 'flex gap-3']) }}>{{ $slot }}</a></li>

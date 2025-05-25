@@ -21,7 +21,6 @@ Route::get('/arsip', function () {
     return view('photo.arsip');
 })->name('arsip');
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
