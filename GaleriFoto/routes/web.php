@@ -15,7 +15,6 @@ Route::get('/foto', function () {
     return view('photo.index');
 })->middleware(['auth', 'verified'])->name('foto');
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
