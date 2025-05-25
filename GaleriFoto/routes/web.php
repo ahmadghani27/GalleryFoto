@@ -4,12 +4,15 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// redirect agar langsung menuju ke halaman dashboard
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect('/login');
 });
 
+
+
 Route::get('/foto', function () {
-    return view('photo.foto');
+    return view('photo.index');
 })->middleware(['auth', 'verified'])->name('foto');
 
 Route::middleware('auth')->group(function () {

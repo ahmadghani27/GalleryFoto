@@ -29,11 +29,13 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'username' => $request->username,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
@@ -41,6 +43,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/'); // ubah ke dashboard kamu bila perlu
+        return redirect('/foto'); // ubah ke dashboard kamu bila perlu
     }
 }

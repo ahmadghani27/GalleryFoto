@@ -1,23 +1,20 @@
 <?php
-
+// database/migrations/2025_05_23_194600_create_users_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
-    public function up(): void
+    public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('username')->unique();
+            $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['visitor', 'admin'])->default('visitor'); // Role: visitor atau admin
-            $table->rememberToken();
             $table->timestamps();
         });
-
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('username')->primary();
@@ -35,7 +32,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
     }
-
 
     public function down(): void
     {
