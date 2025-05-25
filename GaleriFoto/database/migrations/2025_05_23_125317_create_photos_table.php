@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('photos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user_username');
-            $table->unsignedBigInteger('archive_id');
-            $table->string('file_path'); // Menyimpan path relatif ke file di storage
-            $table->string('file_name'); // Nama asli file
-            $table->string('mime_type'); // Tipe MIME (image/jpeg, image/png, dll)
-            $table->unsignedBigInteger('file_size'); // Ukuran file dalam bytes
+            $table->unsignedBigInteger('archive_id')->nullable(); // Ubah menjadi nullable
+            $table->string('file_path');
+            $table->string('file_name');
+            $table->string('mime_type');
+            $table->unsignedBigInteger('file_size');
             $table->text('caption')->nullable();
             $table->timestamps();
 

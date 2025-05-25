@@ -21,12 +21,16 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+
     public function definition()
     {
         return [
-            'username' => $this->faker->userName(),
-            'password' => bcrypt('password'), 
-            'role' => 'admin', 
+            'username' => $this->faker->unique()->userName,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => Hash::make('password'), // Password default
+            'created_at' => now(),
+            'updated_at' => now()
         ];
     }
 
