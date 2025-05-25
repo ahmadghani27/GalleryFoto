@@ -18,11 +18,8 @@ return new class extends Migration
             $table->foreign('user_username')->references('username')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign('password')->references('password')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
                 
-            $table->index('user_username');
+            $table->index('user_username','password');
         });
     }
 

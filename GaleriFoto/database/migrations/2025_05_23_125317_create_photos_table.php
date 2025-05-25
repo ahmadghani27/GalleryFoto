@@ -24,10 +24,9 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->foreign('folder')->references('id')->on('folders')
-                ->onDelete('cascade')
                 ->onUpdate('cascade');
                 
-            $table->index(['user_username', 'file_name']);
+            $table->index(['user_username', 'file_name','folder']);
         });
     }
 
