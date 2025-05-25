@@ -10,14 +10,15 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('user_username');
             $table->unsignedBigInteger('archive_id');
             $table->text('file_path');
             $table->text('caption')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->foreign('user_username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('archive_id')->references('id')->on('archives')->onDelete('cascade');
-            $table->index('user_id');
+            $table->index('user_username');
         });
     }
 

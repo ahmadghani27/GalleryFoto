@@ -14,6 +14,9 @@ Route::get('/', function () {
 Route::get('/foto', function () {
     return view('photo.index');
 })->middleware(['auth', 'verified'])->name('foto');
+Route::get('/album', function () {
+    return view('photo.album');
+})->name('album');
 
 
 Route::middleware('auth')->group(function () {

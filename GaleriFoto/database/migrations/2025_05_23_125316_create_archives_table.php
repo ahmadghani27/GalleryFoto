@@ -10,12 +10,13 @@ return new class extends Migration
     {
         Schema::create('archives', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('user_username');
             $table->unsignedBigInteger('folder_id');
             $table->string('name');
             $table->text('file_path');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->foreign('user_username')->references('username')->on('users')->onDelete('cascade');
             $table->foreign('folder_id')->references('id')->on('folders')->onDelete('cascade');
             $table->index('name');
         });
