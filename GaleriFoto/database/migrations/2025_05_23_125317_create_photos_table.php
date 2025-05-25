@@ -19,9 +19,8 @@ return new class extends Migration
             $table->text('caption')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_username')->references('username')->on('users')->onDelete('cascade');
-            $table->foreign('archive_id')->references('id')->on('archives')->onDelete('cascade');
             $table->index('user_username');
+            $table->index('file_name');
         });
     }
 
