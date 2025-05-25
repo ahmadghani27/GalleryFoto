@@ -22,7 +22,7 @@
             :class="open ? 'w-56' : 'w-16'">
             <aside :class="open ? 'w-56' : 'w-16'" class="bg-white text-black transition-all duration-300 ease-in-out flex flex-col border-r-1 border-gray-300 fixed top-0 left-0 h-dvh ">
                 <div class="flex items-center justify-between p-4">
-                    <span class="text-lg font-semibold text-[20px]" x-show="open">GaleriFoto</span>
+                    <span class="text-3xl font-bold" x-show="open">Pixelora</span>
                     <button @click="open = !open" class="flex  transition-all ease-in-out rounded">
                         <span class="material-symbols-outlined text-[32px]">left_panel_close</span>
                     </button>

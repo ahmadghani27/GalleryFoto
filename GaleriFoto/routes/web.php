@@ -17,6 +17,9 @@ Route::get('/foto', function () {
 Route::get('/album', function () {
     return view('photo.album');
 })->name('album');
+Route::get('/album/kenangan', function () {
+    return view('photo.photo-album');
+})->name('album');
 Route::get('/arsip', function () {
     return view('photo.arsip');
 })->name('arsip');
