@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AlbumController;
 use Illuminate\Support\Facades\Route;
 
 // redirect agar langsung menuju ke halaman dashboard
@@ -10,16 +11,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-// Route::get('/foto', function () {
-//     return view('photo.index');
-// })->middleware(['auth', 'verified'])->name('foto');
+Route::get('/album', [AlbumController::class, 'index'])->name('album');
+Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
+Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
 
-Route::get('/album', function () {
-    return view('photo.album');
-})->name('album');
-Route::get('/album/kenangan', function () {
-    return view('photo.photo-album');
-})->name('album');
+
 Route::get('/arsip', function () {
     return view('photo.arsip');
 })->name('arsip');

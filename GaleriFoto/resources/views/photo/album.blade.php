@@ -38,21 +38,21 @@
                         <template x-if="selected === 'Terbaru'">
                             <button
                                 @click="selected = 'Terlama'; open = false"
-                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
                                 Terlama
                             </button>
                         </template>
                         <template x-if="selected === 'Terlama'">
                             <button
                                 @click="selected = 'Terbaru'; open = false"
-                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
+                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
                                     Terbaru
                                 </button>
                             </template>
                         </div>
                     </div>
                 </div>
-            <button type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4">
+            <button type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
                                 <span class="material-symbols-outlined text-gray-300">
                                     add
                                 </span>
@@ -60,14 +60,57 @@
                             </button>
                     </div>
                 </div>
-                <div class=" block p-6">
-                    <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                        @for ($i = 0; $i < 7; $i++)
-                            <x-album-tumbnail></x-album-tumbnail>
-                            @endfor
+                <div class="block p-6">
+                    @if ($album->isEmpty())
+                    <div class="w-full h-60 flex flex-col justify-center items-center gap-4 text-black">
+                        <div class="text-xl font-normal">
+                            Belum ada album yang Anda buat
+                        </div>
+                        <div>
+                            <button class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                                Buat Album
+                            </button>
+                        </div>
                     </div>
+
+                    @else
+                    <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+                        @foreach ($album as $item)
+                        <x-album-tumbnail :folder="$item" />
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
+
+
+
             </div>
-
-
+            <x-modal name="tambah-album" :show="$errors->any()" :closeOnOutsideClick="false" maxWidth="lg">
+                <form method="POST" action="{{ route('album.store') }}">
+                    @csrf
+                    <div class="px-8 py-8 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
+                        <div class="w-full bg-white rounded-2xl inline-flex flex-col justify-start items-start gap-6">
+                            <div class="self-stretch flex flex-col justify-start items-start gap-3">
+                                <div class="self-stretch justify-start text-black text-xl font-semibold">Buat album baru</div>
+                                <div class="self-stretch justify-start text-black/70 text-base font-normal">Kelompokan momen terbaik anda</div>
+                            </div>
+                            <div class="self-stretch h-14 px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex items-center gap-4">
+                                <span class="material-symbols-outlined">folder_open</span>
+                                <input type="text" name="title" class="w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 placeholder:text-black/50" placeholder="Masukkan judul album disini" value="{{ old('title') }}">
+                            </div>
+                            @error('title')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                            @enderror
+                            <div class="self-stretch inline-flex justify-start items-start gap-2">
+                                <button type="button" @click="$dispatch('close-modal', 'tambah-album')" class="flex-1 h-14 px-2.5 py-5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200">
+                                    <div class="justify-start text-neutral-900 text-base font-bold">Batal</div>
+                                </button>
+                                <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-neutral-900/5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200">
+                                    <div class="justify-start text-neutral-900 text-base font-bold">Buat album</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </x-modal>
             @endsection

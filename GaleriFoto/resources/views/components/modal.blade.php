@@ -77,7 +77,7 @@ $maxWidth = [
     >
         <!-- Modal container -->
         <div
-            class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
+            class="bg-white rounded-2xl overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
         >
             {{ $slot }}
         </div>

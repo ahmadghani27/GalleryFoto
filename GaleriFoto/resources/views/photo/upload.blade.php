@@ -11,7 +11,7 @@
                 </div>
                 <p class="self-stretch text-black/70 text-sm font-normal">Tipe file yang diterima: jpg, jpeg, png</p>
             </div>
-            <label class="w-48 h-14 px-2.5 py-5 rounded-2xl outline outline-[1.5px] outline-offset-[-1.5px] hover:text-white hover:bg-black outline-neutral-900 flex justify-center items-center gap-2.5 cursor-pointer transition-all duration-100 hover:bg-neutral-900 hover:text-white">
+            <label class="w-48 h-14 px-2.5 py-5 rounded-2xl outline outline-[1.5px] outline-offset-[-1.5px]  hover:bg-black outline-neutral-900 flex justify-center items-center gap-2.5 cursor-pointer transition-all duration-100 hover:bg-neutral-900 hover:text-white">
                 <span class="text-neutral-900 text-base font-bold hover:text-white w-48 h-14 flex justify-center items-center">Upload</span>
                 <input type="file" name="photo" id="photo-upload" accept=".jpg,.jpeg,.png" class="hidden" @change="handleFileUpload">
             </label>
