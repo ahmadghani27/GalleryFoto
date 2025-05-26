@@ -20,6 +20,9 @@ Route::patch('/album/{id}', [AlbumController::class, 'update'])->name('album.upd
 Route::get('/arsip', function () {
     return view('photo.arsip');
 })->name('arsip');
+Route::get('/album/kenangan', function () {
+    return view('photo.photo-album');
+})->name('album.kenangan');
 
 Route::middleware('auth')->group(function () {
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');

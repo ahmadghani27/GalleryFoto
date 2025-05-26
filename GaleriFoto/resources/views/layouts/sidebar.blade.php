@@ -31,19 +31,19 @@
                     <div class="flex-col w-full">
                         <div class="text-[14px] text-slate-400 mb-2 px-2 font-semibold" x-show="open">MENU</div>
                         <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
-                        <a href="{{ route('foto') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('foto') ? '!bg-slate-100 icon-filled' : '' }}">
+                        <a href="{{ route('foto') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('foto*') ? '!bg-slate-100 icon-filled' : '' }}">
                             <span class="material-symbols-outlined text-[32px]">image</span>
                             <span class="text-[20px] font-medium" x-show="open" x-show="open">Foto</span>
                         </a>
-                        <a href="{{ route('album') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('album') ? '!bg-slate-100 icon-filled' : '' }}">
+                        <a href="{{ route('album') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('album*') ? '!bg-slate-100 icon-filled' : '' }}">
                             <span class="material-symbols-outlined text-[32px]">folder_open</span>
                             <span class="text-[20px] font-medium" x-show="open" x-show="open">Album</span>
                         </a>
-                        <a href="{{ route('arsip') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                        <a href="{{ route('arsip') }}" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('arsip*') ? '!bg-slate-100 icon-filled' : '' }}">
                             <span class="material-symbols-outlined text-[32px]">archive</span>
                             <span class="text-[20px] font-medium" x-show="open">Arsip</span>
                         </a>
-                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100">
+                        <a href="#" class="flex items-center gap-4 px-2 py-4 w-full rounded-md bg-white hover:bg-slate-100 {{ Route::is('favorit*') ? '!bg-slate-100 icon-filled' : '' }}">
                             <span class="material-symbols-outlined text-[32px]">favorite</span>
                             <span class="text-[20px] font-medium" x-show="open">Favorit</span>
                         </a>
