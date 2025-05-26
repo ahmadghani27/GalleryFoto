@@ -9,15 +9,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('folders', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            // $table->string('user_username');
-            $table->string('name');
-            $table->timestamps();
+            $table->bigIncrements('id_folder');
+            $table->unsignedBigInteger('user_id');
 
-            $table->foreign('user_username')->references('username')->on('users')
+            $table->string('name_folder');
+            $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->index('name', 'user_username');
+
+            $table->index(['name_folder', 'user_id']);
         });
     }
 

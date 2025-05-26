@@ -9,24 +9,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('photos', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('user_username');
+            $table->bigIncrements('id_photo');
+            $table->unsignedBigInteger('user_id');
+
             $table->unsignedBigInteger('folder')->nullable(); // Ubah menjadi nullable
-            $table->boolean('archive')->default(false); // Ubah menjadi nullable
-            $table->string('file_path');
-            $table->string('file_name');
-            $table->string('mime_type');
-            $table->unsignedBigInteger('file_size');
-            $table->text('caption')->nullable();
+            $table->boolean('is_archive')->default(false); // Ubah menjadi nullable
+            $table->boolean('is_favorite')->default(false);
+            $table->text('file_path');
+            $table->string('photo_title');
             $table->timestamps();
 
-            $table->foreign('user_username')->references('username')->on('users')
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign('folder')->references('id')->on('folders')
+            $table->foreign('folder')->references('id_folder')->on('folders')
                 ->onUpdate('cascade');
-                
-            $table->index(['user_username', 'file_name','folder']);
+
+            $table->index(['user_id', 'photo_title', 'folder']);
         });
     }
 
