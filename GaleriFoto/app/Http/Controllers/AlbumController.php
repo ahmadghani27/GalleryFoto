@@ -35,7 +35,7 @@ class AlbumController extends Controller
 
         $album->delete();
 
-        return redirect()->route('album.index')->with('success', 'Album berhasil dihapus!');
+        return redirect()->route('album')->with('success', 'Album berhasil dihapus!');
     }
     
 }
