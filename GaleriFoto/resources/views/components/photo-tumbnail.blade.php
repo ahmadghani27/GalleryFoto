@@ -18,7 +18,7 @@
                     <div class="text-xl font-semibold text-white">{{ 'Pantai Kiri' }}</div>
                     <div class="text-sm mt-1 font-light text-white opacity-80">{{ '20 Mei 2025' }}</div>
                 </div>
-                <x-daisy-dropdown>
+                <x-daisy-dropdown >
                     <x-daisy-dropdown-link href="">
                         <span class="material-symbols-outlined">folder_open</span>
                         <span>Pindah ke album</span>

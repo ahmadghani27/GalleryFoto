@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('folders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('user_username');
+            // $table->string('user_username');
             $table->string('name');
             $table->timestamps();
 
