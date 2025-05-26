@@ -65,7 +65,7 @@
             <div class="text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">Menampilkan 1 Foto</div>
         </div>
     </div>
-    <div class="block p-6">
+    <div class="block p-6 bg-gray-100" >
         <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach ($foto as $ft)
                 <x-photo-tumbnail></x-photo-tumbnail>
