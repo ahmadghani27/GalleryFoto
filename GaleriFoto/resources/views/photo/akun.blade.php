@@ -92,7 +92,7 @@
                     class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
                 <button type="submit" :disabled="submitting"
                     class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
-                        <template x-if="!submitting">
+                    <template x-if="!submitting">
                         <span class="text-white">Hapus akun</span>
                     </template>
                     

@@ -9,7 +9,7 @@
                 </div>
                 <div class="p-2 flex">
                     <label class="cursor-pointer label">
-                        <input type="checkbox" class="checkbox checkbox-xl checkbox-primary" />
+                        <input type="checkbox" class="p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
                     </label>
                 </div>
             </div>
