@@ -4,21 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Crypt;
 
 class PhotoController extends Controller
 {
     public function index() {
         $userId = Auth::id(); // ambil id user yang sedang login
+        $sortOrder = request('sort', 'desc');
         $foto = Photo::where('user_id', $userId)
-                    ->where('is_archive', false)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+            ->where('is_archive', false)
+            ->orderBy('created_at', $sortOrder)
+            ->get()
+            ->groupBy(function ($item) {
+                $tanggal = Carbon::parse($item->created_at);
+        
+                if ($tanggal->isToday()) {
+                    return 'Hari ini';
+                } elseif ($tanggal->isYesterday()) {
+                    return 'Kemarin';
+                } else {
+                    return $tanggal->translatedFormat('d M Y');
+                }
+            });
         return view('photo.index', compact('foto'));
     }
 
