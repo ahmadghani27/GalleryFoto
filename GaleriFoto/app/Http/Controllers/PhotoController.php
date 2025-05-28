@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Crypt;
 
 class PhotoController extends Controller
 {
@@ -16,6 +17,7 @@ class PhotoController extends Controller
         $userId = Auth::id(); // ambil id user yang sedang login
         $foto = Photo::where('user_id', $userId)
                     ->where('is_archive', false)
+                    ->orderBy('created_at', 'desc')
                     ->get();
         return view('photo.index', compact('foto'));
     }
@@ -53,7 +55,7 @@ class PhotoController extends Controller
             'folder'       => null,
             'is_archive'   => false,
             'is_favorite'  => false,
-            'file_path'    => '/img/' . $fileName,
+            'file_path'    => '/image/' . $fileName,
             'photo_title'  => $request->title,
             'created_at'   => now(),
             'update_at'    => now(),
@@ -100,7 +102,7 @@ class PhotoController extends Controller
                     'folder'       => null,
                     'is_archive'   => false,
                     'is_favorite'  => false,
-                    'file_path'    => '/img/' . $fileName,
+                    'file_path'    => '/image/' . $fileName,
                     'photo_title'  => $judul,
                     'created_at'   => now(),
                     'update_at'    => now(),
@@ -123,5 +125,47 @@ class PhotoController extends Controller
             'files' => $uploadedFiles,
             'redirect' => route('foto')
         ]);
+    }
+
+    public function destroy(Request $request) {
+        $decryptedId = Crypt::decryptString($request->id_foto);
+
+        $foto = Photo::findOrFail($decryptedId);
+        $foto->delete();
+
+        return redirect()->route('foto')->with('status', 'Foto berhasil dihapus.');
+    }
+
+    public function editJudul(Request $request) {
+        $decryptedId = Crypt::decryptString($request->id_foto);
+
+        $foto = Photo::findOrFail($decryptedId);
+
+        $foto->update([
+            'photo_title'=>$request->new_judul,
+        ]);
+        
+        return Redirect::route('foto')->with('status', 'Judul berhasil diperbarui');
+    }
+
+    public function arsipkan(Request $request) {
+        $decryptedId = Crypt::decryptString($request->id_foto);
+
+        $foto = Photo::findOrFail($decryptedId);
+
+        $foto->update([
+            'is_archive'=>true,
+        ]);
+        
+        return Redirect::route('foto')->with('status', 'Foto berhasil diarsipkan');
+    }
+
+    public function toggleFavorite(Request $request)
+    {
+        $photo = Photo::findOrFail($request->id_foto);
+        $photo->is_favorite = !$photo->is_favorite;
+        $photo->save();
+
+        return response()->json(['success' => true, 'is_favorite' => $photo->is_favorite]);
     }
 }
