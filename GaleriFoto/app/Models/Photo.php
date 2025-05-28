@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Photo extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'id_photo';
+    
     protected $fillable = [
         'user_id',
         'folder',
