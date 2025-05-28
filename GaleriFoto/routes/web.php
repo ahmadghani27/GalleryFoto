@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/akun', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/foto/single-upload', [PhotoController::class, 'store'])->name('foto.singleupload');
     Route::post('/foto/multi-upload', [PhotoController::class, 'massStore'])->name('foto.multiupload');
+    Route::delete('/foto/single-delete', [PhotoController::class, 'destroy'])->name('foto.singledelete');
+    Route::patch('/foto/edit-judul', [PhotoController::class, 'editJudul'])->name('foto.editjudul');
+    Route::patch('/foto/single-arsip', [PhotoController::class, 'arsipkan'])->name('foto.singlearsip');
+    Route::patch('/foto/favorite', [PhotoController::class, 'toggleFavorite'])->name('foto.togglefavorite');
 });
 
 require __DIR__.'/auth.php';
