@@ -11,11 +11,6 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/album', [AlbumController::class, 'index'])->name('album');
-Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
-Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
-Route::patch('/album/{id}', [AlbumController::class, 'update'])->name('album.update');
-
 
 Route::get('/arsip', function () {
     return view('photo.arsip');
@@ -25,6 +20,10 @@ Route::get('/album/kenangan', function () {
 })->name('album.kenangan');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/album', [AlbumController::class, 'index'])->name('album');
+    Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
+    Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
+    Route::patch('/album/{id}', [AlbumController::class, 'update'])->name('album.update');
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::get('/foto', [PhotoController::class, 'index'])->name('foto');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');

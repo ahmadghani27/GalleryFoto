@@ -52,11 +52,19 @@
                         </div>
                     </div>
                 </div>
-            <button type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
-                                <span class="material-symbols-outlined text-gray-300">
+            <button  x-data=" { open: window.innerWidth>= 768 }"
+                                x-init="open = window.innerWidth >= 768"
+                                @resize.window="open = window.innerWidth >= 768" type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                                <span class="material-symbols-outlined text-gray-300" >
                                     add
                                 </span>
-                                <span class="text-gray-300 font-semibold">Tambah Album</span>
+
+                                <span
+                                    class="text-gray-300 font-semibold"
+                                    x-show="open"
+                                    x-transition>
+                                    Tambah Album
+                                </span>
                             </button>
                     </div>
                 </div>
