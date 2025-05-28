@@ -16,7 +16,6 @@ Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
 Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
 Route::patch('/album/{id}', [AlbumController::class, 'update'])->name('album.update');
 
-
 Route::get('/arsip', function () {
     return view('photo.arsip');
 })->name('arsip');
