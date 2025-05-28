@@ -23,9 +23,9 @@ Route::middleware('auth')->group(function () {
     //Route Album
     Route::get('/album', [AlbumController::class, 'index'])->name('album');
     Route::post('/album', [AlbumController::class, 'store'])->name('album.store');
-    Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
-    Route::patch('/album/{id}', [AlbumController::class, 'update'])->name('album.update');
-    Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
+    Route::delete('/album/{id_album}', [AlbumController::class, 'destroy'])->name('album.destroy');
+    Route::get('/album/{id_album}', [AlbumController::class, 'show'])->name('album.show');
+    Route::patch('/album/{id_album}', [AlbumController::class, 'update'])->name('album.update');
     //Route Foto
     Route::get('/foto', [PhotoController::class, 'index'])->name('foto');
     Route::post('/foto/single-upload', [PhotoController::class, 'store'])->name('foto.singleupload');
@@ -35,9 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/foto/single-arsip', [PhotoController::class, 'arsipkan'])->name('foto.singlearsip');
     Route::patch('/foto/favorite', [PhotoController::class, 'toggleFavorite'])->name('foto.togglefavorite');
     //Route Profile
+    Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/akun/password', [PasswordController::class, 'update'])->name('update_password');
     Route::delete('/akun', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

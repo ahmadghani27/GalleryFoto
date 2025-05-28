@@ -8,15 +8,42 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use App\Models\Photo;
 
 class AlbumController extends Controller
 {
     public function index()
     {
         $userId = Auth::id();
-        $album = Folder::where('user_id', $userId)->get();
+
+        $album = Folder::with(['photos' => function ($query) {
+            $query->orderBy('created_at')->limit(1); // Ambil 1 foto pertama
+        }])
+            ->where('user_id', $userId)
+            ->get();
 
         return view('photo.album', compact('album'));
+    }
+    public function show($id_album)
+    {
+        $userId = Auth::id();
+
+        // 1. Verifikasi bahwa album/folder tersebut milik user yang login
+        $album = Folder::where('id_folder', $id_album)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        // 2. Ambil semua foto yang berada dalam folder/album tersebut
+        $photos = Photo::where('folder', $id_album)
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // 3. Kirim kedua data ke view
+        return view('photo.photo-album', [
+            'album' => $album,
+            'photos' => $photos
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -37,27 +64,20 @@ class AlbumController extends Controller
         return Redirect::back()->with('status', 'Album berhasil dibuat!');
     }
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, $id_folder): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-        ], [
-            'name.required' => 'Nama baru album wajib diisi.',
-            'name.string'   => 'Nama harus berupa teks.',
-            'name.max'      => 'Nama album maksimal 255 karakter.',
+            'username' => 'required|string|max:255',
         ]);
 
-        $decryptedId = Crypt::decryptString($id);
-
-        $album = Folder::where('id_folder', $decryptedId)
+        $album = Folder::where('id_folder', $id_folder)
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        $album->update([
-            'name_folder' => $request->name,
-        ]);
+        $album->name_folder = $request->username;
+        $album->save();
 
-        return Redirect::back()->with('status', 'Nama album berhasil diubah!');
+        return redirect()->route('album')->with('status', 'Album berhasil diperbarui!');
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -70,6 +90,6 @@ class AlbumController extends Controller
 
         $album->delete();
 
-        return Redirect::route('album')->with('status', 'Album berhasil dihapus!');
+        return redirect()->route('album')->with('status', 'Album berhasil dihapus!');
     }
 }

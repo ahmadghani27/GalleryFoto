@@ -2,6 +2,16 @@
 @section('title', 'Album')
 @section('content')
 <div class="flex flex-col  bg-gray-100">
+    @if (session('status'))
+    <div class="toast toast-center" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+        <div class="flex items-center alert bg-green-300 border-none">
+            <span>{{ session('status') }}</span>
+            <button type="button" class="flex text-sm hover:text-black text-gray-800" @click="show = false">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+    </div>
+    @endif
     <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white border-b-[1.5px] border-gray-200">
         <article class="w-full flex justify-between items-center">
             <div class="text-black text-4xl font-bold p-2">Album</div>
@@ -55,7 +65,7 @@
             <button  x-data=" { open: window.innerWidth>= 768 }"
                                 x-init="open = window.innerWidth >= 768"
                                 @resize.window="open = window.innerWidth >= 768" type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
-                                <span class="material-symbols-outlined text-gray-300" >
+                                <span class="material-symbols-outlined text-gray-300">
                                     add
                                 </span>
 

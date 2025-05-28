@@ -10,7 +10,7 @@ class Photo extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_photo';
-    
+
     protected $fillable = [
         'user_id',
         'folder',
@@ -21,4 +21,13 @@ class Photo extends Model
         'created_at',
         'updated_at'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class, 'folder', 'id_folder');
+    }
 }
