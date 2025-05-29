@@ -5,19 +5,13 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AlbumController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArchiveController;
 
 // redirect agar langsung menuju ke halaman dashboard
 Route::get('/', function () {
     return redirect('/login');
 });
 
-
-Route::get('/arsip', function () {
-    return view('photo.arsip');
-})->name('arsip');
-Route::get('/album/kenangan', function () {
-    return view('photo.photo-album');
-})->name('album.kenangan');
 
 Route::middleware('auth')->group(function () {
     //Route Album
@@ -44,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/akun/password', [PasswordController::class, 'update'])->name('update_password');
     Route::delete('/akun', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
+    Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
 });
 
 require __DIR__ . '/auth.php';

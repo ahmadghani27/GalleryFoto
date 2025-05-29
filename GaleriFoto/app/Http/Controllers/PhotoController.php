@@ -18,7 +18,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PhotoController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $userId = Auth::id(); // ambil id user yang sedang login
         $sortOrder = request('sort', 'desc');
         $search = request('search');
@@ -34,7 +35,7 @@ class PhotoController extends Controller
             ->get()
             ->groupBy(function ($item) {
                 $tanggal = Carbon::parse($item->created_at);
-        
+
                 if ($tanggal->isToday()) {
                     return 'Hari ini';
                 } elseif ($tanggal->isYesterday()) {
@@ -46,7 +47,8 @@ class PhotoController extends Controller
         return view('photo.index', compact('foto', 'search'));
     }
 
-    public function store(Request $request) : RedirectResponse {
+    public function store(Request $request): RedirectResponse
+    {
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -89,11 +91,12 @@ class PhotoController extends Controller
         return Redirect::route('foto')->with('status', 'Foto berhasil diupload');
     }
 
-    public function massStore(Request $request) {
+    public function massStore(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'photo.*' => 'required|image|mimes:jpg,jpeg,png|max:5048',
             'title.*' => 'required|string|max:255',
-        ],[
+        ], [
             // Pesan error untuk title
             'title.*.required' => 'Judul foto wajib diisi.',
             'title.*.string'   => 'Judul foto harus berupa teks.',
@@ -141,7 +144,7 @@ class PhotoController extends Controller
                 'filename' => $fileName,
             ];
         }
-        
+
         session()->flash('status', 'Semua foto berhasil diupload');
 
         return response()->json([
@@ -151,7 +154,8 @@ class PhotoController extends Controller
         ]);
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         $decryptedId = Crypt::decryptString($request->id_foto);
 
         $foto = Photo::findOrFail($decryptedId);
@@ -160,27 +164,29 @@ class PhotoController extends Controller
         return redirect()->route('foto')->with('status', 'Foto berhasil dihapus.');
     }
 
-    public function editJudul(Request $request) {
+    public function editJudul(Request $request)
+    {
         $decryptedId = Crypt::decryptString($request->id_foto);
 
         $foto = Photo::findOrFail($decryptedId);
 
         $foto->update([
-            'photo_title'=>$request->new_judul,
+            'photo_title' => $request->new_judul,
         ]);
-        
+
         return Redirect::route('foto')->with('status', 'Judul berhasil diperbarui');
     }
 
-    public function arsipkan(Request $request) {
+    public function arsipkan(Request $request)
+    {
         $decryptedId = Crypt::decryptString($request->id_foto);
 
         $foto = Photo::findOrFail($decryptedId);
 
         $foto->update([
-            'is_archive'=>true,
+            'is_archive' => true,
         ]);
-        
+
         return Redirect::route('foto')->with('status', 'Foto berhasil diarsipkan');
     }
 

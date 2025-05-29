@@ -68,7 +68,7 @@
 
         </div>
 
-        <main class="flex-1 bg-gray-100 transition-all duration-300 ease-in-out" :class="open ? 'ml-56' : 'ml-16'"">
+        <main class="flex-1 w-full h-full bg-gray-100 transition-all duration-300 ease-in-out" :class="open ? 'ml-56' : 'ml-16'"">
             @yield('content')
         </main>
     </div>

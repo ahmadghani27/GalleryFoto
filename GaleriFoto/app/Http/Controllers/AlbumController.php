@@ -31,6 +31,7 @@ class AlbumController extends Controller
     public function show($id_album)
     {
         $userId = Auth::id();
+        $sort = request()->query('sort', 'desc'); // default: terbaru
 
         $folder = Folder::withCount('photos')
             ->where('id_folder', $id_album)
@@ -39,12 +40,13 @@ class AlbumController extends Controller
 
         $photos = Photo::where('folder', $id_album)
             ->where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', $sort)
             ->get();
 
         return view('photo.photo-album', [
-            'folder' => $folder, // Ubah dari $album ke $folder
-            'photos' => $photos
+            'folder' => $folder,
+            'photos' => $photos,
+            'currentSort' => $sort // Kirim current sort ke view
         ]);
     }
 
