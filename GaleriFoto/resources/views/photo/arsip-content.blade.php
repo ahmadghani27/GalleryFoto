@@ -97,12 +97,17 @@
                             <span class="material-symbols-outlined">edit</span>
                             <span>Ganti judul</span>
                         </button>
-                        <button type="button"
-                            class="arsipkanFoto flex gap-3 items-center text-gray-700 hover:text-blue-600 transition-colors"
-                            onclick="arsipkanFoto('{{ Crypt::encryptString($photo->id_photo) }}')">
-                            <span class="material-symbols-outlined">unarchive</span>
-                            <span>Keluarkan dari Arsip</span>
-                        </button>
+                        <form action="{{ route('photos.unarchive') }}" method="POST" class="inline">
+                            @csrf
+                            <input type="hidden" name="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
+                            <button type="submit"
+                                class="unarsipkanFoto flex gap-3 items-center px-3 py-2 hover:bg-gray-100 rounded-lg text-sm"
+                                onclick="return confirm('Yakin ingin mengeluarkan foto ini dari arsip?')">
+                                <span class="material-symbols-outlined text-yellow-600">unarchive</span>
+                                <span>Keluarkan dari Arsip</span>
+                            </button>
+                        </form>
+
                         <button type="button" class="deleteFoto flex gap-3" onclick="document.getElementById('modalDelete').showModal()">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined">delete</span>

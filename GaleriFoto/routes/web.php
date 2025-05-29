@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/foto/edit-judul', [PhotoController::class, 'editJudul'])->name('foto.editjudul');
     Route::patch('/foto/single-arsip', [PhotoController::class, 'arsipkan'])->name('foto.singlearsip');
     Route::patch('/foto/favorite', [PhotoController::class, 'toggleFavorite'])->name('foto.togglefavorite');
+    Route::post('/foto/unarchive', [PhotoController::class, 'unarsipkan'])
+     ->name('photos.unarchive');
     //Route Profile
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -37,8 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
     Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
     Route::get('/arsip/content', [ArchiveController::class, 'content'])->name('arsip.content');
-    Route::post('/photos/{photo}/unarchive', [PhotoController::class, 'unarchive'])
-        ->name('photos.unarchive');
 });
 
 require __DIR__ . '/auth.php';

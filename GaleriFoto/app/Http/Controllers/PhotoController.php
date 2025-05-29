@@ -168,16 +168,30 @@ class PhotoController extends Controller
 
     public function arsipkan(Request $request)
     {
-        $decryptedId = Crypt::decryptString($request->id_foto);
-
-        $foto = Photo::findOrFail($decryptedId);
-
-        $foto->update([
-            'is_archive' => true,
+        $request->validate([
+            'id_foto' => 'required|string'
         ]);
 
-        return Redirect::route('foto')->with('status', 'Foto berhasil diarsipkan');
+        try {
+            $decryptedId = Crypt::decryptString($request->id_foto);
+
+            $foto = Photo::where('id_photo', $decryptedId);
+
+            $foto->update(['is_archive' => true]);
+
+            return Redirect::route('foto')->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil diarsipkan'
+            ]);
+        } catch (\Exception $e) {
+            return Redirect::back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengarsipkan foto: ' . $e->getMessage()
+            ]);
+        }
     }
+
+    
 
     public function toggleFavorite(Request $request)
     {
@@ -188,27 +202,28 @@ class PhotoController extends Controller
         return response()->json(['success' => true, 'is_favorite' => $photo->is_favorite]);
     }
 
-
-
-    public function unarchive(Request $request, $encryptedId)
+    public function unarsipkan(Request $request)
     {
+        $request->validate([
+            'id_foto' => 'required|string'
+        ]);
+
         try {
-            $photoId = Crypt::decryptString($encryptedId);
-            $photo = Photo::where('id_photo', $photoId)
-                ->where('user_id', Auth::id())
-                ->firstOrFail();
+            $decryptedId = Crypt::decryptString($request->id_foto);
 
-            $photo->update(['is_archive' => false]);
+            $foto = Photo::where('id_photo', $decryptedId);
 
-            return response()->json([
-                'success' => true,
+            $foto->update(['is_archive' => false]);
+
+            return Redirect::route('arsip.content')->with([
+                'status' => 'success',
                 'message' => 'Foto berhasil dikeluarkan dari arsip'
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengeluarkan foto dari arsip'
-            ], 400);
+            return Redirect::back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
+            ]);
         }
     }
 }
