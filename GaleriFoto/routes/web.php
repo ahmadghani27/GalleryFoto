@@ -37,7 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
     Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
     Route::get('/arsip/content', [ArchiveController::class, 'content'])->name('arsip.content');
-    Route::post('/photo/archive', [ArchiveController::class, 'toggleArchive'])->name('photo.archive');
+    Route::post('/photos/{photo}/unarchive', [PhotoController::class, 'unarchive'])
+        ->name('photos.unarchive');
 });
 
 require __DIR__ . '/auth.php';

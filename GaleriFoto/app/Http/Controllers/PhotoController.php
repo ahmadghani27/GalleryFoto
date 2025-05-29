@@ -189,4 +189,26 @@ class PhotoController extends Controller
     }
 
 
+
+    public function unarchive(Request $request, $encryptedId)
+    {
+        try {
+            $photoId = Crypt::decryptString($encryptedId);
+            $photo = Photo::where('id_photo', $photoId)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            $photo->update(['is_archive' => false]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil dikeluarkan dari arsip'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengeluarkan foto dari arsip'
+            ], 400);
+        }
+    }
 }

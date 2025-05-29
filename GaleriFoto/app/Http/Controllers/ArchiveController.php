@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use app\Http\Requests\ArchiveRequest;
-use Illuminate\Support\Facades\Crypt;
 use App\Models\Photo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ArchiveController extends Controller
 {
@@ -17,72 +18,49 @@ class ArchiveController extends Controller
         return view('photo.arsip');
     }
 
-    public function verify(Request $request)
+    public function verify(Request $request): JsonResponse
     {
         $request->validate([
             'password' => 'required|string'
         ]);
 
-        $user = Auth::user();
-
-        if (!Hash::check($request->password, $user->password)) {
+        if (!Hash::check($request->password, Auth::user()->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Kata sandi yang Anda masukkan salah'
             ], 401);
         }
 
+        session(['archive_verified' => true]);
+
         return response()->json([
-            'success' => true
+            'success' => true,
+            'redirect' => route('arsip.content')  // Tambahkan redirect
         ]);
     }
-    public function content()
+
+    public function content(): RedirectResponse|\Illuminate\View\View
     {
         if (!session('archive_verified')) {
-            return redirect()->route('arsip');
+            return redirect()->route('arsip')->withErrors('Silakan verifikasi password terlebih dahulu');
         }
 
-        $userId = Auth::id();
-        $sortOrder = request('sort', 'desc');
-
-        $arsipFoto = Photo::where('user_id', $userId)
+        $arsipFoto = Photo::with(['folder'])
+            ->where('user_id', Auth::id())
             ->where('is_archive', true)
-            ->orderBy('created_at', $sortOrder)
+            ->orderBy('created_at', request('sort', 'desc'))
             ->get()
-            ->groupBy(function ($item) {
-                $tanggal = Carbon::parse($item->created_at);
+            ->groupBy(function ($photo) {
+                $date = Carbon::parse($photo->created_at);
 
-                if ($tanggal->isToday()) {
-                    return 'Hari ini';
-                } elseif ($tanggal->isYesterday()) {
-                    return 'Kemarin';
-                } else {
-                    return $tanggal->translatedFormat('d M Y');
-                }
+                if ($date->isToday()) return 'Hari ini';
+                if ($date->isYesterday()) return 'Kemarin';
+                return $date->translatedFormat('d M Y');
             });
 
-        return view('photo.arsip-content', compact('arsipFoto'));
-    }
-
-    public function toggleArchive(Request $request)
-    {
-        $request->validate([
-            'photo_id' => 'required',
-            'is_archive' => 'required|boolean'
+        return view('photo.arsip-content', [
+            'arsipFoto' => $arsipFoto,
+            'currentSort' => request('sort', 'desc')
         ]);
-
-        try {
-            $photoId = Crypt::decryptString($request->photo_id);
-            $photo = Photo::where('id_photo', $photoId)
-                ->where('user_id', Auth::id())
-                ->firstOrFail();
-
-            $photo->is_archive = $request->is_archive;
-            $photo->save();
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false], 400);
-        }
     }
 }
