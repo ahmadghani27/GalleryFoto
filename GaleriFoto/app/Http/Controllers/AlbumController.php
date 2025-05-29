@@ -94,4 +94,9 @@ class AlbumController extends Controller
 
         return redirect()->route('album')->with('status', 'Album berhasil dihapus!');
     }
+
+    public function getActiveAlbum($id) {
+        $items = Folder::where('id_folder', '!=', $id)->get();
+        return response()->json($items);
+    }
 }
