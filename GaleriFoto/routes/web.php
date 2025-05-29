@@ -33,7 +33,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/foto/single-delete', [PhotoController::class, 'destroy'])->name('foto.singledelete');
     Route::patch('/foto/edit-judul', [PhotoController::class, 'editJudul'])->name('foto.editjudul');
     Route::patch('/foto/single-arsip', [PhotoController::class, 'arsipkan'])->name('foto.singlearsip');
+    Route::patch('/foto/single-pindahalbum', [PhotoController::class, 'pindahAlbum'])->name('foto.singlepindahalbum');
     Route::patch('/foto/favorite', [PhotoController::class, 'toggleFavorite'])->name('foto.togglefavorite');
+    Route::get('/api/getActiveAlbum/{id}', [AlbumController::class, 'getActiveAlbum'])->name('api.getActiveAlbum');
+    Route::get('/foto_access/{path}', [PhotoController::class, 'access'])
+        ->where('path', '.*')
+        ->name('foto.access');
     //Route Profile
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');

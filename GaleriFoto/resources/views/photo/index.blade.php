@@ -11,11 +11,24 @@
                     <span class="material-symbols-outlined">
                         search
                     </span>
+                    {{-- wajib pakai class searchFoto yang sama --}}
                     <input
-                        type="search"
-                        value="Monyet"
-                        class="text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                        placeholder="Cari foto..." />
+                        id="searchFotoField" 
+                        type="text"
+                        value="{{ request('search') }}"
+                        class="searchFoto text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
+                        placeholder="Cari judul foto" />
+
+                    <button
+                        id="clearSearchBtn"
+                        type="button"
+                        class="clearSearchBtn hidden"
+                        aria-label="Clear search"
+                    >
+                        <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">
+                            close
+                        </span>
+                    </button>
                 </div>
             </div>
             <button type="button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4"
@@ -26,7 +39,7 @@
                 <span class="text-gray-300 font-semibold">Tambah Foto</span>
             </button>
         </div>
-        <div class="w-full flex items-center mt-3 gap-6">
+        <div class="w-full flex items-center mt-3 gap-4">
             <div class="flex justify-end items-center gap-5">
                 <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
                     <div
@@ -48,7 +61,7 @@
                                 <a
                                     href="{{ route('foto', ['sort' => 'asc']) }}"
                                     @click="selected = 'Terlama'; open = false"
-                                    class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                    class="text-center px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
                                     Terlama
                                 </a>
                             </template>
@@ -56,7 +69,7 @@
                                 <a
                                     href="{{ route('foto', ['sort' => 'desc']) }}"
                                     @click="selected = 'Terbaru'; open = false"
-                                    class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
+                                    class="text-center px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
                                     Terbaru
                                 </a>
                             </template>
@@ -64,105 +77,119 @@
                     </div>
                 </div>
             </div>
-            <div class="text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $foto->count() }}</span> Foto</div>
+            @if (!empty($search)) 
+                <div class="font-semibold  text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
+                    <span class="material-symbols-outlined">filter_alt</span>
+                    <span class="pr-1">{{ $search }}</span>   
+                </div>
+            @endif
+            <div class="text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $foto->flatten()->count() }}</span> Foto</div>
         </div>
     </div>
-    <div class="block px-6 bg-gray-100" >
-        @foreach ($foto as $tanggal => $groupedPhotos)
-            <span class="text-lg font-bold block mt-4 mb-2">{{ $tanggal }}</span>
-                <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                    @foreach($groupedPhotos as $ft) 
-                        <x-photo-tumbnail
-                            :path="$ft->file_path"
-                            :title="$ft->photo_title"
-                            :date="$ft->created_at"
-                            :photoId="$ft->id_photo"
-                            :isLoved="$ft->is_favorite"
-                        >
-                            <x-daisy-dropdown >
-                                <button type="button">
-                                    <span class="material-symbols-outlined">folder_open</span>
-                                    <span>Pindah ke album</span>
-                                </button>    
-                                <button type="button" class="editJudul flex gap-3" onclick="document.getElementById('modalEdit').showModal()">
-                                    <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
-                                    <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                    <span class="material-symbols-outlined">edit</span>
-                                    <span>Ganti judul</span>
-                                </button>    
-                                <button type="button" class="arsipkanFoto flex gap-3"  onclick="document.getElementById('modalArsip').showModal()">
-                                    <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                    <span class="material-symbols-outlined">archive</span>
-                                    <span>Arsipkan</span>
-                                </button>    
-                                <button type="button" class="deleteFoto flex gap-3" onclick="document.getElementById('modalDelete').showModal()">
-                                    <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                    <span class="material-symbols-outlined">delete</span>
-                                    <span>Hapus foto</span>
-                                </button>
-                            </x-daisy-dropdown>
-                        </x-photo-tumbnail>
-                    @endforeach
-                </div>
-        @endforeach 
-    </div>
+    <style>
+        .foto-group:last-of-type {
+            margin-bottom: 1.5rem
+        }
+    </style>
+    @if($foto->isEmpty() && !empty($search)) 
+        <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
+            <div class="text-xl font-normal">
+                Foto tidak ditemukan
+            </div>
+            <div>
+                <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                    Upload foto
+                </button>
+            </div>
+        </div>
+    @elseif($foto->isEmpty() && empty($search))
+        <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
+            <div class="text-xl font-normal">
+                Belum upload foto
+            </div>
+            <div>
+                <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                    Upload foto
+                </button>
+            </div>
+        </div>
+    @else
+        <div class="block px-6 bg-gray-100" >
+            @foreach ($foto as $tanggal => $groupedPhotos)
+                <span class="text-lg font-bold block mt-4 mb-2">{{ $tanggal }}</span>
+                    <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+                        @foreach($groupedPhotos as $ft) 
+                            <x-photo-tumbnail
+                                :path="$ft->file_path"
+                                :title="$ft->photo_title"
+                                :date="$ft->created_at"
+                                :photoId="$ft->id_photo"
+                                :isLoved="$ft->is_favorite"
+                            >
+                                <x-daisy-dropdown>
+                                    <div class="flex-col py-1 gap-2">
+                                        <button type="button" class="pindahAlbum flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
+                                            <input type="hidden" class="id_foto" value="{{ $ft->id_photo }}">
+                                            <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
+                                            <input type="hidden" class="album_id" value="{{ $ft->folder }}">
+                                            <span class="material-symbols-outlined">folder_open</span>
+                                            <span>Pindah ke album</span>
+                                        </button>    
+                                        <button type="button" class="editJudul flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
+                                            <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
+                                            <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                            <span class="material-symbols-outlined">edit</span>
+                                            <span>Ganti judul</span>
+                                        </button>    
+                                        <button type="button" class="arsipkanFoto flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalArsip').showModal()">
+                                            <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
+                                            <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                            <span class="material-symbols-outlined">archive</span>
+                                            <span>Arsipkan</span>
+                                        </button>    
+                                        <button type="button" class="deleteFoto flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
+                                            <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
+                                            <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                            <span class="material-symbols-outlined">delete</span>
+                                            <span>Hapus foto</span>
+                                        </button>
+                                    </div>
+                                </x-daisy-dropdown>
+                            </x-photo-tumbnail>
+                        @endforeach
+                    </div>
+            @endforeach 
+        </div>
+    @endif
 </div>
 
-<dialog id="modalEdit" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">Ganti Judul</h3>
-        <p class="py-4">Perhatian! tindakan ini tidak dapat dikembalikan</p>
-        <div class="modal-action">
-        <form method="POST" action="{{ route('foto.editjudul') }}">
-            @csrf
-            @method('PATCH')
-            <input type="hidden" id="editId" name="id_foto">
-            <input type="text" id="editTitle" name="title_foto" disabled>
-            <input type="text" name="new_judul">
-            <button type="submit" class="btn btn-primary">Hapus</button>
-        </form>
-        <form method="dialog">
-            <button class="btn">Batal</button>
-        </form>
-        </div>
-    </div>
-</dialog> 
+@include('photo.modal-edit-foto')
+@include('photo.modal-delete-foto')
+@include('photo.modal-arsip-foto')
 
-<dialog id="modalArsip" class="modal">
+<dialog id="modalPindahAlbum" class="modal">
     <div class="modal-box">
-        <h3 class="text-lg font-bold">Arsipkan</h3>
-        <p class="py-4">Perhatian! tindakan ini tidak dapat dikembalikan</p>
-        <div class="modal-action">
-        <form method="POST" action="{{ route('foto.singlearsip') }}">
-            @csrf
-            @method('PATCH')
-            <input type="hidden" id="arsipId" name="id_foto">
-            <button type="submit" class="btn btn-primary">Hapus</button>
-        </form>
-        <form method="dialog">
-            <button class="btn">Batal</button>
-        </form>
+        <h3 class="text-lg font-bold">Pindah "<span id="albumTitle" class="text-lg"></span>" ke album</h3>
+        <p class="">Kelompokan momen terbaik anda</p>
+        <div class="modal-action flex-col">
+            <form method="POST" action="{{ route('foto.singlepindahalbum') }}">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" id="albumId" name="id_foto">
+                <label class="" for="album-selector">Pilih album</label>
+                <select id="album-selector" name="folder_id" class="mt-2 select w-full select-md">
+                    <option disabled selected>Pilih album tujuan</option>
+                </select>
+                <hr class="mt-4">
+                <button type="submit" class="mt-4 btn btn-primary w-full">Pindahkan</button>
+            </form>
+            <form method="dialog">
+                <button class="btn w-full">Batal</button>
+            </form>
         </div>
     </div>
-</dialog> 
+</dialog>
 
-<dialog id="modalDelete" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">Hapus foto</h3>
-        <p class="py-4">Perhatian! tindakan ini tidak dapat dikembalikan</p>
-        <div class="modal-action">
-        <form method="POST" action="{{ route('foto.singledelete') }}">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" id="deleteId" name="id_foto">
-            <button type="submit" class="btn btn-primary">Hapus</button>
-        </form>
-        <form method="dialog">
-            <button class="btn">Batal</button>
-        </form>
-        </div>
-    </div>
-</dialog> 
 
 {{-- single upload toast --}}
 @if (session('status'))

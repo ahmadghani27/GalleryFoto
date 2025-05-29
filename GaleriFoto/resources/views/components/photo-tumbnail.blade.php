@@ -3,7 +3,7 @@
     'title' => 'Judul Default',
     'photoId' => 'ss',
     'date' => now()->format('d M Y'),
-    'isLoved' => false
+    'isLoved' => false,
 ])
 
 <div class="bg-white rounded-lg overflow-hidden relative" x-data="{ control : false, loved: {{ $isLoved ? 'true' : 'false' }} }" @mouseleave="control = false">
@@ -53,7 +53,7 @@
             </div>
         </div>
         
-        <img src="{{ asset($path) }}" alt="{{ $title }}" class="w-full h-full object-cover " loading="lazy">
+        <img src="{{ route('foto.access', ['path' => $path ]) }}" alt="{{ $title }}" class="w-full h-full object-cover " loading="lazy">
     </div>
 </div>
 

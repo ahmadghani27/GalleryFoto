@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -17,9 +21,16 @@ class PhotoController extends Controller
     public function index() {
         $userId = Auth::id(); // ambil id user yang sedang login
         $sortOrder = request('sort', 'desc');
-        $foto = Photo::where('user_id', $userId)
-            ->where('is_archive', false)
-            ->orderBy('created_at', $sortOrder)
+        $search = request('search');
+
+        $query = Photo::where('user_id', $userId)
+            ->where('is_archive', false);
+
+        if(!empty($search)) {
+            $query->where('photo_title', 'like', '%' . $search . '%');
+        }
+
+        $foto = $query->orderBy('created_at', $sortOrder)
             ->get()
             ->groupBy(function ($item) {
                 $tanggal = Carbon::parse($item->created_at);
@@ -32,7 +43,7 @@ class PhotoController extends Controller
                     return $tanggal->translatedFormat('d M Y');
                 }
             });
-        return view('photo.index', compact('foto'));
+        return view('photo.index', compact('foto', 'search'));
     }
 
     public function store(Request $request) : RedirectResponse {
@@ -54,21 +65,21 @@ class PhotoController extends Controller
         ]);
 
 
-        if(!empty($request->photo)){
-        //     //maka proses berikut yang dijalankan
-            $fileName = 'foto-'.uniqid().'.'.$request->photo->extension();
-            //setelah tau fotonya sudah masuk maka tempatkan ke public
-            $request->photo->move(public_path('image'), $fileName);
-        } else {
-            $fileName = null;
-        }
+        $folder = now()->format('Y/m');
+        $fileName = 'foto-' . uniqid() . '.' . $request->photo->extension();
+        $path = "photos/{$folder}/{$fileName}";
+
+        // Resize and compress image
+        $image = Image::make($request->file('photo'))->encode('jpg', 80);
+        Storage::disk('local')->put("{$path}", $image);
+        
 
         Photo::create([
             'user_id'      => $request->user()->id,
             'folder'       => null,
             'is_archive'   => false,
             'is_favorite'  => false,
-            'file_path'    => '/image/' . $fileName,
+            'file_path'    => $path,
             'photo_title'  => $request->title,
             'created_at'   => now(),
             'update_at'    => now(),
@@ -103,32 +114,32 @@ class PhotoController extends Controller
         }
 
         $uploadedFiles = [];
+        $folder = now()->format('Y/m');
         
-        if(!empty($request->photo)){
-            foreach ($request->file('photo') as $index => $photo) {
-                $judul = $request->input('title')[$index];
-                $fileName = 'foto-'.uniqid().'.'.$photo->extension();
-    
+        foreach ($request->file('photo') as $index => $photo) {
+            $judul = $request->input('title')[$index];
+            $fileName = 'foto-'.uniqid().'.'.$photo->extension();
+            $path = "photos/{$folder}/{$fileName}";
 
-                Photo::create([
-                    'user_id'      => $request->user()->id,
-                    'folder'       => null,
-                    'is_archive'   => false,
-                    'is_favorite'  => false,
-                    'file_path'    => '/image/' . $fileName,
-                    'photo_title'  => $judul,
-                    'created_at'   => now(),
-                    'update_at'    => now(),
-                ]);
+            // Resize and compress image
+            $image = Image::make($photo)->encode('jpg', 60);
+            Storage::disk('local')->put("{$path}", $image);
 
-                $photo->move(public_path('image'), $fileName);
-    
-               
-                $uploadedFiles[] = [
-                    'title' => $judul,
-                    'filename' => $fileName,
-                ];
-            }
+            Photo::create([
+                'user_id'      => $request->user()->id,
+                'folder'       => null,
+                'is_archive'   => false,
+                'is_favorite'  => false,
+                'file_path'    => $path,
+                'photo_title'  => $judul,
+                'created_at'   => now(),
+                'update_at'    => now(),
+            ]);
+            
+            $uploadedFiles[] = [
+                'title' => $judul,
+                'filename' => $fileName,
+            ];
         }
         
         session()->flash('status', 'Semua foto berhasil diupload');
@@ -180,5 +191,29 @@ class PhotoController extends Controller
         $photo->save();
 
         return response()->json(['success' => true, 'is_favorite' => $photo->is_favorite]);
+    }
+
+    public function pindahAlbum(Request $request) {
+        $foto = Photo::findOrFail($request->id_foto);
+        $album = Folder::findOrFail($request->folder_id);
+
+        $foto->update([
+            'folder'=>$request->folder_id
+        ]);
+
+        return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
+    }
+
+    public function access($path)
+    {
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404, 'File not found: ' . $path);
+        }
+
+        $fullPath = Storage::disk('local')->path($path);
+        $mime = mime_content_type($fullPath);
+        $file = file_get_contents($fullPath);
+
+        return response($file, 200)->header('Content-Type', $mime);
     }
 }
