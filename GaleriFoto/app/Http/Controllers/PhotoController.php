@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -191,7 +195,7 @@ class PhotoController extends Controller
         }
     }
 
-    
+
 
     public function toggleFavorite(Request $request)
     {
@@ -225,5 +229,30 @@ class PhotoController extends Controller
                 'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function pindahAlbum(Request $request)
+    {
+        $foto = Photo::findOrFail($request->id_foto);
+        $album = Folder::findOrFail($request->folder_id);
+
+        $foto->update([
+            'folder' => $request->folder_id
+        ]);
+
+        return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
+    }
+
+    public function access($path)
+    {
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404, 'File not found: ' . $path);
+        }
+
+        $fullPath = Storage::disk('local')->path($path);
+        $mime = mime_content_type($fullPath);
+        $file = file_get_contents($fullPath);
+
+        return response($file, 200)->header('Content-Type', $mime);
     }
 }
