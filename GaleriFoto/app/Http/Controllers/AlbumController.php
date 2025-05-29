@@ -53,4 +53,9 @@ class AlbumController extends Controller
 
         return back()->with('success', 'Nama album berhasil diubah');
     }
+
+    public function getActiveAlbum($id) {
+        $items = Folder::where('id_folder', '!=', $id)->get();
+        return response()->json($items);
+    }
 }

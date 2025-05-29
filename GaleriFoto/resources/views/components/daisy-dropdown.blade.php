@@ -16,7 +16,7 @@ default => 'hover:text-gray-900',
 };
 @endphp
 
-<div x-data="{ open: false }" class="dropdown dropdown-top dropdown-end"
+<div x-data="{ open: false }" {{ $attributes->merge(['class' => 'dropdown dropdown-top dropdown-end']) }}
     :class="{ 'dropdown-open': open }"
     @click.outside="open = false">
     <div tabindex="0" role="button"
