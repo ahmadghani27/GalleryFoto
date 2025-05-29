@@ -17,7 +17,7 @@
                 </div>
             </div>
             <x-daisy-dropdown hoverClass="dark" colorClass="dark" x-data="{ isOpen: false }">
-                <x-daisy-dropdown-link 
+                <x-daisy-dropdown-link
                     href="#"
                     onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-nama-album-{{ $folder->id_folder }}' }))">
                     <span class="material-symbols-outlined p-2">edit</span>
@@ -126,7 +126,7 @@
                     <input type="text" disabled
                         class="block bg-transparent min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400
                                border-none focus:outline-none focus:ring-0 focus:border-none shadow-none disabled:text-gray-600"
-                        value="{{ $folder->name_folder }}" placeholder="Nama album lama" >
+                        value="{{ $folder->name_folder }}" placeholder="Nama album lama">
                 </div>
 
                 <span class="material-symbols-outlined mt-4 mb-4 shrink-0 text-2 text-gray-500 select-none">

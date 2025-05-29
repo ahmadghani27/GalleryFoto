@@ -179,16 +179,30 @@ class PhotoController extends Controller
 
     public function arsipkan(Request $request)
     {
-        $decryptedId = Crypt::decryptString($request->id_foto);
-
-        $foto = Photo::findOrFail($decryptedId);
-
-        $foto->update([
-            'is_archive' => true,
+        $request->validate([
+            'id_foto' => 'required|string'
         ]);
 
-        return Redirect::route('foto')->with('status', 'Foto berhasil diarsipkan');
+        try {
+            $decryptedId = Crypt::decryptString($request->id_foto);
+
+            $foto = Photo::where('id_photo', $decryptedId);
+
+            $foto->update(['is_archive' => true]);
+
+            return Redirect::route('foto')->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil diarsipkan'
+            ]);
+        } catch (\Exception $e) {
+            return Redirect::back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengarsipkan foto: ' . $e->getMessage()
+            ]);
+        }
     }
+
+
 
     public function toggleFavorite(Request $request)
     {
@@ -199,12 +213,38 @@ class PhotoController extends Controller
         return response()->json(['success' => true, 'is_favorite' => $photo->is_favorite]);
     }
 
-    public function pindahAlbum(Request $request) {
+    public function unarsipkan(Request $request)
+    {
+        $request->validate([
+            'id_foto' => 'required|string'
+        ]);
+
+        try {
+            $decryptedId = Crypt::decryptString($request->id_foto);
+
+            $foto = Photo::where('id_photo', $decryptedId);
+
+            $foto->update(['is_archive' => false]);
+
+            return Redirect::route('arsip.content')->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil dikeluarkan dari arsip'
+            ]);
+        } catch (\Exception $e) {
+            return Redirect::back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function pindahAlbum(Request $request)
+    {
         $foto = Photo::findOrFail($request->id_foto);
         $album = Folder::findOrFail($request->folder_id);
 
         $foto->update([
-            'folder'=>$request->folder_id
+            'folder' => $request->folder_id
         ]);
 
         return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);

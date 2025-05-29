@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/foto_access/{path}', [PhotoController::class, 'access'])
         ->where('path', '.*')
         ->name('foto.access');
+    Route::post('/foto/unarchive', [PhotoController::class, 'unarsipkan'])
+        ->name('photos.unarchive');
     //Route Profile
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -41,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
     Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
+    Route::get('/arsip/content', [ArchiveController::class, 'content'])->name('arsip.content');
 });
 
 require __DIR__ . '/auth.php';
