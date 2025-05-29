@@ -1,115 +1,171 @@
 @extends('layouts.sidebar')
 @section('title', 'Arsip')
+
 @section('content')
-<div class="flex flex-col gap-2 px-8  bg-gray-100">
-    <div class="sticky top-0 z-40 bg-gray-100 py-2">
-        <article class="w-full flex justify-between items-center">
-            <div class="text-black text-xl font-bold p-4">Arsip</div>
-        </article>
-        <div class="w-full h-16 flex justify-start items-center gap-4">
-            <div class="w-auto h-16 px-5 bg-white rounded-[999px] outline outline-1 outline-offset-[-1px] outline-black/10 flex justify-between items-center">
-                <div class="flex justify-start items-center gap-4 w-full mr-3.5">
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>
-                    <input
-                        type="text"
-                        value="Monyet"
-                        class="text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                        placeholder="Cari foto..." />
-                </div>
-                <span class="material-symbols-outlined">
-                    close
-                </span>
-            </div>
-            <div x-data="{ open: false, selected: 'Terbaru' }" class="relative">
-                <div
-                    @click="open = !open"
-                    :class="open ? 'rounded-t-2xl' : 'rounded-2xl'"
-                    class="cursor-pointer h-14 px-5 py-5 bg-white  outline outline-1 outline-offset-[-1px] outline-black/10 flex justify-start items-center gap-2">
-                    <span class="material-symbols-outlined cursor-pointer">
-                        format_line_spacing
-                    </span>
-                    <div x-text="selected" class="text-neutral-900 text-base font-normal font-inter group-hover:text-white"></div>
+
+<!-- 
+
+-->
+<!-- resources/views/photo/arsip.blade.php -->
+<div x-data="{
+    password: '',
+    showPassword: false,
+    isAuthenticated: false,
+    errorMessage: '',
+    isLoading: false,
+    
+    async checkPassword() {
+        this.isLoading = true;
+        this.errorMessage = '';
+        
+        try {
+            const response = await fetch('{{ route('arsip.verify') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    password: this.password
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.isAuthenticated = true;
+            } else {
+                this.errorMessage = data.message || 'Kata sandi salah';
+            }
+        } catch (error) {
+            this.errorMessage = 'Terjadi kesalahan, silakan coba lagi';
+        } finally {
+            this.isLoading = false;
+        }
+    }
+}">
+    <!-- Password Form -->
+    <template x-if="!isAuthenticated">
+        <div class="flex items-center justify-center w-full min-h-screen bg-gray-200 p-4">
+            <div class="flex flex-col justify-center items-center gap-6 max-w-md w-full bg-gray-100 p-6 rounded-2xl shadow-lg">
+                <div class="w-full flex flex-col justify-start items-start gap-2">
+                    <h1 class="text-2xl font-bold text-neutral-900">Masukkan kata sandi akun anda</h1>
+                    <p class="text-base font-normal text-neutral-900/70">Masukkan kata sandi untuk mengakses arsip</p>
+                    <div class="w-full h-px bg-black/10"></div>
                 </div>
 
-                <div
-                    x-show="open"
-                    @click.away="open = false"
-                    class=" top-full left-0 w-full bg-white rounded-b-2xl outline outline-1 outline-offset-[-1px] outline-black/10 z-10">
-                    <div class="flex flex-col">
-                        <template x-if="selected === 'Terbaru'">
-                            <button
-                                @click="selected = 'Terlama'; open = false"
-                                class="px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 rounded-b-2xl">
-                                Terlama
-                            </button>
-                        </template>
-                        <template x-if="selected === 'Terlama'">
-                            <button
-                                @click="selected = 'Terbaru'; open = false"
-                                class="px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 rounded-b-2xl">
-                                Terbaru
-                            </button>
-                        </template>
+                <div class="w-full flex flex-col gap-2">
+                    <label for="password" class="text-base font-medium text-neutral-900">Kata sandi</label>
+                    <div class="relative">
+                        <input
+                            x-model="password"
+                            :type="showPassword ? 'text' : 'password'"
+                            id="password"
+                            name="password"
+                            required
+                            @keyup.enter="checkPassword"
+                            class="w-full px-4 py-4 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
+                            placeholder="Masukkan kata sandi">
+                        <button
+                            type="button"
+                            @click="showPassword = !showPassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-700">
+                            <span x-text="showPassword ? 'visibility_off' : 'visibility'" class="material-symbols-outlined"></span>
+                        </button>
                     </div>
+                    <div x-show="errorMessage" x-text="errorMessage" class="mt-1 text-sm text-red-500"></div>
                 </div>
+
+                <button
+                    @click="checkPassword"
+                    :disabled="isLoading"
+                    class="w-full px-6 py-4 bg-black hover:bg-neutral-800 rounded-2xl transition-colors duration-200 disabled:opacity-50 ">
+                    <span x-show="!isLoading" class="text-white text-base font-bold">Masuk</span>
+                    <span x-show="isLoading" class="text-white text-base font-bold">Memverifikasi...</span>
+                </button>
             </div>
         </div>
-        <div class="self-stretch justify-start text-black text-xl font-medium">Menampilkan 20 foto</div>
-    </div>
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 max-w-full">
-        <div class="relative aspect-square bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow  min-w-[300px] max-w-[450px]">
-            <!-- Gambar -->
-            <img src="{{ asset('sample-photo.jpg') }}" alt="Photo" class="absolute inset-0 w-full h-full object-cover ">
+    </template>
 
-            <!-- Keterangan -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 bg-white">
-                <div class="flex justify-between items-center">
-                    <div class="space-y-1">
-                        <h3 class="text-lg font-semibold text-gray-900">Kenangan</h3>
-                        <p class="text-sm text-gray-600">Dibuat 25 Mei 2025</p>
-                    </div>
-
-                    <!-- Dropdown Trigger -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="px-1 py-2 rounded-full hover:bg-gray-100 flex justify-center items-center">
-                            <span class="material-symbols-outlined cursor-pointer text-gray-600">
-                                more_vert
-                            </span>
-                        </button>
-
-                        <!-- Dropdown Menu -->
-                        <div
-                            x-show="open"
-                            @click.outside="open = false"
-                            class="absolute right-[-30%] bottom-[85%] mb-2 z-10"
-                            x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="transform opacity-0 scale-95"
-                            x-transition:enter-end="transform opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="transform opacity-100 scale-100"
-                            x-transition:leave-end="transform opacity-0 scale-95">
-                            <div class="w-[160px] bg-zinc-100 rounded-xl outline outline-1 outline-offset-[-1px] outline-black/10 inline-flex flex-col justify-start items-start gap-0.5 shadow-lg">
-                                <div class="self-stretch p-3 inline-flex justify-start items-center gap-2.5 hover:bg-zinc-200 rounded-lg cursor-pointer">
-                                    <span class="material-symbols-outlined cursor-pointer text-gray-600">
-                                        edit
-                                    </span>
-                                    <div class="text-neutral-900 text-base font-normal">Ganti nama</div>
-                                </div>
-                                <div class="self-stretch p-3 inline-flex justify-start items-center gap-2.5 hover:bg-zinc-200 rounded-lg cursor-pointer">
-                                    <span class="material-symbols-outlined cursor-pointer text-gray-600">
-                                        delete
-                                    </span>
-                                    <div class="text-neutral-900 text-base font-normal">Hapus album</div>
-                                </div>
+    <!-- Arsip Content -->
+    <template x-if="isAuthenticated">
+        <div class="flex flex-col bg-white">
+            <!-- Header/Navbar -->
+            <div class="flex flex-col bg-white">
+                <div class="sticky top-0 z-40 px-6 py-3 pt-6 bg-white border-b-[1.5px] border-gray-200">
+                    <div class="flex gap-5">
+                        <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
+                            <div class="flex justify-start items-center gap-4 w-full mr-3.5">
+                                <span class="material-symbols-outlined">
+                                    search
+                                </span>
+                                <input
+                                    type="search"
+                                    value="Monyet"
+                                    class="text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
+                                    placeholder="Cari foto..." />
                             </div>
+                        </div>
+                        <button type="button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4"
+                            onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))">
+                            <span class="material-symbols-outlined text-gray-300">
+                                add
+                            </span>
+                            <span class="text-gray-300 font-semibold">Tambah Foto</span>
+                        </button>
+                    </div>
+                    <div class="w-full flex items-center mt-3 gap-6">
+                        <div class="flex justify-end items-center gap-5">
+                            <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
+                                <div
+                                    @click="open = !open" :class="{'rounded-t-md': open, 'rounded-full': !open}"
+                                    class="cursor-pointer px-5 py-3 !bg-white border-[1.5px] border-gray-300 rounded-full flex justify-start items-center gap-2
+                        ">
+                                    <span class="material-symbols-outlined cursor-pointer">
+                                        format_line_spacing
+                                    </span>
+                                    <div x-text="selected" class="text-neutral-900 text-base font-normal font-inter group-hover:text-white"></div>
+                                </div>
+
+                                <div
+                                    x-show="open"
+                                    @click.away="open = false"
+                                    class="absolute top-full left-0 w-full bg-transparent">
+                                    <div class="flex flex-col">
+                                        <template x-if="selected === 'Terbaru'">
+                                            <a
+                                                href="{{ route('foto', ['sort' => 'asc']) }}"
+                                                @click="selected = 'Terlama'; open = false"
+                                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] ">
+                                                Terlama
+                                            </a>
+                                        </template>
+                                        <template x-if="selected === 'Terlama'">
+                                            <a
+                                                href="{{ route('foto', ['sort' => 'desc']) }}"
+                                                @click="selected = 'Terbaru'; open = false"
+                                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] ">
+                                    Terbaru
+                                </a>
+                            </template>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+            <div class=" text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">Menampilkan Foto
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block px-6 bg-gray-100">
 
+                            </div>
+                        </div>
+
+                        <!-- Content Area -->
+                        <div class="block px-6 bg-gray-100">
+                            @include('photo.arsip-content') <!-- Buat partial view untuk konten arsip -->
+                        </div>
+                    </div>
+    </template>
+</div>
 @endsection
