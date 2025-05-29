@@ -32,20 +32,18 @@ class AlbumController extends Controller
     {
         $userId = Auth::id();
 
-        // 1. Verifikasi bahwa album/folder tersebut milik user yang login
-        $album = Folder::where('id_folder', $id_album)
+        $folder = Folder::withCount('photos')
+            ->where('id_folder', $id_album)
             ->where('user_id', $userId)
             ->firstOrFail();
 
-        // 2. Ambil semua foto yang berada dalam folder/album tersebut
         $photos = Photo::where('folder', $id_album)
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // 3. Kirim kedua data ke view
         return view('photo.photo-album', [
-            'album' => $album,
+            'folder' => $folder, // Ubah dari $album ke $folder
             'photos' => $photos
         ]);
     }

@@ -5,7 +5,7 @@
 <div class="flex flex-col bg-gray-100">
     <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white border-b-[1.5px] border-gray-200">
         <article class="w-full flex justify-between items-center">
-            <div class="text-black text-4xl font-bold p-2">Album > Kenangan</div>
+           <div class="text-black text-4xl font-bold p-2">Album > {{ $folder->name_folder }}</div>
         </article>
         <div class="w-full h-16 flex justify-start items-center gap-4">
             <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
