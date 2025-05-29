@@ -17,10 +17,9 @@ class AlbumController extends Controller
         $userId = Auth::id();
 
         $album = Folder::with(['photos' => function ($query) {
-            $query->orderBy('created_at')->limit(1); // Ambil 1 foto pertama
-        }])
-            ->where('user_id', $userId)
-            ->get();
+            $query->orderBy('created_at')->limit(1);
+        }])->where('user_id', Auth::id())->get();
+
 
         return view('photo.album', compact('album'));
     }

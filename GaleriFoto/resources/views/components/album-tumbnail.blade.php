@@ -33,21 +33,22 @@
                 </x-daisy-dropdown-link>
             </x-daisy-dropdown>
         </div>
-        @if($folder->photos->first())
+        @if ($folder->thumbnail)
         <a href="{{ route('album.show', $folder->id_folder) }}"
-            class="block w-full h-full z-10"
+            class="block w-full h-full"
             aria-label="Buka album {{ $folder->name_folder }}"
             @click.stop>
-            <img src="{{ asset('storage/'.$folder->photos->first()->file_path) }}"
-                alt="{{ $folder->photos->first()->photo_title }}"
-                class="w-full h-full object-cover">
+            <img src="{{ asset($folder->thumbnail->file_path) }}"
+                alt="{{ $folder->thumbnail->photo_title }}"
+                class="w-full h-full object-cover rounded-xl shadow-md group-hover:opacity-90 transition duration-200 ease-in-out">
         </a>
         @else
+        {{-- If there is no photo in the folder, show a placeholder --}}
         <a href="{{ route('album.show', $folder->id_folder) }}"
-            class="block w-full h-full z-10"
+            class="block w-full h-full"
             aria-label="Buka album {{ $folder->name_folder }}"
             @click.stop>
-            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+            <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded-xl shadow-inner">
                 <span class="material-symbols-outlined text-4xl text-gray-400">photo_library</span>
             </div>
         </a>

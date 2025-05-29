@@ -17,16 +17,13 @@ class Folder extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function getThumbnailAttribute()
-    {
-        return $this->photos()
-            ->orderBy('created_at') // Urutkan dari yang paling lama (gambar pertama)
-            ->first(); // Ambil gambar pertama
-    }
-
-
+    // Folder.php
     public function photos()
     {
         return $this->hasMany(Photo::class, 'folder', 'id_folder');
+    }
+    public function getThumbnailAttribute()
+    {
+        return $this->photos->first(); // Karena sudah pakai limit(1) di eager load
     }
 }
