@@ -2,13 +2,11 @@
 
 <div class="relative">
     <div class="aspect-square rounded-xl overflow-hidden">
-        <div x-show="control" x-transition class="flex justify-between flex-col absolute w-auto h-auto">
-            <div class="flex items-center justify-end">
-                <div class="p-2 flex">
-                    <label class="cursor-pointer label">
-                        <input type="checkbox" class="checkbox checkbox-xl checkbox-primary" />
-                    </label>
-                </div>
+        <div x-show="control" x-transition class="flex justify-between flex-col absolute w-auto h-auto right-0 top-0 p-1">
+            <div class="p-2 flex">
+                <label class="cursor-pointer label">
+                    <input type="checkbox" class="p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
+                </label>
             </div>
         </div>
         <div class="absolute bottom-0 flex items-center justify-between bg-white w-full p-4">
@@ -19,16 +17,16 @@
                 </div>
             </div>
             <x-daisy-dropdown hoverClass="dark" colorClass="dark" x-data="{ isOpen: false }">
-                <x-daisy-dropdown-link
+                <x-daisy-dropdown-link 
                     href="#"
                     onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-nama-album-{{ $folder->id_folder }}' }))">
-                    <span class="material-symbols-outlined">edit</span>
+                    <span class="material-symbols-outlined p-2">edit</span>
                     <span>Ganti nama</span>
                 </x-daisy-dropdown-link>
                 <x-daisy-dropdown-link
                     href="#"
                     onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'hapus-album-{{ $folder->id_folder }}' }))">
-                    <span class="material-symbols-outlined">delete</span>
+                    <span class="material-symbols-outlined p-2">delete</span>
                     <span>Hapus album</span>
                 </x-daisy-dropdown-link>
             </x-daisy-dropdown>
@@ -119,18 +117,16 @@
             @method('PATCH')
 
             <div class="flex-col mt-6 items-center justify-items-center">
-                <div class="flex items-center gap-2 rounded-md bg-white px-4 py-2 border-gray-300 border-2 w-full outline outline-1 outline-transparent focus-within:outline-2 focus-within:outline-indigo-300">
+                <div class="flex items-center gap-2 rounded-md bg-gray-100 px-4 py-2 border-gray-300 border-2 w-full outline outline-1 outline-transparent focus-within:outline-2 focus-within:outline-indigo-300">
                     <div class="grid place-center">
                         <span class="material-symbols-outlined shrink-0 text-2 text-gray-900 select-none">
                             match_case
                         </span>
                     </div>
-                    <input type="text"
+                    <input type="text" disabled
                         class="block bg-transparent min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400
                                border-none focus:outline-none focus:ring-0 focus:border-none shadow-none disabled:text-gray-600"
-                        value="{{ $folder->name_folder }}"
-                        disabled
-                        placeholder="Nama album lama">
+                        value="{{ $folder->name_folder }}" placeholder="Nama album lama" >
                 </div>
 
                 <span class="material-symbols-outlined mt-4 mb-4 shrink-0 text-2 text-gray-500 select-none">

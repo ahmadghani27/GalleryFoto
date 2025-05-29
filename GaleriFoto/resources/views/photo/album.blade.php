@@ -29,7 +29,7 @@
                         placeholder="Cari foto..." />
                 </div>
             </div>
-            <div x-data="{ open: false, selected: 'Terbaru' }" class="relative">
+            <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
                 <div
                     @click="open = !open" :class="{'rounded-t-md': open, 'rounded-full': !open}"
                     class="cursor-pointer px-5 py-3 !bg-white border-[1.5px] border-gray-300 rounded-full flex justify-start items-center gap-2
@@ -46,23 +46,26 @@
                     class="absolute top-full left-0 w-full bg-transparent">
                     <div class="flex flex-col">
                         <template x-if="selected === 'Terbaru'">
-                            <button
+                            <a
+                                href="{{ route('album', ['sort' => 'asc']) }}"
                                 @click="selected = 'Terlama'; open = false"
-                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
                                 Terlama
-                            </button>
+                            </a>
                         </template>
                         <template x-if="selected === 'Terlama'">
-                            <button
+                            <a
+                                href="{{ route('album', ['sort' => 'desc']) }}"
                                 @click="selected = 'Terbaru'; open = false"
-                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
+                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
                                     Terbaru
-                                </button>
+                                </a>
                             </template>
                         </div>
                     </div>
                 </div>
-            <button  x-data=" { open: window.innerWidth>= 768 }"
+
+            <button x-data=" { open: window.innerWidth>= 768 }"
                                 x-init="open = window.innerWidth >= 768"
                                 @resize.window="open = window.innerWidth >= 768" type=" button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
                                 <span class="material-symbols-outlined text-gray-300">
@@ -75,7 +78,7 @@
                                     x-transition>
                                     Tambah Album
                                 </span>
-                            </button>
+                                </button>
                     </div>
                 </div>
                 <div class="block p-6">

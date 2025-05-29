@@ -70,15 +70,52 @@
                     </div>
                 </div>
 
-                <div class=" text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">Menampilkan 1 Foto
+                <div class="text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg p-2 rounded-lg">
+                    @if ($photos->count() == 0)
+                    Album kosong
+                    @else
+                    Menampilkan {{ $photos->count() }} Foto
+                    @endif
                 </div>
             </div>
             <div class="block p-6">
+                @foreach ($photos->groupBy(function($item) { return $item->created_at->format('d F Y'); }) as $tanggal => $groupedPhotos)
+                <span class="text-lg font-bold block mt-4 mb-2">{{ $tanggal }}</span>
                 <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                    @for ($i = 0; $i < 7; $i++)
-                        <x-photo-tumbnail></x-photo-tumbnail>
-                        @endfor
+                    @foreach($groupedPhotos as $ft)
+                    <x-photo-tumbnail
+                        :path="$ft->file_path"
+                        :title="$ft->photo_title"
+                        :date="$ft->created_at"
+                        :photoId="$ft->id_photo"
+                        :isLoved="$ft->is_favorite">
+                        <x-daisy-dropdown>
+                            <button type="button">
+                                <span class="material-symbols-outlined">folder_open</span>
+                                <span>Pindah ke album</span>
+                            </button>
+                            <button type="button" class="editJudul flex gap-3" onclick="document.getElementById('modalEdit').showModal()">
+                                <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
+                                <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                <span class="material-symbols-outlined">edit</span>
+                                <span>Ganti judul</span>
+                            </button>
+                            <button type="button" class="arsipkanFoto flex gap-3" onclick="document.getElementById('modalArsip').showModal()">
+                                <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                <span class="material-symbols-outlined">archive</span>
+                                <span>Arsipkan</span>
+                            </button>
+                            <button type="button" class="deleteFoto flex gap-3" onclick="document.getElementById('modalDelete').showModal()">
+                                <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
+                                <span class="material-symbols-outlined">delete</span>
+                                <span>Hapus foto</span>
+                            </button>
+                        </x-daisy-dropdown>
+                    </x-photo-tumbnail>
+                    @endforeach
                 </div>
+                @endforeach
             </div>
+
         </div>
         @endsection

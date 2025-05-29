@@ -12,17 +12,22 @@ use App\Models\Photo;
 
 class AlbumController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
 
+        $sort = $request->query('sort', 'desc'); // default: Terbaru
+
         $album = Folder::with(['photos' => function ($query) {
             $query->orderBy('created_at')->limit(1);
-        }])->where('user_id', Auth::id())->get();
-
+        }])
+            ->where('user_id', $userId)
+            ->orderBy('created_at', $sort)
+            ->get();
 
         return view('photo.album', compact('album'));
     }
+
     public function show($id_album)
     {
         $userId = Auth::id();
