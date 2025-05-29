@@ -79,10 +79,8 @@
                 </div>
             </div>
             <div class="block p-6">
-                @foreach ($photos->groupBy(function($item) { return $item->created_at->format('d F Y'); }) as $tanggal => $groupedPhotos)
-                <span class="text-lg font-bold block mt-4 mb-2">{{ $tanggal }}</span>
                 <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                    @foreach($groupedPhotos as $ft)
+                    @foreach($photos as $ft)
                     <x-photo-tumbnail
                         :path="$ft->file_path"
                         :title="$ft->photo_title"
@@ -114,7 +112,6 @@
                     </x-photo-tumbnail>
                     @endforeach
                 </div>
-                @endforeach
             </div>
 
         </div>
