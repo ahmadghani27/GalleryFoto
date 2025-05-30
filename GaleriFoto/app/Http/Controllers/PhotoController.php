@@ -20,7 +20,7 @@ class PhotoController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id(); // ambil id user yang sedang login
+        $userId = Auth::id(); // Ambil ID user yang sedang login
         $sortOrder = request('sort', 'desc');
         $search = request('search');
 
@@ -44,7 +44,11 @@ class PhotoController extends Controller
                     return $tanggal->translatedFormat('d M Y');
                 }
             });
-        return view('photo.index', compact('foto', 'search'));
+
+        // Fetch folders for the authenticated user
+        $folders = Folder::where('user_id', $userId)->get();
+
+        return view('photo.index', compact('foto', 'search', 'folders'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -85,6 +89,7 @@ class PhotoController extends Controller
             'photo_title'  => $request->title,
             'created_at'   => now(),
             'update_at'    => now(),
+            'thumbnail_updated_at'       => null
         ]);
 
 
@@ -137,6 +142,8 @@ class PhotoController extends Controller
                 'photo_title'  => $judul,
                 'created_at'   => now(),
                 'update_at'    => now(),
+                'thumbnail_updated_at'       => null
+
             ]);
 
             $uploadedFiles[] = [
