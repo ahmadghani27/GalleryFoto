@@ -1,7 +1,7 @@
 @props(['folder'])
 
 <div class="relative">
-    <div class="aspect-square rounded-xl overflow-hidden">
+    <div class="aspect-square rounded-lg overflow-hidden">
         <div x-show="control" x-transition class="flex justify-between flex-col absolute w-auto h-auto right-0 top-0 p-1">
             <div class="p-2 flex">
                 <label class="cursor-pointer label">
@@ -35,7 +35,7 @@
         <a href="{{ route('album.show', $folder->id_folder) }}" class="block w-full h-full">
             <img src="{{ route('foto.access', $folder->thumbnail->file_path) }}"
                 alt="Thumbnail album {{ $folder->name_folder }}"
-                class="w-full h-full object-cover rounded-xl shadow-md"
+                class="w-full h-full object-cover rounded-md shadow-md"
                 loading="lazy">
         </a>
         @else
@@ -43,8 +43,8 @@
             class="block w-full h-full"
             aria-label="Buka album {{ $folder->name_folder }}"
             @click.stop>
-            <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded-xl">
-                <span class="material-symbols-outlined text-4xl text-gray-400">photo_library</span>
+            <div class="w-full h-full bg-gray-300 flex items-center justify-center rounded-md">
+                <span class="material-symbols-outlined text-4xl text-gray-700">photo_library</span>
             </div>
         </a>
         @endif
