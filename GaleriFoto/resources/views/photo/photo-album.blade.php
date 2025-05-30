@@ -290,7 +290,7 @@
         </div>
     </div>
     @else
-    <div class="block px-6 bg-gray-100">
+    <div class="block p-6 bg-gray-100">
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($photos as $ft)
             <x-photo-tumbnail
