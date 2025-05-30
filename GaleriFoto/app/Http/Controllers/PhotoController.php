@@ -287,7 +287,7 @@ class PhotoController extends Controller
 
         $foto->update([
             'folder' => $album->id_folder,
-            'folder_updated_at' => now() // Timestamp saat dipindahkan
+            'thumbnail_updated_at' => now() // Timestamp saat dipindahkan
         ]);
 
         return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
@@ -314,7 +314,7 @@ class PhotoController extends Controller
             $foto = Photo::findOrFail($foto_id);
             $foto->update([
                 'folder' => $request->folder_id,
-                'folder_updated_at' => now()
+                'thumbnail_updated_at' => now()
             ]);
         }
 
