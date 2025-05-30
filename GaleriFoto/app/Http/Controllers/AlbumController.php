@@ -19,14 +19,14 @@ class AlbumController extends Controller
         $userId = Auth::id();
         $sort = $request->query('sort', 'desc'); // default: Terbaru
 
-        $albums = Folder::with(['thumbnail' => function ($query) {
+        $album = Folder::with(['thumbnail' => function ($query) {
             $query->orderBy('thumbnail_updated_at', 'desc');
         }])
             ->where('user_id', $userId)
             ->orderBy('created_at', $sort)
             ->get();
 
-        return view('photo.album', compact('albums'));
+        return view('photo.album', compact('album'));
     }
 
     public function show($id_album)
