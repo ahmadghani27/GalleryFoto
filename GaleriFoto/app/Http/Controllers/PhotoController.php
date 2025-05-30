@@ -164,6 +164,23 @@ class PhotoController extends Controller
         return redirect()->route('foto')->with('status', 'Foto berhasil dihapus.');
     }
 
+    public function massDestroy(Request $request) {
+        $request->validateWithBag("massDelete", [
+            'id_foto' => ['required'],
+        ], [
+            'id_foto.required' => 'Tidak ada foto yang dipilih',
+        ]);
+
+        $id_foto = json_decode($request->id_foto, true);
+
+        foreach($id_foto as $foto_id) {
+            $foto = Photo::findOrFail($foto_id);
+            $foto->delete();
+        }
+
+        return Redirect::route('foto')->with('status',  count($id_foto) . ' foto berhasil dihapus');
+    }
+
     public function editJudul(Request $request)
     {
         $decryptedId = Crypt::decryptString($request->id_foto);
@@ -203,6 +220,25 @@ class PhotoController extends Controller
     }
 
 
+    
+    public function massArsipkan(Request $request) {
+        $request->validateWithBag("massArsipkan", [
+            'id_foto' => ['required'],
+        ], [
+            'id_foto.required' => 'Tidak ada foto yang dipilih',
+        ]);
+
+        $id_foto = json_decode($request->id_foto, true);
+
+        foreach($id_foto as $foto_id) {
+            $foto = Photo::findOrFail($foto_id);
+            $foto->update([
+                'is_archive'=>true,
+            ]);
+        }
+
+        return Redirect::route('foto')->with('status',  count($id_foto) . ' foto berhasil diarsipkan');
+    }
 
     public function toggleFavorite(Request $request)
     {
@@ -248,6 +284,29 @@ class PhotoController extends Controller
         ]);
 
         return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
+    }
+
+    public function massPindahAlbum(Request $request) {
+        $request->validateWithBag("massPindahAlbum", [
+            'id_foto' => ['required'],
+            'folder_id' => ['required'],
+        ], [
+            // Pesan error untuk id_foto
+            'id_foto.required' => 'Tidak ada foto yang dipilih',
+            // Pesan error untuk folder_id
+            'folder_id.required' => 'Tidak ada album yang dipilih'
+        ]);
+
+        $id_foto = json_decode($request->id_foto, true);
+
+        foreach($id_foto as $foto_id) {
+            $foto = Photo::findOrFail($foto_id);
+            $foto->update([
+                'folder'=>$request->folder_id
+            ]);
+        }
+
+        return Redirect::route('foto')->with('status', count($id_foto) . ' foto berhasil dipindah ke album');
     }
 
     public function access($path)

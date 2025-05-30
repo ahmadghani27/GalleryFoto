@@ -30,11 +30,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/foto/single-pindahalbum', [PhotoController::class, 'pindahAlbum'])->name('foto.singlepindahalbum');
     Route::patch('/foto/favorite', [PhotoController::class, 'toggleFavorite'])->name('foto.togglefavorite');
     Route::get('/api/getActiveAlbum/{id}', [AlbumController::class, 'getActiveAlbum'])->name('api.getActiveAlbum');
+    Route::get('/api/getAllActiveAlbum', [AlbumController::class, 'getAllActiveAlbum'])->name('api.getAllActiveAlbum');
     Route::get('/foto_access/{path}', [PhotoController::class, 'access'])
         ->where('path', '.*')
         ->name('foto.access');
     Route::post('/foto/unarchive', [PhotoController::class, 'unarsipkan'])
         ->name('photos.unarchive');
+    Route::patch('/foto/multiple-pindahalbum', [PhotoController::class, 'massPindahAlbum'])->name('foto.multiplepindahalbum');
+    Route::patch('/foto/multiple-delete', [PhotoController::class, 'massDestroy'])->name('foto.multipledelete');
+    Route::patch('/foto/multiple-arsip', [PhotoController::class, 'massArsipkan'])->name('foto.multiplearsip');
     //Route Profile
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
