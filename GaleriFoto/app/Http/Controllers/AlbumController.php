@@ -19,15 +19,23 @@ class AlbumController extends Controller
     {
         $userId = Auth::id();
         $sort = $request->query('sort', 'desc');
+        $search = $request->query('search');
 
-        $albums = Folder::with(['thumbnailPhoto', 'photos' => function ($query) {
+        $query = Folder::with(['thumbnailPhoto', 'photos' => function ($query) {
             $query->where('is_archive', 0)->orderBy('created_at', 'desc')->limit(1);
         }])
-            ->where('user_id', $userId)
-            ->orderBy('created_at', $sort)
-            ->get();
+            ->where('user_id', $userId);
 
-        return view('photo.album', ['album' => $albums]);
+        if ($search) {
+            $query->where('name_folder', 'like', '%' . $search . '%');
+        }
+
+        $albums = $query->orderBy('created_at', $sort)->get();
+
+        return view('photo.album', [
+            'album' => $albums,
+            'search' => $search
+        ]);
     }
     public function show($id_album)
     {

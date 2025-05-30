@@ -22,11 +22,37 @@
                     <span class="material-symbols-outlined">
                         search
                     </span>
-                    <input
-                        type="search"
-                        value="Monyet"
-                        class="text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                        placeholder="Cari foto..." />
+                    <form id="searchForm" method="GET" action="{{ route('album') }}" class="w-full flex items-center gap-2">
+                        <input
+                            id="searchAlbumField"
+                            name="search"
+                            type="text"
+                            value="{{ request('search') }}"
+                            class="searchAlbum text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
+                            placeholder="Cari nama album"
+                            x-data
+                            @input.debounce.500ms="
+                    if($event.target.value.trim() === '') {
+                        window.location.href = '{{ route('album') }}';
+                    } else {
+                        document.getElementById('searchForm').submit();
+                    }
+                " />
+
+                        <button
+                            id="clearSearchAlbumBtn"
+                            type="button"
+                            class="clearSearchBtn {{ request('search') ? '' : 'hidden' }}"
+                            aria-label="Clear search"
+                            @click="
+                    document.getElementById('searchAlbumField').value = '';
+                    window.location.href = '{{ route('album') }}';
+                ">
+                            <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">
+                                close
+                            </span>
+                        </button>
+                    </form>
                 </div>
             </div>
             <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
