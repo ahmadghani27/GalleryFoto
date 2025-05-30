@@ -32,5 +32,4 @@ class Photo extends Model
     {
         return $this->belongsTo(Folder::class, 'folder', 'id_folder');
     }
-    
 }
