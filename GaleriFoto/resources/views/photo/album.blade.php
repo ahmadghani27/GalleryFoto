@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="block p-6">
-                    @if ($album->isEmpty())
+                    @if ($albums->isEmpty())
                     <div class="w-full h-60 flex flex-col justify-center items-center gap-4 text-black">
                         <div class="text-xl font-normal">
                             Belum ada album yang Anda buat
@@ -96,7 +96,7 @@
 
                     @else
                     <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                        @foreach ($album as $item)
+                        @foreach ($albums as $item)
                         <x-album-tumbnail :folder="$item" />
                         @endforeach
                     </div>

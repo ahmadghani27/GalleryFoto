@@ -26,4 +26,9 @@ class Folder extends Model
     {
         return $this->photos->first(); // Karena sudah pakai limit(1) di eager load
     }
+    public function thumbnail()
+    {
+        return $this->hasOne(Photo::class, 'folder', 'id_folder')
+            ->where('is_thumbnail', true);
+    }
 }
