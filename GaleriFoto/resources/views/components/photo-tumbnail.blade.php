@@ -20,6 +20,8 @@
                 <div>
                     <button type="button" x-show=" !leave " class="p-2 flex rounded-md bg-gray-200"  
                     @click="
+                        const el = $event.currentTarget.closest('.cardFoto');
+
                         loved = !loved;
                         fetch('{{ route('foto.togglefavorite') }}', {
                             method: 'PATCH',
@@ -32,6 +34,10 @@
                         .then(res => res.json())
                         .then(data => {
                             loved = data.is_favorite;
+                            if (window.location.pathname.startsWith('/favorit')) {
+                                if (el) el.remove();
+                                window.location.reload();
+                            }
                         })
                         .catch(err => console.error(err));
                     ">

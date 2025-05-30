@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AlbumController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\FavoriteController;
 
 // redirect agar langsung menuju ke halaman dashboard
 Route::get('/', function () {
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
     Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
     Route::get('/arsip/content', [ArchiveController::class, 'content'])->name('arsip.content');
+
+    //Route Favorit
+    Route::get('/favorit', [FavoriteController::class, 'index'])->name('favorit');
+    Route::patch('/foto/unFavorite', [FavoriteController::class, 'unFavorite'])->name('favorit.unFavorite');
 });
 
 require __DIR__ . '/auth.php';
