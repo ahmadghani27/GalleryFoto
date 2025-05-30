@@ -6,7 +6,7 @@
     'isLoved' => false,
 ])
 
-<div class="bg-white rounded-lg overflow-hidden relative" x-data="{ control : false, loved: {{ $isLoved ? 'true' : 'false' }} }" @mouseleave="control = false">
+<div class="bg-white cardFoto rounded-lg overflow-hidden relative" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
     <div class="aspect-square rounded-sm overflow-hidden" @mouseenter="control = true">
         <template x-if="loved">
             <div class="p-4 absolute">
@@ -18,7 +18,7 @@
         <div x-show="control" x-transition class="flex justify-between flex-col p-4 absolute bg-gradient-to-t from-gray-900/50 from-10% via-gray-900/0 via-30% to-gray-900/50 to-90% w-full h-full ">
             <div class="flex items-center justify-between">
                 <div>
-                    <button type="button" class="p-2 flex rounded-md bg-gray-200"  
+                    <button type="button" x-show=" !leave " class="p-2 flex rounded-md bg-gray-200"  
                     @click="
                         loved = !loved;
                         fetch('{{ route('foto.togglefavorite') }}', {
@@ -40,7 +40,8 @@
                 </div>
                 <div class="p-2 flex">
                     <label class="cursor-pointer label">
-                        <input type="checkbox" class="p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
+                        <input type="checkbox" class="foto-multiple-selector p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
+                        <input type="hidden" class="id_carrier" value="{{ $photoId }}">
                     </label>
                 </div>
             </div>
@@ -49,7 +50,9 @@
                     <div class="text-xl font-semibold text-white">{{ $title }}</div>
                     <div class="text-sm mt-1 font-light text-white opacity-80">{{ $date }}</div>
                 </div>
-                {{ $slot }}
+                <div x-show=" !leave ">
+                    {{ $slot }}
+                </div>
             </div>
         </div>
         
