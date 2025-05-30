@@ -31,4 +31,8 @@ class Folder extends Model
         return $this->hasOne(Photo::class, 'folder', 'id_folder')
             ->orderBy('thumbnail_updated_at', 'desc');
     }
+    public function getThumbnailAttribute()
+    {
+        return $this->photos->first(); // Karena sudah pakai limit(1) di eager load
+    }
 }
