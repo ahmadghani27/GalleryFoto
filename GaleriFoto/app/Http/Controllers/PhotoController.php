@@ -71,29 +71,36 @@ class PhotoController extends Controller
         ]);
 
 
-        $folder = now()->format('Y/m');
-        $fileName = 'foto-' . uniqid() . '.' . $request->photo->extension();
-        $path = "photos/{$folder}/{$fileName}";
-
-        // Resize and compress image
-        $image = Image::make($request->file('photo'))->encode('jpg', 80);
-        Storage::disk('local')->put("{$path}", $image);
-
-
-        Photo::create([
-            'user_id'      => $request->user()->id,
-            'folder'       => null,
-            'is_archive'   => false,
-            'is_favorite'  => false,
-            'file_path'    => $path,
-            'photo_title'  => $request->title,
-            'created_at'   => now(),
-            'update_at'    => now(),
-            'thumbnail_updated_at'       => null
-        ]);
-
-
-        return Redirect::route('foto')->with('status', 'Foto berhasil diupload');
+        try {
+            $folder = now()->format('Y/m');
+            $fileName = 'foto-' . uniqid() . '.' . $request->photo->extension();
+            $path = "photos/{$folder}/{$fileName}";
+    
+            // Resize and compress image
+            $image = Image::make($request->file('photo'))->encode('jpg', 80);
+            Storage::disk('local')->put("{$path}", $image);
+            
+    
+            Photo::create([
+                'user_id'      => $request->user()->id,
+                'folder'       => null,
+                'is_archive'   => false,
+                'is_favorite'  => false,
+                'file_path'    => $path,
+                'photo_title'  => $request->title,
+                'created_at'   => now(),
+                'update_at'    => now(),
+            ]);
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil diupload'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal upload foto: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function massStore(Request $request)
@@ -152,7 +159,10 @@ class PhotoController extends Controller
             ];
         }
 
-        session()->flash('status', 'Semua foto berhasil diupload');
+        session()->flash([
+            'status' => 'success',
+            'message' => 'Semua foto berhasil diupload'
+        ]);
 
         return response()->json([
             'message' => 'Semua foto berhasil diupload',
@@ -163,12 +173,22 @@ class PhotoController extends Controller
 
     public function destroy(Request $request)
     {
-        $decryptedId = Crypt::decryptString($request->id_foto);
-
-        $foto = Photo::findOrFail($decryptedId);
-        $foto->delete();
-
-        return redirect()->route('foto')->with('status', 'Foto berhasil dihapus.');
+        try {
+            $decryptedId = Crypt::decryptString($request->id_foto);
+    
+            $foto = Photo::findOrFail($decryptedId);
+            $foto->delete();
+    
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal hapus foto: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function massDestroy(Request $request)
@@ -179,27 +199,47 @@ class PhotoController extends Controller
             'id_foto.required' => 'Tidak ada foto yang dipilih',
         ]);
 
-        $id_foto = json_decode($request->id_foto, true);
+        try {
+            $id_foto = json_decode($request->id_foto, true);
+    
+            foreach($id_foto as $foto_id) {
+                $foto = Photo::findOrFail($foto_id);
+                $foto->delete();
+            }
 
-        foreach ($id_foto as $foto_id) {
-            $foto = Photo::findOrFail($foto_id);
-            $foto->delete();
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => count($id_foto) . ' foto berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal hapus foto: ' . $e->getMessage()
+            ]);
         }
-
-        return Redirect::route('foto')->with('status',  count($id_foto) . ' foto berhasil dihapus');
     }
 
     public function editJudul(Request $request)
     {
-        $decryptedId = Crypt::decryptString($request->id_foto);
+        try {
+            $decryptedId = Crypt::decryptString($request->id_foto);
+    
+            $foto = Photo::findOrFail($decryptedId);
+    
+            $foto->update([
+                'photo_title' => $request->new_judul,
+            ]);
 
-        $foto = Photo::findOrFail($decryptedId);
-
-        $foto->update([
-            'photo_title' => $request->new_judul,
-        ]);
-
-        return Redirect::route('foto')->with('status', 'Judul berhasil diperbarui');
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Judul berhasil diperbarui'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal edit judul foto: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function arsipkan(Request $request)
@@ -215,12 +255,12 @@ class PhotoController extends Controller
 
             $foto->update(['is_archive' => true]);
 
-            return Redirect::route('foto')->with([
+            return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Foto berhasil diarsipkan'
             ]);
         } catch (\Exception $e) {
-            return Redirect::back()->with([
+            return redirect()->back()->with([
                 'status' => 'error',
                 'message' => 'Gagal mengarsipkan foto: ' . $e->getMessage()
             ]);
@@ -229,24 +269,33 @@ class PhotoController extends Controller
 
 
 
-    public function massArsipkan(Request $request)
-    {
+    public function massArsipkan(Request $request) {
         $request->validateWithBag("massArsipkan", [
             'id_foto' => ['required'],
         ], [
             'id_foto.required' => 'Tidak ada foto yang dipilih',
         ]);
 
-        $id_foto = json_decode($request->id_foto, true);
-
-        foreach ($id_foto as $foto_id) {
-            $foto = Photo::findOrFail($foto_id);
-            $foto->update([
-                'is_archive' => true,
+        try {
+            $id_foto = json_decode($request->id_foto, true);
+    
+            foreach($id_foto as $foto_id) {
+                $foto = Photo::findOrFail($foto_id);
+                $foto->update([
+                    'is_archive'=>true,
+                ]);
+            }
+    
+            return redirect()->back()->with([
+                    'status' => 'success',
+                    'message' => count($id_foto) . ' foto berhasil diarsipkan'
+                ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengarsipkan foto: ' . $e->getMessage()
             ]);
         }
-
-        return Redirect::route('foto')->with('status',  count($id_foto) . ' foto berhasil diarsipkan');
     }
 
     public function toggleFavorite(Request $request)
@@ -276,7 +325,7 @@ class PhotoController extends Controller
                 'message' => 'Foto berhasil dikeluarkan dari arsip'
             ]);
         } catch (\Exception $e) {
-            return Redirect::back()->with([
+            return redirect()->back()->with([
                 'status' => 'error',
                 'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
             ]);
@@ -284,20 +333,24 @@ class PhotoController extends Controller
     }
     public function pindahAlbum(Request $request)
     {
-        $request->validate([
-            'id_foto' => 'required|exists:photos,id_photo',
-            'folder_id' => 'required|exists:folders,id_folder'
-        ]);
+        try {
+            $foto = Photo::findOrFail($request->id_foto);
+            $album = Folder::findOrFail($request->folder_id);
+    
+            $foto->update([
+                'folder' => $request->folder_id
+            ]);
 
-        $foto = Photo::findOrFail($request->id_foto);
-        $album = Folder::findOrFail($request->folder_id);
-
-        $foto->update([
-            'folder' => $album->id_folder,
-            'thumbnail_updated_at' => now() // Timestamp saat dipindahkan
-        ]);
-
-        return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => ('Foto berhasil dipindah ke album ' . $album->name_folder)
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal memindah ke album: ' . $e->getMessage()
+            ]);
+        }
     }
 
 
@@ -314,18 +367,27 @@ class PhotoController extends Controller
             'folder_id.required' => 'Tidak ada album yang dipilih'
         ]);
 
-        $id_foto = json_decode($request->id_foto, true);
+        try {
+            $id_foto = json_decode($request->id_foto, true);
+    
+            foreach($id_foto as $foto_id) {
+                $foto = Photo::findOrFail($foto_id);
+                $foto->update([
+                    'folder'=>$request->folder_id
+                ]);
+            }
+            
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => count($id_foto) . ' foto berhasil dipindah ke album'
+            ]);
 
-
-        foreach ($id_foto as $foto_id) {
-            $foto = Photo::findOrFail($foto_id);
-            $foto->update([
-                'folder' => $request->folder_id,
-                'thumbnail_updated_at' => now()
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal memindah ke album: ' . $e->getMessage()
             ]);
         }
-
-        return Redirect::route('foto')->with('status', count($id_foto) . ' foto berhasil dipindah ke album');
     }
 
     public function access($path)

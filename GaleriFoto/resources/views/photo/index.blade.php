@@ -375,7 +375,7 @@
 @if (session('status'))
 <div class="toast toast-center" x-data="{ show: true }" x-show="show"  x-init="setTimeout(() => show = false, 5000)">
     <div class="flex items-center alert bg-green-300 border-none">
-        <span>{{ session('status') }}</span>
+        <span>{{ session('message') }}</span>
         <button type="button" class="flex text-sm hover:text-black text-gray-800" @click="show = false">
             <span class="material-symbols-outlined">close</span>
         </button>
@@ -384,7 +384,7 @@
 @endif
 
 {{-- multiupload toast --}}
-<div
+{{-- <div
     x-data="{ show: false, message: '' }"
     x-show="false"
     x-transition
@@ -399,7 +399,7 @@
             <span class="material-symbols-outlined">close</span>
         </button>
     </div>
-</div>
+</div> --}}
 
 <x-modal name="upload-photo" :show="$errors->any()"  :closeOnOutsideClick="false" maxWidth="2xl">
     <div class="px-8 py-8 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
