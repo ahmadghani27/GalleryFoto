@@ -1,5 +1,6 @@
 <?php
 
+// app/Models/Folder.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,30 +10,37 @@ class Folder extends Model
 {
     use HasFactory;
 
-    protected $appends = ['thumbnail']; // Agar bisa diakses sebagai attribute
     protected $primaryKey = 'id_folder';
-    protected $fillable = ['user_id', 'name_folder'];
+    protected $fillable = ['user_id', 'name_folder', 'thumbnail_id'];
+    protected $with = ['thumbnailPhoto']; // Always eager load thumbnail
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    // Folder.php
+
     public function photos()
     {
         return $this->hasMany(Photo::class, 'folder', 'id_folder');
     }
-    public function photosCount()
+
+    public function thumbnailPhoto()
     {
-        return $this->photos()->count();
+        return $this->belongsTo(Photo::class, 'thumbnail_id')
+            ->where('is_archive', 0)
+            ->withDefault();
     }
-    public function thumbnail()
-    {
-        return $this->hasOne(Photo::class, 'folder', 'id_folder')
-            ->orderBy('thumbnail_updated_at', 'desc');
-    }
+
     public function getThumbnailAttribute()
     {
-        return $this->photos->first(); // Karena sudah pakai limit(1) di eager load
+        // First try the designated thumbnail, then fallback to latest photo
+        if ($this->thumbnailPhoto && $this->thumbnailPhoto->exists) {
+            return $this->thumbnailPhoto;
+        }
+
+        return $this->photos()
+            ->where('is_archive', 0)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 }

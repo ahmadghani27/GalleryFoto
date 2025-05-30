@@ -75,12 +75,12 @@ class PhotoController extends Controller
             $folder = now()->format('Y/m');
             $fileName = 'foto-' . uniqid() . '.' . $request->photo->extension();
             $path = "photos/{$folder}/{$fileName}";
-    
+
             // Resize and compress image
             $image = Image::make($request->file('photo'))->encode('jpg', 80);
             Storage::disk('local')->put("{$path}", $image);
-            
-    
+
+
             Photo::create([
                 'user_id'      => $request->user()->id,
                 'folder'       => null,
@@ -175,10 +175,10 @@ class PhotoController extends Controller
     {
         try {
             $decryptedId = Crypt::decryptString($request->id_foto);
-    
+
             $foto = Photo::findOrFail($decryptedId);
             $foto->delete();
-    
+
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Foto berhasil dihapus.'
@@ -201,8 +201,8 @@ class PhotoController extends Controller
 
         try {
             $id_foto = json_decode($request->id_foto, true);
-    
-            foreach($id_foto as $foto_id) {
+
+            foreach ($id_foto as $foto_id) {
                 $foto = Photo::findOrFail($foto_id);
                 $foto->delete();
             }
@@ -223,9 +223,9 @@ class PhotoController extends Controller
     {
         try {
             $decryptedId = Crypt::decryptString($request->id_foto);
-    
+
             $foto = Photo::findOrFail($decryptedId);
-    
+
             $foto->update([
                 'photo_title' => $request->new_judul,
             ]);
@@ -251,9 +251,26 @@ class PhotoController extends Controller
         try {
             $decryptedId = Crypt::decryptString($request->id_foto);
 
-            $foto = Photo::where('id_photo', $decryptedId);
+            $foto = Photo::findOrFail($decryptedId);
+            $folderId = $foto->folder;
 
+            // Update photo to archived
             $foto->update(['is_archive' => true]);
+
+            // Check if this photo was a thumbnail for any album
+            $folder = Folder::where('thumbnail_id', $decryptedId)->first();
+            if ($folder) {
+                // Find a new unarchived photo in the same album to be the thumbnail
+                $newThumbnail = Photo::where('folder', $folderId)
+                    ->where('is_archive', false)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                $folder->update([
+                    'thumbnail_id' => $newThumbnail ? $newThumbnail->id_photo : null,
+                    'thumbnail_updated_at' => now()
+                ]);
+            }
 
             return redirect()->back()->with([
                 'status' => 'success',
@@ -267,9 +284,8 @@ class PhotoController extends Controller
         }
     }
 
-
-
-    public function massArsipkan(Request $request) {
+    public function massArsipkan(Request $request)
+    {
         $request->validateWithBag("massArsipkan", [
             'id_foto' => ['required'],
         ], [
@@ -278,18 +294,37 @@ class PhotoController extends Controller
 
         try {
             $id_foto = json_decode($request->id_foto, true);
-    
-            foreach($id_foto as $foto_id) {
+            $updatedThumbnailFolders = [];
+
+            foreach ($id_foto as $foto_id) {
                 $foto = Photo::findOrFail($foto_id);
-                $foto->update([
-                    'is_archive'=>true,
-                ]);
+                $folderId = $foto->folder;
+
+                // Update photo to archived
+                $foto->update(['is_archive' => true]);
+
+                // Check if this photo was a thumbnail
+                $folder = Folder::where('thumbnail_id', $foto_id)->first();
+                if ($folder && !in_array($folder->id_folder, $updatedThumbnailFolders)) {
+                    // Find a new unarchived photo in the same album
+                    $newThumbnail = Photo::where('folder', $folderId)
+                        ->where('is_archive', false)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    $folder->update([
+                        'thumbnail_id' => $newThumbnail ? $newThumbnail->id_photo : null,
+                        'thumbnail_updated_at' => now()
+                    ]);
+
+                    $updatedThumbnailFolders[] = $folder->id_folder;
+                }
             }
-    
+
             return redirect()->back()->with([
-                    'status' => 'success',
-                    'message' => count($id_foto) . ' foto berhasil diarsipkan'
-                ]);
+                'status' => 'success',
+                'message' => count($id_foto) . ' foto berhasil diarsipkan'
+            ]);
         } catch (\Exception $e) {
             return redirect()->back()->with([
                 'status' => 'error',
@@ -336,7 +371,7 @@ class PhotoController extends Controller
         try {
             $foto = Photo::findOrFail($request->id_foto);
             $album = Folder::findOrFail($request->folder_id);
-    
+
             $foto->update([
                 'folder' => $request->folder_id
             ]);
@@ -369,19 +404,18 @@ class PhotoController extends Controller
 
         try {
             $id_foto = json_decode($request->id_foto, true);
-    
-            foreach($id_foto as $foto_id) {
+
+            foreach ($id_foto as $foto_id) {
                 $foto = Photo::findOrFail($foto_id);
                 $foto->update([
-                    'folder'=>$request->folder_id
+                    'folder' => $request->folder_id
                 ]);
             }
-            
+
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => count($id_foto) . ' foto berhasil dipindah ke album'
             ]);
-
         } catch (\Exception $e) {
             return redirect()->back()->with([
                 'status' => 'error',

@@ -14,40 +14,43 @@ use App\Models\Photo;
 class AlbumController extends Controller
 {
 
+    // app/Http/Controllers/AlbumController.php
     public function index(Request $request)
     {
         $userId = Auth::id();
-        $sort = $request->query('sort', 'desc'); // default: Terbaru
+        $sort = $request->query('sort', 'desc');
 
-        $album = Folder::with(['thumbnail' => function ($query) {
-            $query->orderBy('thumbnail_updated_at', 'desc');
+        $albums = Folder::with(['thumbnailPhoto', 'photos' => function ($query) {
+            $query->where('is_archive', 0)->orderBy('created_at', 'desc')->limit(1);
         }])
             ->where('user_id', $userId)
             ->orderBy('created_at', $sort)
             ->get();
 
-        return view('photo.album', compact('album'));
+        return view('photo.album', ['album' => $albums]);
     }
-
     public function show($id_album)
     {
         $userId = Auth::id();
         $sort = request()->query('sort', 'desc'); // default: terbaru
 
-        $folder = Folder::withCount('photos')
+        $folder = Folder::withCount(['photos' => function ($query) {
+            $query->where('is_archive', 0);
+        }])
             ->where('id_folder', $id_album)
             ->where('user_id', $userId)
             ->firstOrFail();
 
         $photos = Photo::where('folder', $id_album)
             ->where('user_id', $userId)
+            ->where('is_archive', 0)
             ->orderBy('created_at', $sort)
             ->get();
 
         return view('photo.photo-album', [
             'folder' => $folder,
             'photos' => $photos,
-            'currentSort' => $sort // Kirim current sort ke view
+            'currentSort' => $sort
         ]);
     }
 
