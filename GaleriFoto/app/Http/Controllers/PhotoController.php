@@ -27,7 +27,7 @@ class PhotoController extends Controller
         $query = Photo::where('user_id', $userId)
             ->where('is_archive', false);
 
-        if(!empty($search)) {
+        if (!empty($search)) {
             $query->where('photo_title', 'like', '%' . $search . '%');
         }
 
@@ -74,7 +74,7 @@ class PhotoController extends Controller
         // Resize and compress image
         $image = Image::make($request->file('photo'))->encode('jpg', 80);
         Storage::disk('local')->put("{$path}", $image);
-        
+
 
         Photo::create([
             'user_id'      => $request->user()->id,
@@ -118,10 +118,10 @@ class PhotoController extends Controller
 
         $uploadedFiles = [];
         $folder = now()->format('Y/m');
-        
+
         foreach ($request->file('photo') as $index => $photo) {
             $judul = $request->input('title')[$index];
-            $fileName = 'foto-'.uniqid().'.'.$photo->extension();
+            $fileName = 'foto-' . uniqid() . '.' . $photo->extension();
             $path = "photos/{$folder}/{$fileName}";
 
             // Resize and compress image
@@ -138,7 +138,7 @@ class PhotoController extends Controller
                 'created_at'   => now(),
                 'update_at'    => now(),
             ]);
-            
+
             $uploadedFiles[] = [
                 'title' => $judul,
                 'filename' => $fileName,
@@ -164,7 +164,8 @@ class PhotoController extends Controller
         return redirect()->route('foto')->with('status', 'Foto berhasil dihapus.');
     }
 
-    public function massDestroy(Request $request) {
+    public function massDestroy(Request $request)
+    {
         $request->validateWithBag("massDelete", [
             'id_foto' => ['required'],
         ], [
@@ -173,7 +174,7 @@ class PhotoController extends Controller
 
         $id_foto = json_decode($request->id_foto, true);
 
-        foreach($id_foto as $foto_id) {
+        foreach ($id_foto as $foto_id) {
             $foto = Photo::findOrFail($foto_id);
             $foto->delete();
         }
@@ -220,8 +221,9 @@ class PhotoController extends Controller
     }
 
 
-    
-    public function massArsipkan(Request $request) {
+
+    public function massArsipkan(Request $request)
+    {
         $request->validateWithBag("massArsipkan", [
             'id_foto' => ['required'],
         ], [
@@ -230,10 +232,10 @@ class PhotoController extends Controller
 
         $id_foto = json_decode($request->id_foto, true);
 
-        foreach($id_foto as $foto_id) {
+        foreach ($id_foto as $foto_id) {
             $foto = Photo::findOrFail($foto_id);
             $foto->update([
-                'is_archive'=>true,
+                'is_archive' => true,
             ]);
         }
 
@@ -273,20 +275,28 @@ class PhotoController extends Controller
             ]);
         }
     }
-
     public function pindahAlbum(Request $request)
     {
+        $request->validate([
+            'id_foto' => 'required|exists:photos,id_photo',
+            'folder_id' => 'required|exists:folders,id_folder'
+        ]);
+
         $foto = Photo::findOrFail($request->id_foto);
         $album = Folder::findOrFail($request->folder_id);
 
         $foto->update([
-            'folder' => $request->folder_id
+            'folder' => $album->id_folder,
+            'folder_updated_at' => now() // Timestamp saat dipindahkan
         ]);
 
         return Redirect::route('foto')->with('status', 'Foto berhasil dipindah ke album ' . $album->name_folder);
     }
 
-    public function massPindahAlbum(Request $request) {
+
+
+    public function massPindahAlbum(Request $request)
+    {
         $request->validateWithBag("massPindahAlbum", [
             'id_foto' => ['required'],
             'folder_id' => ['required'],
@@ -299,10 +309,12 @@ class PhotoController extends Controller
 
         $id_foto = json_decode($request->id_foto, true);
 
-        foreach($id_foto as $foto_id) {
+
+        foreach ($id_foto as $foto_id) {
             $foto = Photo::findOrFail($foto_id);
             $foto->update([
-                'folder'=>$request->folder_id
+                'folder' => $request->folder_id,
+                'folder_updated_at' => now()
             ]);
         }
 

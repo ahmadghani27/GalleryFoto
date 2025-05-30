@@ -18,7 +18,8 @@ return new class extends Migration
             $table->text('file_path');
             $table->string('photo_title');
             $table->timestamps();
-            $table->boolean('is_thumbnail')->default(false);
+            $table->timestamp('thumbnail_updated_at')->nullable();
+
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')

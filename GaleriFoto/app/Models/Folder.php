@@ -22,13 +22,14 @@ class Folder extends Model
     {
         return $this->hasMany(Photo::class, 'folder', 'id_folder');
     }
-    public function getThumbnailAttribute()
+    public function photosCount()
     {
-        return $this->photos->first(); // Karena sudah pakai limit(1) di eager load
+        return $this->photos()->count();
     }
     public function thumbnail()
     {
         return $this->hasOne(Photo::class, 'folder', 'id_folder')
-            ->where('is_thumbnail', true);
+            ->whereNotNull('folder_updated_at')
+            ->latest('folder_updated_at');
     }
 }

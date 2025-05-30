@@ -19,8 +19,10 @@ class Photo extends Model
         'file_path',
         'photo_title',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'thumbnail_updated_at'
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -30,4 +32,5 @@ class Photo extends Model
     {
         return $this->belongsTo(Folder::class, 'folder', 'id_folder');
     }
+    
 }
