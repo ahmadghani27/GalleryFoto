@@ -33,13 +33,7 @@
         </div>
         @if ($folder->thumbnail)
         <a href="{{ route('album.show', $folder->id_folder) }}" class="block w-full h-full">
-            @php
-            // Cek apakah thumbnail menggunakan path baru atau lama
-            $thumbnailPath = str_contains($folder->thumbnail->file_path, 'thumbnails/albums')
-            ? Storage::url($folder->thumbnail->file_path)
-            : asset('storage/' . $folder->thumbnail->file_path);
-            @endphp
-            <img src="{{ $thumbnailPath }}"
+            <img src="{{ asset('storage/' . $folder->thumbnail->file_path) }}"
                 alt="Thumbnail album {{ $folder->name_folder }}"
                 class="w-full h-full object-cover rounded-xl shadow-md"
                 loading="lazy">

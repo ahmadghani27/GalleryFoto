@@ -13,20 +13,20 @@ use App\Models\Photo;
 
 class AlbumController extends Controller
 {
+
     public function index(Request $request)
     {
         $userId = Auth::id();
-
         $sort = $request->query('sort', 'desc'); // default: Terbaru
 
-        $album = Folder::with(['photos' => function ($query) {
-            $query->orderBy('created_at')->limit(1);
+        $albums = Folder::with(['thumbnail' => function ($query) {
+            $query->orderBy('thumbnail_updated_at', 'desc');
         }])
             ->where('user_id', $userId)
             ->orderBy('created_at', $sort)
             ->get();
 
-        return view('photo.album', compact('album'));
+        return view('photo.album', compact('albums'));
     }
 
     public function show($id_album)
@@ -98,12 +98,14 @@ class AlbumController extends Controller
         return redirect()->route('album')->with('status', 'Album berhasil dihapus!');
     }
 
-    public function getActiveAlbum($id) {
+    public function getActiveAlbum($id)
+    {
         $items = Folder::where('id_folder', '!=', $id)->get();
         return response()->json($items);
     }
 
-    public function getAllActiveAlbum() {
+    public function getAllActiveAlbum()
+    {
         $items = Folder::all();
         return response()->json($items);
     }

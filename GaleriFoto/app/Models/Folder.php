@@ -29,7 +29,6 @@ class Folder extends Model
     public function thumbnail()
     {
         return $this->hasOne(Photo::class, 'folder', 'id_folder')
-            ->whereNotNull('folder_updated_at')
-            ->latest('folder_updated_at');
+            ->orderBy('thumbnail_updated_at', 'desc');
     }
 }
