@@ -1,6 +1,3 @@
-Berikut adalah README yang telah diperbarui dengan penambahan kebutuhan instalasi npm, Composer, dan `composer require intervention/image`. Saya juga memastikan tampilannya tetap user-friendly, singkat, dan menarik.
-
-```markdown
 # 📸 Galeri Foto
 
 Selamat datang di **Galeri Foto**, aplikasi web keren berbasis **Laravel** untuk mengatur dan memamerkan koleksi foto kamu dengan mudah! 🚀 Upload, kelola, dan arsipkan foto dengan tampilan yang menawan, fitur canggih, dan pengalaman pengguna yang super nyaman.
