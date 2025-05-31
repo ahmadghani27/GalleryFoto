@@ -46,10 +46,10 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 ## ⚙️ Cara Setup
 
 ### 🔧 Prasyarat
-- **Node.js & npm** <img src="https://nodejs.org/static/images/logo.svg" height="30" alt="Node.js Logo">: Untuk dependensi frontend.
-- **Composer** <img src="https://getcomposer.org/img/logo-composer-transparent.png" height="30" alt="Composer Logo">: Untuk dependensi PHP.
-- **XAMPP** <img src="https://www.apachefriends.org/images/xampp-logo.svg" height="30" alt="XAMPP Logo">: Untuk server MySQL.
-- **PHP** <img src="https://www.php.net/images/logos/new-php-logo.svg" height="30" alt="PHP Logo">: Versi kompatibel dengan Laravel (lihat dokumentasi).
+- **Node.js & npm** : Untuk dependensi frontend.
+- **Composer** : Untuk dependensi PHP.
+- **XAMPP** : Untuk server MySQL.
+- **PHP** : Versi kompatibel dengan Laravel (lihat dokumentasi).
 
 ### Langkah-langkah
 1. Clone repository:
