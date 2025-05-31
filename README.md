@@ -1,14 +1,16 @@
-📸 Galeri Foto
+# 📸 Galeri Foto
 
-Selamat datang di Galeri Foto, aplikasi web kece berbasis Laravel untuk mengatur dan memamerkan koleksi foto kamu dengan gampang! 🚀 Upload, kelola, dan arsipkan foto dengan tampilan yang ciamik, fitur canggih, dan pengalaman pengguna yang super nyaman. 😎
+Selamat datang di **Galeri Foto**, aplikasi web super keren berbasis **Laravel** untuk mengatur dan memamerkan koleksi foto kamu dengan mudah! 🚀 Upload, kelola, dan arsipkan foto dengan tampilan yang memukau, fitur canggih, dan pengalaman pengguna yang bikin betah. 😎
 
-🌟 Apa Itu Galeri Foto?
+---
 
-Galeri Foto adalah aplikasi web untuk menyimpan dan menampilkan foto dengan judul dan URL yang tersimpan rapi di database. Dibuat dengan teknologi modern, aplikasi ini bikin kamu bisa kelola foto dengan gaya! 💻✨
+## 🌟 Apa Itu Galeri Foto?
 
-Menggunakan Laravel untuk backend, XAMPP untuk database MySQL, Laravel Breeze untuk autentikasi, Blade Components untuk antarmuka rapi, dan Alpine.js untuk interaktivitas ringan. Desainnya responsif banget berkat Tailwind CSS, jadi kece di semua perangkat! 📱💻
+**Galeri Foto** adalah aplikasi web untuk menyimpan dan menampilkan foto dengan judul dan URL yang tersimpan rapi di database. Dibuat dengan teknologi modern, aplikasi ini memudahkan kamu untuk mengelola foto dengan gaya! 💻✨
 
-🎉 Fitur Unggulan
+Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel Breeze** untuk autentikasi, **Blade Components** untuk antarmuka yang rapi, dan **Alpine.js** untuk interaktivitas yang ringan. Desainnya yang responsif didukung oleh **Tailwind CSS**, membuatnya tampak keren di semua perangkat! 📱💻
+
+---
 
 ## 🎉 Fitur Unggulan
 
@@ -26,57 +28,62 @@ Menggunakan Laravel untuk backend, XAMPP untuk database MySQL, Laravel Breeze un
 
 ---
 
-🛠️ Teknologi yang Digunakan
+## 🛠️ Teknologi yang Digunakan
 
-<img src="https://laravel.com/img/logomark.min.svg" width="60" alt="Laravel Logo"> 
-<img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" width="60" alt="MySQL Logo"> 
-<img src="https://laravel.com/img/logomark.min.svg" width="60" alt="Laravel Breeze Logo"> 
-<img src="https://laravel.com/img/logomark.min.svg" width="60" alt="Blade Logo"> 
-<img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg" width="60" alt="Tailwind CSS Logo"> 
-<img src="https://alpinejs.dev/alpine.png" width="60" alt="Alpine.js Logo"> 
-<img src="https://code.visualstudio.com/assets/images/code-stable.png" width="60" alt="VS Code Logo"> 
-<img src="https://www.figma.com/favicon.ico" width="60" alt="Figma Logo">
+| Teknologi | Deskripsi | Logo |
+|-----------|-----------|------|
+| **Laravel** | Framework PHP untuk backend yang kuat | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Logo"> |
+| **MySQL (XAMPP)** | Database untuk menyimpan data foto | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" width="40" alt="MySQL Logo"> |
+| **Laravel Breeze** | Autentikasi ringan untuk login/register | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Breeze Logo"> |
+| **Blade Components** | Template frontend untuk UI yang rapi | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Blade Logo"> |
+| **Tailwind CSS** | Framework CSS untuk desain responsif | <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg" width="40" alt="Tailwind CSS Logo"> |
+| **Alpine.js** | JavaScript ringan untuk interaktivitas | <img src="https://alpinejs.dev/alpine.png" width="40" alt="Alpine.js Logo"> |
+| **VS Code** | Editor kode untuk pengembangan | <img src="https://code.visualstudio.com/assets/images/code-stable.png" width="40" alt="VS Code Logo"> |
+| **Figma** | Alat desain untuk UI/UX | <img src="https://www.figma.com/favicon.ico" width="40" alt="Figma Logo"> |
 
-⚙️ Cara Setup
+---
 
-🔧 Prasyarat
-- Node.js & npm <img src="https://nodejs.org/static/images/logo.svg" width="40" alt="Node.js Logo">: Untuk dependensi frontend.
-- Composer <img src="https://getcomposer.org/img/logo-composer-transparent.png" width="40" alt="Composer Logo">: Untuk dependensi PHP.
-- XAMPP <img src="https://www.apachefriends.org/images/xampp-logo.svg" width="40" alt="XAMPP Logo">: Untuk server MySQL.
-- PHP <img src="https://www.php.net/images/logos/new-php-logo.svg" width="40" alt="PHP Logo">: Versi kompatibel dengan Laravel.
+## ⚙️ Cara Setup
 
-🚀 Langkah-langkah
+### 🔧 Prasyarat
+- **Node.js & npm** <img src="https://nodejs.org/static/images/logo.svg" width="30" alt="Node.js Logo">: Untuk dependensi frontend.
+- **Composer** <img src="https://getcomposer.org/img/logo-composer-transparent.png" width="30" alt="Composer Logo">: Untuk dependensi PHP.
+- **XAMPP** <img src="https://www.apachefriends.org/images/xampp-logo.svg" width="30" alt="XAMPP Logo">: Untuk server MySQL.
+- **PHP** <img src="https://www.php.net/images/logos/new-php-logo.svg" width="30" alt="PHP Logo">: Versi kompatibel dengan Laravel (lihat dokumentasi).
+
+### Langkah-langkah
 1. Clone repository:
+   ```bash
    git clone https://github.com/your-repo/galeri-foto.git
    cd galeri-foto
+   ```
 
 2. Install dependensi:
+   ```bash
    composer install
    npm install
    composer require intervention/image
+   ```
 
 3. Konfigurasi environment:
+   ```bash
    cp .env.example .env
-   Edit file .env untuk konfigurasi database. Pastikan XAMPP berjalan dan buat database bernama galeri.
+   ```
+   Edit file `.env` untuk konfigurasi database (pastikan XAMPP sudah berjalan dan buat database bernama `galeri`).
 
 4. Jalankan migrasi database:
+   ```bash
    php artisan migrate
+   ```
 
 5. Jalankan aplikasi:
+   ```bash
    php artisan serve
    npm run dev
+   ```
 
-6. Buka browser di http://localhost:8000 dan nikmati Galeri Foto! 🎉
+6. Buka browser di `http://localhost:8000` dan nikmati Galeri Foto! 🎉
 
-💻 Kontribusi
+---
 
-Ingin ikut bikin keren? Fork repo ini, buat branch baru, dan kirim pull request! Pastikan kode kamu rapi dan ikuti panduan commit:
-git add .
-git commit -m "✨ Deskripsi perubahan"
-git push origin nama-branch
-
-📬 Kontak
-
-Punya pertanyaan atau ide? Hubungi kami di email@example.com atau buka issue di GitHub. 💌
-
-TERIMA KASIH! Ayo kelola foto dengan gaya bersama Galeri Foto! 📷✨
+# TERIMA KASIH
