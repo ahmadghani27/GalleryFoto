@@ -304,29 +304,7 @@ class PhotoController extends Controller
                 $foto->update(['is_archive' => true]);
 
                 // Check if this photo was a thumbnail for any album
-                $folder = Folder::where('thumbnail_id', $foto_id)->first();
-                if ($folder && !in_array($folder->id_folder, $updatedThumbnailFolders)) {
-                    // Find a new unarchived photo in the same album
-                    $newThumbnail = Photo::where('folder', $folderId)
-                        ->where('is_archive', false)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
 
-                    // If no unarchived photos left, set thumbnail to null
-                    if (!$newThumbnail) {
-                        $folder->update([
-                            'thumbnail_id' => null,
-                            'thumbnail_updated_at' => now()
-                        ]);
-                    } else {
-                        $folder->update([
-                            'thumbnail_id' => $newThumbnail->id_photo,
-                            'thumbnail_updated_at' => now()
-                        ]);
-                    }
-
-                    $updatedThumbnailFolders[] = $folder->id_folder;
-                }
             }
 
             return redirect()->back()->with([
