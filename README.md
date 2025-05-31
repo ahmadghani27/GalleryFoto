@@ -78,20 +78,4 @@ Fitur utamanya meliputi CRUD untuk foto dan folder, upload massal, pencarian, pe
 
 ---
 
-## 💻 Kontribusi
-
-Ingin berkontribusi? Fork repo ini, buat branch baru, dan kirim pull request. Pastikan kode kamu rapi dan ikuti panduan commit:
-```bash
-git add .
-git commit -m "Deskripsi perubahan"
-git push origin nama-branch
-```
-
----
-
-## 📬 Kontak
-
-Punya pertanyaan atau saran? Hubungi tim kami di [email@example.com](mailto:email@example.com) atau buka issue di GitHub.
-
-Ayo kelola foto dengan gaya bersama **Galeri Foto**! 📷✨
-```
+#TERIMA KASIH 
