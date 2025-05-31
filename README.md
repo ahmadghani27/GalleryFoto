@@ -1,6 +1,6 @@
-# 📸 Galeri Foto
+# 📸 PIXELORA
 
-Selamat datang di **Galeri Foto**, aplikasi web super keren berbasis **Laravel** untuk mengatur dan memamerkan koleksi foto kamu dengan mudah! 🚀 Upload, kelola, dan arsipkan foto dengan tampilan yang memukau, fitur canggih, dan pengalaman pengguna yang bikin betah. 😎
+Selamat datang di **PIXELORA**, aplikasi web super keren berbasis **Laravel** untuk mengatur dan memamerkan koleksi foto kamu dengan mudah! 🚀 Upload, kelola, dan arsipkan foto dengan tampilan yang memukau, fitur canggih, dan pengalaman pengguna yang bikin betah. 😎
 
 ---
 
@@ -37,7 +37,7 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 | **Laravel Breeze** | Autentikasi ringan untuk login/register | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Breeze Logo"> |
 | **Blade Components** | Template frontend untuk UI yang rapi | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Blade Logo"> |
 | **Tailwind CSS** | Framework CSS untuk desain responsif | <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg" width="40" alt="Tailwind CSS Logo"> |
-| **Alpine.js** | JavaScript ringan untuk interaktivitas | <img src="https://alpinejs.dev/alpine.png" width="40" alt="Alpine.js Logo"> |
+| **Alpine.js** | JavaScript ringan untuk interaktivitas | <img src="[https://alpinejs.dev/alpine.png](https://images.seeklogo.com/logo-png/40/1/alpine-js-logo-png_seeklogo-404949.png)" width="40" alt="Alpine.js Logo"> |
 | **VS Code** | Editor kode untuk pengembangan | <img src="https://code.visualstudio.com/assets/images/code-stable.png" width="40" alt="VS Code Logo"> |
 | **Figma** | Alat desain untuk UI/UX | <img src="https://www.figma.com/favicon.ico" width="40" alt="Figma Logo"> |
 
