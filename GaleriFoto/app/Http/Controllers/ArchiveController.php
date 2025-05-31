@@ -35,7 +35,7 @@ class ArchiveController extends Controller
 
         return response()->json([
             'success' => true,
-            'redirect' => route('arsip.content')  // Tambahkan redirect
+            'redirect' => route('arsip.content')
         ]);
     }
 
@@ -45,10 +45,19 @@ class ArchiveController extends Controller
             return redirect()->route('arsip')->withErrors('Silakan verifikasi password terlebih dahulu');
         }
 
-        $arsipFoto = Photo::with(['folder'])
-            ->where('user_id', Auth::id())
-            ->where('is_archive', true)
-            ->orderBy('created_at', request('sort', 'desc'))
+        $userId = Auth::id();
+        $sortOrder = request('sort', 'desc');
+        $search = request('search');
+
+        $query = Photo::with(['folder'])
+            ->where('user_id', $userId)
+            ->where('is_archive', true);
+
+        if (!empty($search)) {
+            $query->where('photo_title', 'like', '%' . $search . '%');
+        }
+
+        $arsipFoto = $query->orderBy('created_at', $sortOrder)
             ->get()
             ->groupBy(function ($photo) {
                 $date = Carbon::parse($photo->created_at);
@@ -60,7 +69,8 @@ class ArchiveController extends Controller
 
         return view('photo.arsip-content', [
             'arsipFoto' => $arsipFoto,
-            'currentSort' => request('sort', 'desc')
+            'search' => $search,
+            'currentSort' => $sortOrder
         ]);
     }
 }
