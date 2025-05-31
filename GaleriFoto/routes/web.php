@@ -21,7 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/album/{id_album}', [AlbumController::class, 'destroy'])->name('album.destroy');
     Route::get('/album/{folder}', [AlbumController::class, 'show'])->name('album.show');
     Route::patch('/album/{id_album}', [AlbumController::class, 'update'])->name('album.update');
-    
+    Route::post('/album/{album}/add-photos', [AlbumController::class, 'addPhotos'])
+        ->name('album.add-photos');
+
     //Route Foto
     Route::get('/foto', [PhotoController::class, 'index'])->name('foto');
     Route::post('/foto/single-upload', [PhotoController::class, 'store'])->name('foto.singleupload');

@@ -37,31 +37,43 @@ class AlbumController extends Controller
             'search' => $search
         ]);
     }
-    public function show($id_album)
+    public function show($id_folder)
     {
         $userId = Auth::id();
         $sort = request()->query('sort', 'desc'); // default: terbaru
 
+        // Fetch the folder with photo count
         $folder = Folder::withCount(['photos' => function ($query) {
             $query->where('is_archive', 0);
         }])
-            ->where('id_folder', $id_album)
+            ->where('id_folder', $id_folder)
             ->where('user_id', $userId)
             ->firstOrFail();
 
-        $photos = Photo::where('folder', $id_album)
+        // Fetch photos for the current album
+        $photos = Photo::where('folder', $id_folder)
             ->where('user_id', $userId)
             ->where('is_archive', 0)
+            ->orderBy('created_at', $sort)
+            ->get();
+
+        // Fetch all non-archived photos for the user, excluding those in the current album
+        $allPhotos = Photo::where('user_id', $userId)
+            ->where('is_archive', 0)
+            ->where(function ($query) use ($id_folder) {
+                $query->where('folder', '!=', $id_folder)
+                    ->orWhereNull('folder');
+            })
             ->orderBy('created_at', $sort)
             ->get();
 
         return view('photo.photo-album', [
             'folder' => $folder,
             'photos' => $photos,
+            'allPhotos' => $allPhotos,
             'currentSort' => $sort
         ]);
     }
-
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -119,5 +131,21 @@ class AlbumController extends Controller
     {
         $items = Folder::all();
         return response()->json($items);
+    }
+
+    public function addPhotos(Request $request, $id_folder)
+    {
+        $request->validate([
+            'selected_photos' => 'required|string'
+        ]);
+
+        $photoIds = explode(',', $request->selected_photos);
+
+        Photo::whereIn('id_photo', $photoIds)
+            ->where('user_id', Auth::id())
+            ->update(['folder' => $id_folder]);
+
+        return redirect()->route('album.show', $id_folder)
+            ->with('status', 'Foto berhasil ditambahkan ke album');
     }
 }
