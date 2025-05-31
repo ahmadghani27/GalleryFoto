@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <div x-data="{ show: false }" x-show="show" x-cloak
+        <div x-data="{ show : false }" x-show="show" x-cloak
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
             x-transition:enter-end="opacity-100 translate-x-0"
@@ -118,18 +118,20 @@
                             @submit.prevent="submitting = true; $el.submit()">
                             @csrf
                             @method('patch')
+
                             <div class="flex-col gap-4">
                                 <div class="text-[20px] font-semibold">Pindahkan <span style="font-weight:inherit; font-size:inherit" class="pindahCounter"></span> foto ke album</div>
                                 <div class="mt-2 opacity-70">Kelompokan momen-momen berharga anda</div>
                             </div>
+
                             <div class="mt-6" x-data="{show: false}">
                                 <input type="hidden" class="id_foto" name="id_foto">
-                                <label for="mass-album-selector" class="font-medium after:ml-0.5 after:text-red-500 after:content-['*']">Album aktif</label>
+                                <label for="current_password" class="font-medium after:ml-0.5 after:text-red-500 after:content-['*']">Album aktif</label>
                                 <select required id="mass-album-selector" name="folder_id" class="mt-2 select w-full select-md">
                                     <option disabled selected>Pilih album tujuan</option>
                                 </select>
                                 @error('folder_id')
-                                <p class="text-red-600 text-sm mt-1" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
+                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="flex justify-between gap-2 mt-4">
@@ -140,7 +142,9 @@
                                     <template x-if="!submitting">
                                         <span class="text-white">Pindahkan</span>
                                     </template>
+
                                     <template x-if="submitting">
+
                                         <div role="status">
                                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -148,40 +152,42 @@
                                             </svg>
                                             <span class="sr-only">Loading...</span>
                                         </div>
+
                                     </template>
                                 </button>
                             </div>
                         </form>
                     </div>
                 </x-modal>
-                <button class="massArsipkanBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
-                    <span class="material-symbols-outlined">archive</span>
-                    <span class="md:inline sm:hidden">Arsipkan</span>
+                <button class="massUnarsipkanBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out"
+                    @click="$dispatch('open-modal', 'mass-unarsipkan-modal')">
+                    <span class="material-symbols-outlined">unarchive</span>
+                    <span class="md:inline sm:hidden">Unarsipkan</span>
                 </button>
-                <x-modal name="mass-arsipkan-modal" :show="$errors->massArsipkan->any()" :closeOnOutsideClick="false">
-                    <div class="wrapper mass-arsipkan-modal">
-                        <form method="post" action="{{ route('foto.multiplearsip') }}" class="p-6"
+                <x-modal name="mass-unarsipkan-modal" :show="$errors->massUnarsipkan->any()" :closeOnOutsideClick="false">
+                    <div class="wrapper mass-unarsipkan-modal">
+                        <form method="post" action="{{ route('foto.multipleunarsip') }}" class="p-6"
                             x-data="{ submitting: false }"
                             @submit.prevent="submitting = true; $el.submit()">
                             @csrf
                             @method('patch')
                             <div class="flex-col gap-4">
-                                <div class="text-[20px] font-semibold">Arsipkan <span style="font-weight:inherit; font-size:inherit" class="arsipCounter"></span> foto</div>
-                                <div class="mt-2 opacity-70">Sembunyikan foto pribadi anda</div>
+                                <div class="text-[20px] font-semibold">Unarsipkan <span style="font-weight:inherit; font-size:inherit" class="unarsipCounter"></span> foto</div>
+                                <div class="mt-2 opacity-70">Kembalikan foto ke galeri utama</div>
                             </div>
                             <div class="mt-6" x-data="{show: false}">
                                 <input type="hidden" class="id_foto" name="id_foto">
-                                @error('id_foto')
+                                @error('id_foto', 'massUnarsipkan')
                                 <p class="text-red-600 text-sm mt-1" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="flex justify-between gap-2 mt-4">
-                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-arsipkan-modal'))" :disabled="submitting"
+                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-unarsipkan-modal'))" :disabled="submitting"
                                     class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
                                 <button type="submit" :disabled="submitting"
                                     class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
                                     <template x-if="!submitting">
-                                        <span class="text-white">Arsipkan</span>
+                                        <span class="text-white">Unarsipkan</span>
                                     </template>
                                     <template x-if="submitting">
                                         <div role="status">
@@ -208,14 +214,16 @@
                             @submit.prevent="submitting = true; $el.submit()">
                             @csrf
                             @method('patch')
+
                             <div class="flex-col gap-4">
                                 <div class="text-[20px] font-semibold">Hapus <span style="font-weight:inherit; font-size:inherit" class="deleteCounter"></span> foto</div>
                                 <div class="mt-2 opacity-70">Perhatian! tindakan ini tidak dapat dikembalikan</div>
                             </div>
+
                             <div class="mt-6" x-data="{show: false}">
                                 <input type="hidden" class="id_foto" name="id_foto">
                                 @error('id_foto')
-                                <p class="text-red-600 text-sm mt-1" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
+                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="flex justify-between gap-2 mt-4">
@@ -226,7 +234,9 @@
                                     <template x-if="!submitting">
                                         <span class="text-white">Hapus foto</span>
                                     </template>
+
                                     <template x-if="submitting">
+
                                         <div role="status">
                                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -234,20 +244,20 @@
                                             </svg>
                                             <span class="sr-only">Loading...</span>
                                         </div>
+
                                     </template>
                                 </button>
                             </div>
                         </form>
                     </div>
                 </x-modal>
-                <button class="selectAllBtn border-[1.5px] transition-all ease-in-out border-sky-500 hover:bg-sky-100 px-4 active:bg-sky-100 focus:bg-sky-100 rounded-xl btn-primary flex gap-2 p-3">
+                <button class="selectAllBtn border-[1.5px] transition-all ease-in-out border-sky-500 hover:bg-sky-100 px-4 active:bg-sky-100 focus:bg-sky-100  rounded-xl btn-primary flex gap-2 p-3  ">
                     <span class="material-symbols-outlined text-sky-500">done_all</span>
                     <span class="md:inline sm:hidden text-sky-500">Pilih semua</span>
                 </button>
             </div>
         </div>
     </div>
-
     <style>
         .foto-group:last-of-type {
             margin-bottom: 1.5rem

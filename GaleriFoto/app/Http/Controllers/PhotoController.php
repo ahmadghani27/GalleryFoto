@@ -366,6 +366,50 @@ class PhotoController extends Controller
             ]);
         }
     }
+    public function massUnarsipkan(Request $request)
+    {
+        $request->validateWithBag("massUnarsipkan", [
+            'id_foto' => ['required'],
+        ], [
+            'id_foto.required' => 'Tidak ada foto yang dipilih',
+        ]);
+
+        try {
+            $id_foto = json_decode($request->id_foto, true);
+            $updatedThumbnailFolders = [];
+
+            foreach ($id_foto as $foto_id) {
+                $foto = Photo::findOrFail($foto_id);
+                $folderId = $foto->folder;
+
+                // Update photo to unarchived
+                $foto->update(['is_archive' => false]);
+
+                // Check if the folder has no current thumbnail
+                $folder = Folder::find($folderId);
+                if ($folder && !$folder->thumbnail_id && !in_array($folder->id_folder, $updatedThumbnailFolders)) {
+                    // Set this unarchived photo as the new thumbnail if no other is set
+                    $folder->update([
+                        'thumbnail_id' => $foto->id_photo,
+                        'thumbnail_updated_at' => now()
+                    ]);
+
+                    $updatedThumbnailFolders[] = $folder->id_folder;
+                }
+            }
+
+            return redirect()->route('arsip.content')->with([
+                'status' => 'success',
+                'message' => count($id_foto) . ' foto berhasil dikeluarkan dari arsip'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('arsip.content')->with([
+                'status' => 'error',
+                'message' => 'Gagal mengeluarkan foto dari arsip: ' . $e->getMessage()
+            ]);
+        }
+    }
+
     public function pindahAlbum(Request $request)
     {
         try {

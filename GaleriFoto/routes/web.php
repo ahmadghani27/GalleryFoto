@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/foto/multiple-pindahalbum', [PhotoController::class, 'massPindahAlbum'])->name('foto.multiplepindahalbum');
     Route::patch('/foto/multiple-delete', [PhotoController::class, 'massDestroy'])->name('foto.multipledelete');
     Route::patch('/foto/multiple-arsip', [PhotoController::class, 'massArsipkan'])->name('foto.multiplearsip');
+    Route::patch('/foto/multipleunarsip', [PhotoController::class, 'massUnarsipkan'])->name('foto.multipleunarsip');
     //Route Profile
     Route::get('/akun', [ProfileController::class, 'edit'])->name('akun');
     Route::patch('/akun/profile', [ProfileController::class, 'update'])->name('profile.update');
