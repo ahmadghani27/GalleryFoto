@@ -32,24 +32,24 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 
 | **Teknologi**         | **Deskripsi**                                 | **Logo** |
 |-----------------------|-----------------------------------------------|----------|
-| **Laravel**           | Framework PHP untuk backend yang kuat         | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Logo"> |
-| **MySQL (XAMPP)**     | Database untuk menyimpan data foto            | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" width="40" alt="MySQL Logo"> |
-| **Laravel Breeze**    | Autentikasi ringan untuk login/register       | <img src="https://raw.githubusercontent.com/laravel/breeze/976ab1e2f68b90eee5a787445ff94033d919be2f/art/logo.svg" width="40" alt="Laravel Breeze Logo"> |
-| **Blade Components**  | Template frontend untuk UI yang rapi          | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Blade Logo"> |
-| **Tailwind CSS**      | Framework CSS untuk desain responsif          | <img src="https://cdn.worldvectorlogo.com/logos/tailwind-css-2.svg" width="40" alt="Tailwind CSS Logo"> |
-| **Alpine.js**         | JavaScript ringan untuk interaktivitas        | <img src="https://icon.icepanel.io/Technology/png-shadow-512/Alpine.js.png" width="40" alt="Alpine.js Logo"> |
-| **VS Code**           | Editor kode untuk pengembangan                | <img src="https://code.visualstudio.com/assets/images/code-stable.png" width="40" alt="VS Code Logo"> |
-| **Figma**             | Alat desain untuk UI/UX                       | <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" width="40" alt="Figma Logo"> |
+| **Laravel**           | Framework PHP untuk backend yang kuat         | <img src="https://laravel.com/img/logomark.min.svg" height="40" alt="Laravel Logo"> |
+| **Blade Components**  | Template frontend untuk UI yang rapi          | <img src="https://laravel.com/img/logomark.min.svg" height="40" alt="Blade Logo"> |
+| **MySQL (XAMPP)**     | Database untuk menyimpan data foto            | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" height="40" alt="MySQL Logo"> |
+| **Laravel Breeze**    | Autentikasi ringan untuk login/register       | <img src="https://raw.githubusercontent.com/laravel/breeze/976ab1e2f68b90eee5a787445ff94033d919be2f/art/logo.svg" height="40" alt="Laravel Breeze Logo"> |
+| **Tailwind CSS**      | Framework CSS untuk desain responsif          | <img src="https://cdn.worldvectorlogo.com/logos/tailwind-css-2.svg" height="40" alt="Tailwind CSS Logo"> |
+| **Alpine.js**         | JavaScript ringan untuk interaktivitas        | <img src="https://icon.icepanel.io/Technology/png-shadow-512/Alpine.js.png" height="40" alt="Alpine.js Logo"> |
+| **VS Code**           | Editor kode untuk pengembangan                | <img src="https://code.visualstudio.com/assets/images/code-stable.png" height="40" alt="VS Code Logo"> |
+| **Figma**             | Alat desain untuk UI/UX                       | <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" height="40" alt="Figma Logo"> |
 
 ---
 
 ## ⚙️ Cara Setup
 
 ### 🔧 Prasyarat
-- **Node.js & npm** <img src="https://nodejs.org/static/images/logo.svg" width="30" alt="Node.js Logo">: Untuk dependensi frontend.
-- **Composer** <img src="https://getcomposer.org/img/logo-composer-transparent.png" width="30" alt="Composer Logo">: Untuk dependensi PHP.
-- **XAMPP** <img src="https://www.apachefriends.org/images/xampp-logo.svg" width="30" alt="XAMPP Logo">: Untuk server MySQL.
-- **PHP** <img src="https://www.php.net/images/logos/new-php-logo.svg" width="30" alt="PHP Logo">: Versi kompatibel dengan Laravel (lihat dokumentasi).
+- **Node.js & npm** <img src="https://nodejs.org/static/images/logo.svg" height="30" alt="Node.js Logo">: Untuk dependensi frontend.
+- **Composer** <img src="https://getcomposer.org/img/logo-composer-transparent.png" height="30" alt="Composer Logo">: Untuk dependensi PHP.
+- **XAMPP** <img src="https://www.apachefriends.org/images/xampp-logo.svg" height="30" alt="XAMPP Logo">: Untuk server MySQL.
+- **PHP** <img src="https://www.php.net/images/logos/new-php-logo.svg" height="30" alt="PHP Logo">: Versi kompatibel dengan Laravel (lihat dokumentasi).
 
 ### Langkah-langkah
 1. Clone repository:
