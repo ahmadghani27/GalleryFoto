@@ -54,7 +54,7 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 ### Langkah-langkah
 1. Clone repository:
    ```bash
-   git clone https://github.com/your-repo/galeri-foto.git
+   git clone https://github.com/ahmadghani27/GalleryFoto.git
    cd galeri-foto
    ```
 
