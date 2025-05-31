@@ -34,13 +34,12 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 |-----------------------|-----------------------------------------------|----------|
 | **Laravel**           | Framework PHP untuk backend yang kuat         | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Logo"> |
 | **MySQL (XAMPP)**     | Database untuk menyimpan data foto            | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" width="40" alt="MySQL Logo"> |
-| **Laravel Breeze**    | Autentikasi ringan untuk login/register       | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Laravel Breeze Logo"> |
+| **Laravel Breeze**    | Autentikasi ringan untuk login/register       | <img src="https://laravel.com/img/brand/og-breeze.png" width="40" alt="Laravel Breeze Logo"> |
 | **Blade Components**  | Template frontend untuk UI yang rapi          | <img src="https://laravel.com/img/logomark.min.svg" width="40" alt="Blade Logo"> |
-| **Tailwind CSS**      | Framework CSS untuk desain responsif          | <img src="https://tailwindcss.com/_next/static/media/tailwindcss-logomark.3c44a36e.svg" width="40" alt="Tailwind CSS Logo"> |
-| **Alpine.js**         | JavaScript ringan untuk interaktivitas        | <img src="https://seeklogo.com/images/A/alpine-js-logo-21F4169C0C-seeklogo.com.png" width="40" alt="Alpine.js Logo"> |
+| **Tailwind CSS**      | Framework CSS untuk desain responsif          | <img src="https://cdn.worldvectorlogo.com/logos/tailwind-css-2.svg" width="40" alt="Tailwind CSS Logo"> |
+| **Alpine.js**         | JavaScript ringan untuk interaktivitas        | <img src="https://cdn.worldvectorlogo.com/logos/alpine-js-icon.svg" width="40" alt="Alpine.js Logo"> |
 | **VS Code**           | Editor kode untuk pengembangan                | <img src="https://code.visualstudio.com/assets/images/code-stable.png" width="40" alt="VS Code Logo"> |
 | **Figma**             | Alat desain untuk UI/UX                       | <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" width="40" alt="Figma Logo"> |
-
 
 ---
 
