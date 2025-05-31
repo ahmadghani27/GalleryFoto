@@ -303,7 +303,7 @@ class PhotoController extends Controller
                 // Update photo to archived
                 $foto->update(['is_archive' => true]);
 
-                // Check if this photo was a thumbnail
+                // Check if this photo was a thumbnail for any album
                 $folder = Folder::where('thumbnail_id', $foto_id)->first();
                 if ($folder && !in_array($folder->id_folder, $updatedThumbnailFolders)) {
                     // Find a new unarchived photo in the same album
@@ -312,10 +312,18 @@ class PhotoController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->first();
 
-                    $folder->update([
-                        'thumbnail_id' => $newThumbnail ? $newThumbnail->id_photo : null,
-                        'thumbnail_updated_at' => now()
-                    ]);
+                    // If no unarchived photos left, set thumbnail to null
+                    if (!$newThumbnail) {
+                        $folder->update([
+                            'thumbnail_id' => null,
+                            'thumbnail_updated_at' => now()
+                        ]);
+                    } else {
+                        $folder->update([
+                            'thumbnail_id' => $newThumbnail->id_photo,
+                            'thumbnail_updated_at' => now()
+                        ]);
+                    }
 
                     $updatedThumbnailFolders[] = $folder->id_folder;
                 }
@@ -384,18 +392,6 @@ class PhotoController extends Controller
 
                 // Update photo to unarchived
                 $foto->update(['is_archive' => false]);
-
-                // Check if the folder has no current thumbnail
-                $folder = Folder::find($folderId);
-                if ($folder && !$folder->thumbnail_id && !in_array($folder->id_folder, $updatedThumbnailFolders)) {
-                    // Set this unarchived photo as the new thumbnail if no other is set
-                    $folder->update([
-                        'thumbnail_id' => $foto->id_photo,
-                        'thumbnail_updated_at' => now()
-                    ]);
-
-                    $updatedThumbnailFolders[] = $folder->id_folder;
-                }
             }
 
             return redirect()->route('arsip.content')->with([
