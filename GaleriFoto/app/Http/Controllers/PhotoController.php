@@ -257,21 +257,6 @@ class PhotoController extends Controller
             // Update photo to archived
             $foto->update(['is_archive' => true]);
 
-            // Check if this photo was a thumbnail for any album
-            $folder = Folder::where('thumbnail_id', $decryptedId)->first();
-            if ($folder) {
-                // Find a new unarchived photo in the same album to be the thumbnail
-                $newThumbnail = Photo::where('folder', $folderId)
-                    ->where('is_archive', false)
-                    ->orderBy('created_at', 'desc')
-                    ->first();
-
-                $folder->update([
-                    'thumbnail_id' => $newThumbnail ? $newThumbnail->id_photo : null,
-                    'thumbnail_updated_at' => now()
-                ]);
-            }
-
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Foto berhasil diarsipkan'
