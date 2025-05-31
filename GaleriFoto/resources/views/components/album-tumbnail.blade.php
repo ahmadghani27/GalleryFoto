@@ -2,13 +2,6 @@
 
 <div class="relative">
     <div class="aspect-square rounded-lg overflow-hidden">
-        <div x-show="control" x-transition class="flex justify-between flex-col absolute w-auto h-auto right-0 top-0 p-1">
-            <div class="p-2 flex">
-                <label class="cursor-pointer label">
-                    <input type="checkbox" class="p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
-                </label>
-            </div>
-        </div>
         <div class="absolute bottom-0 flex items-center justify-between bg-white w-full p-4">
             <div class="flex flex-col">
                 <div class="text-xl font-semibold text-black">{{ $folder->name_folder }}</div>
