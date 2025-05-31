@@ -78,4 +78,4 @@ Fitur utamanya meliputi CRUD untuk foto dan folder, upload massal, pencarian, pe
 
 ---
 
-#TERIMA KASIH 
+# TERIMA KASIH 
