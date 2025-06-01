@@ -1,16 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 @font-face {
     font-family: 'Inter';
-    src: url("{{ asset('assets/font/Inter-Regular.ttf') }}") format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+    src: url("{{ asset('assets/font/Inter_Thin.ttf') }}") format('truetype');
+
 }
 
-[x-cloak] { display: none !important; }
-
 .f-inter {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter';
 }
 
 * {
@@ -18,24 +13,23 @@
     color: #121212;
 }
 
-.wrapper-old-username:has(input:disabled)  {
+.wrapper-old-username:has(input:disabled) {
     background-color: #f2f2f2;
     color: #888;
 }
 
 .checkbox:checked:hover {
-    background-color:unset !important;
+    background-color: unset !important;
 }
 
 .checkbox:checked:focus {
-    background-color:unset !important;
+    background-color: unset !important;
 }
 
 .checkbox:checked:active {
-    background-color:unset !important;
+    background-color: unset !important;
 }
 
 .icon-filled {
-    font-variation-settings: 'FILL' 1;
+    font-variation-settings: 'FILL'1;
 }
-
