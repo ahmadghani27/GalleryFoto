@@ -44,9 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/foto/multiple-delete', [PhotoController::class, 'massDestroy'])->name('foto.multipledelete');
     Route::patch('/foto/multiple-arsip', [PhotoController::class, 'massArsipkan'])->name('foto.multiplearsip');
     Route::patch('/foto/multipleunarsip', [PhotoController::class, 'massUnarsipkan'])->name('foto.multipleunarsip');
-    Route::get('api/foto/{id}', [PhotoController::class, 'api_get_detail_global_foto'])->name('foto.detail');
+    Route::get('/api/foto/{id}', [PhotoController::class, 'api_get_detail_global_foto'])
+        ->name('foto.detail');
     
-    Route::patch('/raw-arsip', [PhotoController::class, 'arsipkanRaw'])->name('arsipkanRaw');
+    
+    
     Route::delete('/raw-delete', [PhotoController::class, 'deleteRaw'])->name('deleteRaw');
     Route::get('/download-file/{path}', [PhotoController::class, 'downloadFoto'])
         ->where('path', '.*')
@@ -58,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/akun/password', [PasswordController::class, 'update'])->name('update_password');
     Route::delete('/akun', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //Route Arsip
+    Route::patch('/raw-arsip', [PhotoController::class, 'arsipkanRaw'])->name('arsipkanRaw');
+    Route::patch('/raw-unarsip', [PhotoController::class, 'unarsipkanRaw'])->name('unarsipkanRaw');
     Route::get('/arsip', [ArchiveController::class, 'show'])->name('arsip');
     Route::post('/arsip/verify', [ArchiveController::class, 'verify'])->name('arsip.verify');
     Route::get('/arsip/content', [ArchiveController::class, 'content'])->name('arsip.content');

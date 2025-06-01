@@ -1,7 +1,7 @@
 @props(['folder'])
 
 <div class="relative">
-    <div class="aspect-square rounded-lg overflow-hidden">
+    <div class="aspect-square rounded-lg overflow-hidden bg-gray-300">
         <div class="absolute bottom-0 flex items-center justify-between bg-white w-full p-4">
             <div class="flex flex-col">
                 <div class="text-xl font-semibold text-black">{{ $folder->name_folder }}</div>
@@ -33,12 +33,13 @@
         </a>
         @else
         <a href="{{ route('album.show', $folder->id_folder) }}"
-            class="block w-full h-full"
+            class="block bg-white w-full h-full"
             aria-label="Buka album {{ $folder->name_folder }}"
             @click.stop>
-            <div class="w-full h-full bg-gray-300 flex items-center justify-center rounded-md">
-                <span class="material-symbols-outlined text-4xl text-gray-700">photo_library</span>
-            </div>
+            <img src="{{ asset('assets/img/empty_album_placeholder.png') }}"
+                alt="Thumbnail album {{ $folder->name_folder }}"
+                class="w-full h-full object-cover rounded-md shadow-md"
+                loading="lazy">
         </a>
         @endif
     </div>

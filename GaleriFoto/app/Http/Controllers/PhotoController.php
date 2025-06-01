@@ -390,6 +390,28 @@ class PhotoController extends Controller
             ]);
         }
     }
+
+    public function unarsipkanRaw(Request $request)
+    {
+        $request->validate([
+            'id_photo' => 'required'
+        ]);
+
+        try {
+            $foto = Photo::findOrFail($request->id_photo);
+            $foto->update(['is_archive' => false]);
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Berhasil mengeluarkan foto dari arsip'
+            ]);
+        }  catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
+            ]);
+        }
+    }
+
     public function massUnarsipkan(Request $request)
     {
         $request->validateWithBag("massUnarsipkan", [
