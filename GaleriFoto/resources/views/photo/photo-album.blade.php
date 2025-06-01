@@ -388,7 +388,7 @@
 </div>
 
 <x-modal name="tambah-foto" :show="$errors->any()" :closeOnOutsideClick="false" maxWidth="2xl">
-    <div class="px-8 py-8 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
+    <div class="px-8 py-8 w-full bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
 
         <!-- Header Section -->
         <div class="self-stretch flex justify-between items-center gap-5">
@@ -400,31 +400,31 @@
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-            <!-- Photo Selection Form -->
-            <form action="{{ route('album.add-photos', $folder->id_folder) }}" method="POST"
-                x-data="{ submitting: false, selectedPhotos: [] }"
-                @submit.prevent="submitting = true; $el.submit()">
-                @csrf
+        <!-- Photo Selection Form -->
+        <form action="{{ route('album.add-photos', $folder->id_folder) }}" method="POST"
+            x-data="{ submitting: false, selectedPhotos: [] }"
+            @submit.prevent="submitting = true; $el.submit()" class="w-full">
+            @csrf
 
-                <!-- Photo Grid -->
-                <div class="block p-4 bg-gray-100">
-                    @if($allPhotos->isEmpty())
-                    <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
-                        <div class="text-xl font-normal">
-                            Tidak ada foto yang tersedia
-                        </div>
-                        <div>
-                            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition">
-                                Upload foto baru
-                            </button>
-                        </div>
+            <!-- Photo Grid -->
+            <div class="block p-4 bg-gray-100">
+                @if($allPhotos->isEmpty())
+                <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
+                    <div class="text-xl font-normal">
+                        Tidak ada foto yang tersedia
                     </div>
-                    @else
-                    <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
-                        @foreach ($allPhotos as $ft)
-                        <div
-                            x-data="{ isSelected: false }"
-                            @click="
+                    <div>
+                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-foto' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition">
+                            Upload foto baru
+                        </button>
+                    </div>
+                </div>
+                @else
+                <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+                    @foreach ($allPhotos as $ft)
+                    <div
+                        x-data="{ isSelected: false }"
+                        @click="
                         isSelected = !isSelected;
                         if(isSelected) {
                             selectedPhotos.push('{{ $ft->id_photo }}');
@@ -432,111 +432,154 @@
                             selectedPhotos = selectedPhotos.filter(id => id !== '{{ $ft->id_photo }}');
                         }
                     "
-                            :class="isSelected ? 'ring-2 ring-blue-500' : ''"
-                            class="relative cursor-pointer flex flex-col items-center">
+                        :class="isSelected ? 'ring-2 ring-blue-500' : ''"
+                        class="relative cursor-pointer flex flex-col items-center">
 
-                            <x-tambah-foto
-                                :path="$ft->file_path"
-                                :title="$ft->photo_title"
-                                :date="$ft->created_at"
-                                :photoId="$ft->id_photo"
-                                :isLoved="$ft->is_favorite">
+                        <x-tambah-foto
+                            :path="$ft->file_path"
+                            :title="$ft->photo_title"
+                            :date="$ft->created_at"
+                            :photoId="$ft->id_photo"
+                            :isLoved="$ft->is_favorite">
 
-                                <!-- Selection Indicator -->
-                                <div
-                                    x-show="isSelected"
-                                    x-transition:enter="transition ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-200"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                                    class="absolute top-2 right-2 z-10 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-white text-sm">check</span>
-                                </div>
-                            </x-tambah-foto>
-
-                            <!-- Photo Title -->
-                            <div class="mt-2 text-sm text-neutral-900 font-normal font-inter text-center truncate w-full max-w-[120px]">
-                                {{ $ft->photo_title }}
+                            <!-- Selection Indicator -->
+                            <div
+                                x-show="isSelected"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100 scale-100"
+                                x-transition:leave-end="opacity-0 scale-75"
+                                class="absolute top-2 right-2 z-10 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-sm">check</span>
                             </div>
+                        </x-tambah-foto>
+
+                        <!-- Photo Title -->
+                        <div class="mt-2 text-sm text-neutral-900 font-normal font-inter text-center truncate w-full max-w-[120px]">
+                            {{ $ft->photo_title }}
                         </div>
-                        @endforeach
                     </div>
-                    @endif
+                    @endforeach
                 </div>
+                @endif
+            </div>
 
-                <!-- Hidden Input for Selected Photos -->
-                <input type="hidden" name="selected_photos" x-model="selectedPhotos.join(',')">
+            <!-- Hidden Input for Selected Photos -->
+            <input type="hidden" name="selected_photos" x-model="selectedPhotos.join(',')">
 
-                <!-- Submit Button -->
-                <div class="sticky bottom-0 bg-white p-4 border-t">
-                    <button
-                        type="submit"
-                        class="w-full h-14 px-4 py-2 bg-blue-600 text-white rounded-lg flex justify-center items-center gap-2 transition-all"
-                        :disabled="selectedPhotos.length === 0"
-                        :class="selectedPhotos.length === 0 ? 'opacity-50 cursor-not-allowed' : ''">
+            <!-- Submit Button -->
+            <div class="sticky bottom-0 bg-white p-4 border-t">
+                <button
+                    type="submit"
+                    class="w-full h-14 px-4 py-2 bg-blue-600 text-white rounded-lg flex justify-center items-center gap-2 transition-all"
+                    :disabled="selectedPhotos.length === 0"
+                    :class="selectedPhotos.length === 0 ? 'opacity-50 cursor-not-allowed' : ''">
 
-                        <template x-if="!submitting">
-                            <span>
-                                Tambahkan <span x-text="selectedPhotos.length"></span> Foto ke Album
-                            </span>
-                        </template>
+                    <template x-if="!submitting">
+                        <span>
+                            Tambahkan <span x-text="selectedPhotos.length"></span> Foto ke Album
+                        </span>
+                    </template>
 
-                        <template x-if="submitting">
-                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </template>
-                    </button>
-                </div>
-            </form>
+                    <template x-if="submitting">
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </template>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Search Functionality
+        function filterPhotos() {
+            const searchTerm = document.getElementById('searchFoto').value.toLowerCase();
+            const photoItems = document.querySelectorAll('.photo-tumbnail');
+
+            photoItems.forEach(item => {
+                const title = item.querySelector('.photo-title').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    item.closest('.foto-group > div').style.display = 'block';
+                } else {
+                    item.closest('.foto-group > div').style.display = 'none';
+                }
+            });
+        }
+
+        function clearSearch() {
+            document.getElementById('searchFoto').value = '';
+            const photoItems = document.querySelectorAll('.foto-group > div');
+            photoItems.forEach(item => {
+                item.style.display = 'block';
+            });
+            document.getElementById('clearSearchAlbumBtn').classList.add('hidden');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchFoto');
+            const clearBtn = document.getElementById('clearSearchAlbumBtn');
+
+            if (searchInput.value.trim() !== '') {
+                clearBtn.classList.remove('hidden');
+            }
+
+            searchInput.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    </div>
+</x-modal>
+<x-modal name="upload-photo" :show="$errors->any()" :closeOnOutsideClick="false" maxWidth="2xl">
+    <div class="px-8 py-8 bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
+
+        <!-- Header Section -->
+        <div class="self-stretch flex justify-between items-center gap-5">
+            <div class="flex-1 flex flex-col justify-start items-start gap-2">
+                <h2 class="self-stretch text-black text-xl font-semibold">Upload Foto</h2>
+                <p class="self-stretch text-black/70 text-base font-normal">Simpan momen terbaik anda</p>
+            </div>
+            <button type="button" @click="$dispatch('close-modal', 'upload-photo')" class="p-1.5 bg-zinc-100 rounded-full flex justify-start items-center gap-2.5">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
 
-        <script>
-            // Search Functionality
-            function filterPhotos() {
-                const searchTerm = document.getElementById('searchFoto').value.toLowerCase();
-                const photoItems = document.querySelectorAll('.photo-tumbnail');
+        <!-- Tabs Section -->
+        <div x-data="{ tab: 'single' }" class="self-stretch flex flex-col gap-6">
 
-                photoItems.forEach(item => {
-                    const title = item.querySelector('.photo-title').textContent.toLowerCase();
-                    if (title.includes(searchTerm)) {
-                        item.closest('.foto-group > div').style.display = 'block';
-                    } else {
-                        item.closest('.foto-group > div').style.display = 'none';
-                    }
-                });
-            }
+            <!-- Tab Switch -->
+            <div class="self-stretch flex justify-start items-end flex-wrap content-end">
+                <div class="self-stretch flex justify-start items-end gap-7 flex-wrap content-end">
+                    <div class="w-28 flex flex-col justify-start items-start gap-2 cursor-pointer" @click="tab = 'single'">
+                        <span :class="tab === 'single' ? 'font-semibold' : 'font-normal'" class="self-stretch text-neutral-900 text-base">Single upload</span>
+                        <div :class="tab === 'single' ? 'bg-black' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
+                    </div>
+                    <div class="flex flex-col justify-start items-start gap-2 cursor-pointer" @click="tab = 'multi'">
+                        <span :class="tab === 'multi' ? 'font-semibold' : 'font-normal'" class="text-neutral-900 text-base">Multiple upload</span>
+                        <div :class="tab === 'multi' ? 'bg-black' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
+                    </div>
+                </div>
+                <div class="w-full h-[1.5px] bg-zinc-300"></div>
+            </div>
+            <!-- File Upload Section -->
+            <div x-show="tab === 'single'">
+                @include('photo.upload')
+            </div>
 
-            function clearSearch() {
-                document.getElementById('searchFoto').value = '';
-                const photoItems = document.querySelectorAll('.foto-group > div');
-                photoItems.forEach(item => {
-                    item.style.display = 'block';
-                });
-                document.getElementById('clearSearchAlbumBtn').classList.add('hidden');
-            }
+            <div x-show="tab === 'multi'">
+                @include('photo.mass_upload')
+            </div>
 
-            // Initialize
-            document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.getElementById('searchFoto');
-                const clearBtn = document.getElementById('clearSearchAlbumBtn');
-
-                if (searchInput.value.trim() !== '') {
-                    clearBtn.classList.remove('hidden');
-                }
-
-                searchInput.addEventListener('input', function() {
-                    if (this.value.trim() !== '') {
-                        clearBtn.classList.remove('hidden');
-                    } else {
-                        clearBtn.classList.add('hidden');
-                    }
-                });
-            });
-        </script>
+        </div>
     </div>
 </x-modal>
 
