@@ -8,35 +8,23 @@
         <div class="flex gap-5">
             <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
                 <div class="flex justify-start items-center gap-4 w-full mr-3.5">
-                    <span class="material-symbols-outlined">search</span>
-                    <form id="searchForm" method="GET" action="{{ route('arsip.content') }}" class="w-full flex items-center gap-2">
-                        <input
-                            id="searchFotoField"
-                            name="search"
-                            type="text"
-                            value="{{ $search ?? '' }}"
-                            class="searchFoto text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                            placeholder="Cari judul foto"
-                            x-data
-                            @input.debounce.500ms="
-                                if($event.target.value.trim() === '') {
-                                    window.location.href = '{{ route('arsip.content') }}';
-                                } else {
-                                    document.getElementById('searchForm').submit();
-                                }
-                            " />
-                        <button
-                            id="clearSearchBtn"
-                            type="button"
-                            class="clearSearchBtn {{ $search ? '' : 'hidden' }}"
-                            aria-label="Clear search"
-                            @click="
-                                document.getElementById('searchFotoField').value = '';
-                                window.location.href = '{{ route('arsip.content') }}';
-                            ">
-                            <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">close</span>
-                        </button>
-                    </form>
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+                    <input
+                        id="searchAlbumField"
+                        name="search"
+                        type="text"
+                        value="{{ $search ?? '' }}"
+                        class="searchFoto text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
+                        placeholder="Cari nama album" />
+                    <button
+                        id="clearSearchAlbumBtn"
+                        type="button"
+                        class="clearSearchBtn {{ $search ? '' : 'hidden' }}"
+                        aria-label="Clear search">
+                        <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">close</span>
+                    </button>
                 </div>
             </div>
             <div class="flex justify-end items-center gap-5">
