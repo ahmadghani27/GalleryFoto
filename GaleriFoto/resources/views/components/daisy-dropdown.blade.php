@@ -26,7 +26,7 @@ default => 'hover:text-gray-900',
                 more_vert
             </span>
         </div>
-        <ul class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm {{ $contentClasses }} group-hover:block hidden">
+        <ul class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-md {{ $contentClasses }} group-hover:block hidden">
             {{ $slot }}
         </ul>
     </div>

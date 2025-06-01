@@ -14,7 +14,7 @@
     @endif
     <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white border-b-[1.5px] border-gray-200">
         <article class="w-full flex justify-between items-center">
-            <div class="text-black text-4xl font-bold p-2">Album</div>
+            <div class="text-black text-2xl font-bold p-2">Album</div>
         </article>
         <div class="w-full h-16 flex justify-start items-center gap-4">
             <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
@@ -58,7 +58,7 @@
                             <a
                                 href="{{ route('album', ['sort' => 'asc']) }}"
                                 @click="selected = 'Terlama'; open = false"
-                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
                                 Terlama
                             </a>
                         </template>
@@ -66,7 +66,7 @@
                             <a
                                 href="{{ route('album', ['sort' => 'desc']) }}"
                                 @click="selected = 'Terbaru'; open = false"
-                                class="px-5 py-2 bg-white text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
+                                class="px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
                                     Terbaru
                                 </a>
                             </template>
@@ -103,9 +103,9 @@
                         </div>
                     </div>
                     @else
-                    <div class="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+                    <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
                         @foreach ($album as $item)
-                        <x-album-tumbnail :folder="$item" />
+                            <x-album-tumbnail :folder="$item" />
                         @endforeach
                     </div>
                     @endif
@@ -129,11 +129,11 @@
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                             <div class="self-stretch inline-flex justify-start items-start gap-2">
-                                <button type="button" @click="$dispatch('close-modal', 'tambah-album')" class="flex-1 h-14 px-2.5 py-5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200">
+                                <button type="button" @click="$dispatch('close-modal', 'tambah-album')" class="flex-1 h-14 px-2.5 py-5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200 transition-all ease-in-out">
                                     <div class="justify-start text-neutral-900 text-base font-bold">Batal</div>
                                 </button>
-                                <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-neutral-900/5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200">
-                                    <div class="justify-start text-neutral-900 text-base font-bold">Buat album</div>
+                                <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-gray-900 rounded-2xl text-white flex justify-center items-center gap-2.5 hover:bg-black transition-all ease-in-out">
+                                    <div style="color: inherit" class="justify-start text-neutral-900 text-base font-bold">Buat album</div>
                                 </button>
                             </div>
                         </div>

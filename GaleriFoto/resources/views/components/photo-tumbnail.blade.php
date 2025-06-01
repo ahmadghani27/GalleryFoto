@@ -6,7 +6,7 @@
     'isLoved' => false,
 ])
 
-<div class="bg-white cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
+<div class="bg-white cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }}, isArsip: window.location.pathname.startsWith('/arsip') }"  @mouseleave="if (!leave) control = false">
     <div class="aspect-square rounded-sm overflow-hidden" @mouseenter="control = true">
         <template x-if="loved">
             <div class="p-4 absolute">
@@ -18,7 +18,7 @@
         <div x-show="control" x-transition class="flex justify-between flex-col p-4 absolute bg-gradient-to-t from-gray-900/50 from-10% via-gray-900/0 via-30% to-gray-900/50 to-90% w-full h-full ">
             <div class="flex items-center justify-between">
                 <div>
-                    <button type="button" x-show=" !leave " class="p-2 flex rounded-md bg-gray-200"  
+                    <button type="button" x-show=" !isArsip && !leave " class="p-2 flex rounded-md bg-gray-200"  
                     @click.stop="
                         const el = $event.currentTarget.closest('.cardFoto');
 

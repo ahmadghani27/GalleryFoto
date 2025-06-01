@@ -11,6 +11,7 @@ let deleteFotoLink = document.querySelectorAll(".deleteFoto");
 let editJudulLink = document.querySelectorAll(".editJudul");
 let arsipkanFotolLink = document.querySelectorAll(".arsipkanFoto");
 let pindahAlbumLink = document.querySelectorAll(".pindahAlbum");
+let unarsipkanFotoLink = document.querySelectorAll(".unarsipkanFoto");
 
 deleteFotoLink.forEach(function (link) {
     link.addEventListener('click', function() {
@@ -57,6 +58,16 @@ pindahAlbumLink.forEach(function (link) {
         });
     });
 })
+
+unarsipkanFotoLink.forEach(function (link) {
+    link.addEventListener('click', function() {
+        const tt = this.querySelector(".title_foto").value;
+        const hh = this.querySelector(".id_foto").value;
+
+        document.getElementById('unarsipId').value = hh;
+        document.getElementById('unarsipTitle').innerHTML = tt;
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.querySelector('.searchFoto');
@@ -210,33 +221,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })
 
-    blockBtn.addEventListener('click', function() {
-        upToBlockState();
-        hideMassActionPanel();
-    });
-
-    selectAllBtn.addEventListener('click', function() {
-        fotoSelector.forEach(function(cb) {
-            cb.checked = true;
-            const foto_id = cb.parentElement.querySelector('.id_carrier').value;
-            forceSelectedId(foto_id);
-            counterCardSelected();
+    if(blockBtn) {
+        blockBtn.addEventListener('click', function() {
+            upToBlockState();
+            hideMassActionPanel();
         });
-    });
+    }
+
+    if(selectAllBtn) {
+        selectAllBtn.addEventListener('click', function() {
+            fotoSelector.forEach(function(cb) {
+                cb.checked = true;
+                const foto_id = cb.parentElement.querySelector('.id_carrier').value;
+                forceSelectedId(foto_id);
+                counterCardSelected();
+            });
+        });
+    }
 
 
     ///action logic
-    massPindahAlbumBtn.addEventListener('click', function() {
-        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-pindah-album-modal' }));
-    });
+    if(massPindahAlbumBtn) {
+        massPindahAlbumBtn.addEventListener('click', function() {
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-pindah-album-modal' }));
+        });
+    }
 
-    massArsipkanBtn.addEventListener('click', function() {
-        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-arsipkan-modal' }));
-    });
+    if(massArsipkanBtn) {
+        massArsipkanBtn.addEventListener('click', function() {
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-arsipkan-modal' }));
+        });
+    }
 
-    massDeleteBtn.addEventListener('click', function() {
-        window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-delete-modal' }));
-    });
+    if(massDeleteBtn) {
+        massDeleteBtn.addEventListener('click', function() {
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'mass-delete-modal' }));
+        });
+    }   
 
     window.addEventListener('open-modal', function (e) {
         if (e.detail === 'mass-pindah-album-modal') {
@@ -320,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal_detail_delete_btn = document.querySelector('.modal-detail-delete-btn');
     const modal_detail_download_btn = document.querySelector('.modal-detail-download-btn');
     const modal_detail_album_btn = document.querySelector('.modal-detail-album-btn');
+    const modal_detail_unarsipkan_btn = document.querySelector('.modal-detail-unarsipkan-btn');
 
     let dataDetailFoto = {
         'data' : {},
@@ -335,13 +357,22 @@ document.addEventListener('DOMContentLoaded', () => {
         dataDetailFoto.prev = index > 0 ? index - 1 : -1;
     }
 
+    let isLoadFotoDetail = false;
+    
     function showDetailFoto(current_id) {
+
+        if(isLoadFotoDetail) return;
+
+        isLoadFotoDetail = true;
+        const loadBarTop = document.querySelector('.loadBarTop');
+        loadBarTop._x_dataStack[0].show = true;
 
         console.log(dataDetailFoto.prev);
         backward_btn.disabled = dataDetailFoto.prev === -1;
         forward_btn.disabled = dataDetailFoto.next === -1;
 
-        fetch(`api/foto/${current_id}`) 
+        console.log(current_id)
+        fetch(`/api/foto/${current_id}`) 
             .then(res => res.json())
             .then(data => {
                 if(!dataDetailFoto.isOpenModal) {
@@ -372,7 +403,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 tanggal_foto.textContent = formatDate(data.foto.created_at);
-            });
+
+                loadBarTop._x_dataStack[0].show = false;
+            })
+            .catch(err => {
+                console.error('Gagal memuat foto', err);
+            })
+            .finally(() => {
+                isLoadFotoDetail = false;
+            }); 
     }
 
     function handleFwBwClick(index) {
@@ -384,77 +423,75 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalArsipDetail = document.getElementById('modal-detail-arsipkan');
     const modalDeteleDetail = document.getElementById('modal-detail-delete');
     const modalPindahAlbum = document.getElementById('modalPindahAlbum');
+    const modalUnarsipDetail = document.getElementById('modal-detail-unarsipkan');
 
-    modal_detail_arsipkan_btn.addEventListener('click', function() {
-        const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
-        
-        modalArsipDetail.showModal();
-        modalArsipDetail.querySelector('#fotoTitle').textContent = '"' + data.photo_title + '"';
-        modalArsipDetail.querySelector('.id_photo').value = data.id_photo;
-    });
+    if(modal_detail_arsipkan_btn) {
+        modal_detail_arsipkan_btn.addEventListener('click', function() {
+            const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
+            
+            modalArsipDetail.showModal();
+            modalArsipDetail.querySelector('#fotoTitle').textContent = '"' + data.photo_title + '"';
+            modalArsipDetail.querySelector('.id_photo').value = data.id_photo;
+        });
+    }
 
-    modal_detail_delete_btn.addEventListener('click', function() {
-        const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
-        modalDeteleDetail.showModal();
-        modalDeteleDetail.querySelector('.id_photo').value = data.id_photo;
-    });
+    if(modal_detail_delete_btn) {
+        modal_detail_delete_btn.addEventListener('click', function() {
+            const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
+            modalDeteleDetail.showModal();
+            modalDeteleDetail.querySelector('.id_photo').value = data.id_photo;
+        });
+    }
 
+    if(modal_detail_download_btn) {
+        modal_detail_download_btn.addEventListener('click', function() {
+            const path = dataDetailFoto.data[dataDetailFoto.currentIndex].file_path;
 
-    modal_detail_download_btn.addEventListener('click', function() {
-        const path = dataDetailFoto.data[dataDetailFoto.currentIndex].file_path;
+            const encodedPath = encodeURIComponent(path);
+            const link = document.createElement('a');
+            link.href = `/download-file/${encodedPath}`;
+            link.setAttribute('download', ''); // browser uses filename from Laravel response
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        });
+    }
 
-        const encodedPath = encodeURIComponent(path);
-        const link = document.createElement('a');
-        link.href = `/download-file/${encodedPath}`;
-        link.setAttribute('download', ''); // browser uses filename from Laravel response
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    });
+    if(modal_detail_album_btn) {
+        modal_detail_album_btn.addEventListener('click', function() {
+            const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
+            console.log(data);
+            modalPindahAlbum.showModal();
 
-    modal_detail_album_btn.addEventListener('click', function() {
-        const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
-        console.log(data);
-        modalPindahAlbum.showModal();
+            document.getElementById('albumId').value = data.id_photo;
+            document.getElementById('albumTitle').innerHTML = data.photo_title;
 
-        document.getElementById('albumId').value = data.id_photo;
-        document.getElementById('albumTitle').innerHTML = data.photo_title;
+            let id_folder = data.folder == "" ? 0 : data.folder;
 
-        let id_folder = data.folder == "" ? 0 : data.folder;
-
-        fetch(`/api/getActiveAlbum/${id_folder}`)
-        .then(response => response.json())
-        .then(data => {
-            const select = document.getElementById('album-selector');
-            select.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
-            data.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id_folder;
-                option.textContent = item.name_folder;
-                select.appendChild(option);
+            fetch(`/api/getActiveAlbum/${id_folder}`)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('album-selector');
+                select.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id_folder;
+                    option.textContent = item.name_folder;
+                    select.appendChild(option);
+                });
             });
         });
-    });
+    }
 
-    // modal_detail_favorit_btn.addEventListener('click', function() {
-    //     const id = dataDetailFoto.data[dataDetailFoto.currentIndex].id_photo;
-    //     fetch('/foto/favorite', {
-    //         method: 'PATCH',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         body: JSON.stringify({ id_foto: id })
-    //     })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         foto_favorit.classList.toggle('text-red-500', data.is_favorite);
-    //         if (window.location.pathname.startsWith('/favorit')) {
-    //             window.location.reload();
-    //         }
-    //     })
-    //     .catch(err => console.error(err));
-    // })
+    if(modal_detail_unarsipkan_btn) {
+        modal_detail_unarsipkan_btn.addEventListener('click', function() {
+            const data = dataDetailFoto.data[dataDetailFoto.currentIndex];
+            
+            modalUnarsipDetail.showModal();
+            modalUnarsipDetail.querySelector('#fotoTitle').textContent = '"' + data.photo_title + '"';
+            modalUnarsipDetail.querySelector('.id_photo').value = data.id_photo;
+        })
+    }
 
     window.addEventListener('close-modal', function (event) {
         if (event.detail === 'detail-foto-modal') {
@@ -466,13 +503,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    forward_btn.addEventListener('click', function() {
-        handleFwBwClick(dataDetailFoto.next);
-    });
+    if(forward_btn) {
+        forward_btn.addEventListener('click', function() {
+            handleFwBwClick(dataDetailFoto.next);
+        });
+    }
 
-    backward_btn.addEventListener('click', function() {
-        handleFwBwClick(dataDetailFoto.prev);
-    })
+    if(backward_btn) {
+        backward_btn.addEventListener('click', function() {
+            handleFwBwClick(dataDetailFoto.prev);
+        })
+    }
 
     card_foto.forEach(function(card) {
         card.addEventListener('click', function() {
