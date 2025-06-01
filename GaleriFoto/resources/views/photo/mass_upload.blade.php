@@ -100,19 +100,24 @@
             },
             handleFiles(event) {
                 const selectedFiles = Array.from(event.target.files);
-
                 for (const file of selectedFiles) {
                     if (/\.(jpg|jpeg|png)$/i.test(file.name)) {
                         this.files.push({
                             file,
                             nama: file.name,
                             size: file.size,
-                            width: file.width,
-                            height: file.height
+                            width: 0, // Akan diisi setelah load gambar
+                            height: 0
                         });
+                        // Load gambar untuk mendapatkan dimensi
+                        const img = new Image();
+                        img.src = URL.createObjectURL(file);
+                        img.onload = () => {
+                            this.files[this.files.length - 1].width = img.width;
+                            this.files[this.files.length - 1].height = img.height;
+                        };
                     }
                 }
-
                 event.target.value = null;
             },
             formatSize(bytes) {
@@ -136,14 +141,20 @@
             },
             async submitForm() {
                 if (!this.files.length || this.files.some(f => !f.file)) {
-                    this.emptyDataError = "Data kosong";
+                    this.emptyDataError = "Pilih setidaknya satu foto untuk diunggah.";
+                    return;
+                }
+
+                if (this.files.some(f => !f.nama.trim())) {
+                    this.emptyDataError = "Semua foto harus memiliki judul.";
                     return;
                 }
 
                 this.submitting = true;
+                this.emptyDataError = "";
                 const formData = new FormData();
 
-                this.files.forEach((fileObj, index) => {
+                this.files.forEach((fileObj) => {
                     formData.append('photo[]', fileObj.file);
                     formData.append('title[]', fileObj.nama);
                 });
@@ -153,32 +164,37 @@
                         method: "POST",
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Accept': 'application/json',
                         },
                         body: formData
                     });
 
                     const data = await response.json();
+
                     if (!response.ok) {
-                        // Server kirim error (misalnya validation error dari Laravel)
                         throw data;
                     }
-                    console.log("Result:", data);
-                    this.files = [];
 
-                    if (response.ok) {
+                    // Reset form setelah sukses
+                    this.files = [];
+                    this.activeIndex = null;
+
+                    // Tampilkan pesan sukses (opsional)
+                    this.emptyDataError = data.message;
+
+                    // Redirect ke URL dari server
+                    if (data.redirect) {
                         window.location.href = data.redirect;
                     }
                 } catch (error) {
-                    if (error.errors) {
-                        // Laravel validation error
-                        console.error("Validation Errors:", error.errors);
-                        this.emptyDataError = "Data tidak memenuhi syarat"
-                    } else {
-                        console.error("Unexpected Error:", error);
-                    }
-                } finally {
                     this.submitting = false;
+                    if (error.errors) {
+                        // Tampilkan error validasi
+                        const errorMessages = Object.values(error.errors).flat().join(' ');
+                        this.emptyDataError = errorMessages || "Validasi gagal.";
+                    } else {
+                        // Tampilkan error umum
+                        this.emptyDataError = error.message || "Terjadi kesalahan saat mengunggah.";
+                    }
                 }
             }
         };

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PhotoController extends Controller
@@ -109,66 +110,81 @@ class PhotoController extends Controller
             'photo.*' => 'required|image|mimes:jpg,jpeg,png|max:5048',
             'title.*' => 'required|string|max:255',
         ], [
-            // Pesan error untuk title
             'title.*.required' => 'Judul foto wajib diisi.',
             'title.*.string'   => 'Judul foto harus berupa teks.',
             'title.*.max'      => 'Judul foto tidak boleh lebih dari 255 karakter.',
-
-            // Pesan error untuk photo
             'photo.*.required' => 'File foto wajib diunggah.',
-            'photo.*.file'     => 'File yang diunggah harus berupa file.',
+            'photo.*.image'    => 'File yang diunggah harus berupa gambar.',
             'photo.*.mimes'    => 'Format file yang diperbolehkan adalah JPG, JPEG, atau PNG.',
             'photo.*.max'      => 'Ukuran file maksimal adalah 5MB (5048 KB).',
         ]);
 
         if ($validator->fails()) {
-            throw new HttpResponseException(response()->json([
-                'message' => 'Validation failed',
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validasi gagal.',
                 'errors' => $validator->errors()
-            ], 422));
+            ], 422);
+        }
+
+        // Batasi jumlah file
+        $maxFiles = 50;
+        if (count($request->file('photo')) > $maxFiles) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Maksimum $maxFiles foto dapat diunggah sekaligus."
+            ], 422);
         }
 
         $uploadedFiles = [];
         $folder = now()->format('Y/m');
 
-        foreach ($request->file('photo') as $index => $photo) {
-            $judul = $request->input('title')[$index];
-            $fileName = 'foto-' . uniqid() . '.' . $photo->extension();
-            $path = "photos/{$folder}/{$fileName}";
+        DB::beginTransaction();
+        try {
+            foreach ($request->file('photo') as $index => $photo) {
+                $judul = $request->input('title')[$index];
+                $fileName = 'foto-' . uniqid() . '.' . $photo->extension();
+                $path = "photos/{$folder}/{$fileName}";
 
-            // Resize and compress image
-            $image = Image::make($photo)->encode('jpg', 60);
-            Storage::disk('local')->put("{$path}", $image);
+                // Resize and compress image
+                $image = Image::make($photo)->encode('jpg', 80);
+                Storage::disk('local')->put($path, $image);
 
-            Photo::create([
-                'user_id'      => $request->user()->id,
-                'folder'       => null,
-                'is_archive'   => false,
-                'is_favorite'  => false,
-                'file_path'    => $path,
-                'photo_title'  => $judul,
-                'created_at'   => now(),
-                'update_at'    => now(),
-                'thumbnail_updated_at'       => null
+                Photo::create([
+                    'user_id'           => $request->user()->id,
+                    'folder'            => null,
+                    'is_archive'        => false,
+                    'is_favorite'       => false,
+                    'file_path'         => $path,
+                    'photo_title'       => $judul,
+                    'created_at'        => now(),
+                    'updated_at'        => now(),
+                    'thumbnail_updated_at' => null
+                ]);
 
+                $uploadedFiles[] = [
+                    'title' => $judul,
+                    'filename' => $fileName,
+                ];
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Semua foto berhasil diupload.',
+                'uploadedFiles' => $uploadedFiles,
+                'redirect' => url()->previous() // URL halaman sebelumnya
             ]);
-
-            $uploadedFiles[] = [
-                'title' => $judul,
-                'filename' => $fileName,
-            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            foreach ($uploadedFiles as $file) {
+                Storage::disk('local')->delete("photos/{$folder}/{$file['filename']}");
+            }
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal upload foto: ' . $e->getMessage()
+            ], 500);
         }
-
-        session()->flash([
-            'status' => 'success',
-            'message' => 'Semua foto berhasil diupload'
-        ]);
-
-        return response()->json([
-            'message' => 'Semua foto berhasil diupload',
-            'files' => $uploadedFiles,
-            'redirect' => route('foto')
-        ]);
     }
 
     public function destroy(Request $request)
@@ -269,7 +285,8 @@ class PhotoController extends Controller
         }
     }
 
-    public function arsipkanRaw(Request $request) {
+    public function arsipkanRaw(Request $request)
+    {
         try {
             $foto = Photo::findOrFail($request->id_photo);
             $foto->update(['is_archive' => true]);
@@ -286,7 +303,8 @@ class PhotoController extends Controller
         }
     }
 
-    public function deleteRaw(Request $request) {
+    public function deleteRaw(Request $request)
+    {
         try {
             $foto = Photo::findOrFail($request->id_photo);
             $foto->delete();
@@ -302,7 +320,7 @@ class PhotoController extends Controller
             ]);
         }
     }
-    
+
 
 
     public function massArsipkan(Request $request)
@@ -315,7 +333,6 @@ class PhotoController extends Controller
 
         try {
             $id_foto = json_decode($request->id_foto, true);
-            $updatedThumbnailFolders = [];
 
             foreach ($id_foto as $foto_id) {
                 $foto = Photo::findOrFail($foto_id);
@@ -383,7 +400,6 @@ class PhotoController extends Controller
 
         try {
             $id_foto = json_decode($request->id_foto, true);
-            $updatedThumbnailFolders = [];
 
             foreach ($id_foto as $foto_id) {
                 $foto = Photo::findOrFail($foto_id);
@@ -476,10 +492,11 @@ class PhotoController extends Controller
         return response($file, 200)->header('Content-Type', $mime);
     }
 
-    public function api_get_detail_global_foto($foto_id) {
+    public function api_get_detail_global_foto($foto_id)
+    {
         try {
             $foto = Photo::findOrFail($foto_id);
-            
+
 
             return response()->json([
                 'status' => 'success',
@@ -492,10 +509,10 @@ class PhotoController extends Controller
                 'message' => 'Gagal memuat foto: ' . $e->getMessage(),
             ]);
         }
-
     }
 
-    public function downloadFoto($path) {
+    public function downloadFoto($path)
+    {
         if (!Storage::disk('local')->exists($path)) {
             abort(404, 'File not found: ' . $path);
         }
