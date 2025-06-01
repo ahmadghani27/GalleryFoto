@@ -40,7 +40,8 @@ class AlbumController extends Controller
     public function show($id_folder)
     {
         $userId = Auth::id();
-        $sort = request()->query('sort', 'desc'); // default: terbaru
+        $sort = request()->query('sort', 'desc'); // Default: terbaru
+        $search = request()->query('search'); // Ambil parameter search dari query string
 
         // Fetch the folder with photo count
         $folder = Folder::withCount(['photos' => function ($query) {
@@ -51,11 +52,17 @@ class AlbumController extends Controller
             ->firstOrFail();
 
         // Fetch photos for the current album
-        $photos = Photo::where('folder', $id_folder)
+        $query = Photo::where('folder', $id_folder)
             ->where('user_id', $userId)
-            ->where('is_archive', 0)
-            ->orderBy('created_at', $sort)
-            ->get();
+            ->where('is_archive', 0);
+
+        // Terapkan filter pencarian jika ada
+        if ($search) {
+            $query->where('photo_title', 'like', '%' . $search . '%');
+        }
+
+        // Terapkan pengurutan
+        $photos = $query->orderBy('created_at', $sort)->get();
 
         // Fetch all non-archived photos for the user, excluding those in the current album
         $allPhotos = Photo::where('user_id', $userId)
@@ -71,7 +78,8 @@ class AlbumController extends Controller
             'folder' => $folder,
             'photos' => $photos,
             'allPhotos' => $allPhotos,
-            'currentSort' => $sort
+            'currentSort' => $sort,
+            'search' => $search // Kirim parameter search ke view
         ]);
     }
     public function store(Request $request): RedirectResponse
