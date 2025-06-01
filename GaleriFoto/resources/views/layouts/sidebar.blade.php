@@ -12,19 +12,22 @@
     @vite(['resources/css/styles.css', 'resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased font-inter">
+<body class="antialiased font-inter ">
     <div class="flex h-dvh w-full">
         <div
-            x-data="{ open: localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : window.innerWidth >= 768 }"
-            x-init="open = localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : window.innerWidth >= 768; $watch('open', value => localStorage.setItem('sidebarOpen', value))"
-            @resize.window="open = localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : window.innerWidth >= 900"
+            x-data="{ open: localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : (window.innerWidth >= 768) }"
+            x-init="  $watch('open', value => localStorage.setItem('sidebarOpen', JSON.stringify(value)));open = window.innerWidth >= 768 ? (localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : true) : false; "
+            @resize.window="if (window.innerWidth < 768) {
+            open = false;
+            localStorage.setItem('sidebarOpen', JSON.stringify(false)); } else {
+            open = localStorage.getItem('sidebarOpen') ? JSON.parse(localStorage.getItem('sidebarOpen')) : true; } "
             class="flex h-full transition-all duration-300"
             :class="open ? 'w-56' : 'w-16'">
 
             <aside
                 :class="open ? 'w-56' : 'w-16'"
-                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col border-r-[1.5px] border-gray-200 h-dvh">
-                <div class="flex items-end justify-between p-4">
+                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col h-dvh z-[999]">
+                <div class="flex items-end justify-between px-4 py-6">
                     <span class="text-3xl font-bold"
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 -translate-x-10"
@@ -42,25 +45,25 @@
                     <div class="flex-col w-full">
                         <div class="text-[14px] text-black/50 mb-2 px-2 font-semibold " x-show="open">MENU</div>
                         <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
-                        <a href="{{ route('foto') }}" class="flex items-center gap-4 px-2 py-4 my-1  w-full rounded-2xl bg-white hover:bg-slate-100 {{ Route::is('foto*') ? '!bg-cyan-600' : '' }}">
+                        <a href="{{ route('foto') }}" class="flex items-center gap-4 px-2 py-4 my-1  w-full rounded-2xl bg-white hover:bg-cyan-50 {{ Route::is('foto*') ? '!bg-cyan-600' : '' }}">
                             <span class="material-symbols-outlined text-[32px] {{ Route::is('foto*') ? '!text-white' : '' }}">image</span>
                             <span class="text-[20px] font-normal {{ Route::is('foto*') ? '!text-white' : '' }}" x-show="open">Foto</span>
                         </a>
-                        <a href="{{ route('album') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-slate-100 {{ Route::is('album*') ? '!bg-cyan-600' : '' }}">
+                        <a href="{{ route('album') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-cyan-50 {{ Route::is('album*') ? '!bg-cyan-600' : '' }}">
                             <span class="material-symbols-outlined text-[32px] {{ Route::is('album*') ? '!text-white' : '' }}">folder_open</span>
                             <span class="text-[20px] font-normal {{ Route::is('album*') ? '!text-white' : '' }}" x-show="open">Album</span>
                         </a>
-                        <a href="{{ route('arsip') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-slate-100 {{ Route::is('arsip*') ? '!bg-cyan-600' : '' }}">
+                        <a href="{{ route('arsip') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-cyan-50 {{ Route::is('arsip*') ? '!bg-cyan-600' : '' }}">
                             <span class="material-symbols-outlined text-[32px] {{ Route::is('arsip*') ? '!text-white' : '' }}">archive</span>
                             <span class="text-[20px] font-normal {{ Route::is('arsip*') ? '!text-white' : '' }}" x-show="open">Arsip</span>
                         </a>
-                        <a href="{{ route('favorit') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-slate-100 {{ Route::is('favorit*') ? '!bg-cyan-600' : '' }}">
+                        <a href="{{ route('favorit') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-cyan-50 {{ Route::is('favorit*') ? '!bg-cyan-600' : '' }}">
                             <span class="material-symbols-outlined text-[32px] {{ Route::is('favorit*') ? '!text-white' : '' }}">favorite</span>
                             <span class="text-[20px] font-normal {{ Route::is('favorit*') ? '!text-white' : '' }}" x-show="open">Favorit</span>
                         </a>
                         <div class="text-[14px] text-black/50 mb-2 mt-4 px-2 font-semibold gap-1" x-show="open">ANDA</div>
                         <div class="w-full h-[1.5px] bg-slate-200 mb-2" x-show="!open"></div>
-                        <a href="{{ route('akun') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-slate-100 transition-all ease-in-out {{ Route::is('akun') ? '!bg-cyan-600' : '' }}">
+                        <a href="{{ route('akun') }}" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-cyan-50 transition-all ease-in-out {{ Route::is('akun') ? '!bg-cyan-600' : '' }}">
                             <span class="material-symbols-outlined text-[32px] {{ Route::is('akun*') ? '!text-white' : '' }}">account_box</span>
                             <span class="text-[20px] font-normal {{ Route::is('akun*') ? '!text-white' : '' }}" x-show="open">Akun</span>
                         </a>
@@ -68,7 +71,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-slate-100">
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center gap-4 px-2 py-4 my-1 w-full rounded-2xl bg-white hover:bg-cyan-50">
                                 <span class="material-symbols-outlined text-[32px] {{ Route::is('logout*') ? '!text-white' : '' }}">exit_to_app</span>
                                 <span class="text-[20px] font-normal {{ Route::is('logout*') ? '!text-white' : '' }}" x-show="open">Keluar</span>
                             </a>
@@ -79,7 +82,7 @@
 
         </div>
 
-        <main class="flex-1 w-full h-full bg-gray-100 transition-all duration-300 ease-in-out">
+        <main class="flex-1 w-full h-full bg-stone-50 transition-all duration-300 ease-in-out">
             @yield('content')
         </main>
     </div>
