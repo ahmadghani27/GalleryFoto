@@ -8,7 +8,7 @@
 
     <title>@yield('title', 'Pixelora')</title>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="shortcut icon" href="{{ asset('storage/icon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/img/icon.ico') }}" type="image/x-icon">
 
     @vite(['resources/css/styles.css', 'resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -33,7 +33,7 @@
                         x-transition:leave="transition ease-in duration-300"
                         x-transition:leave-start="opacity-100 translate-x-0"
                         x-transition:leave-end="opacity-0 -translate-x-10"
-                        x-show="open"><img src="{{ asset('storage/Pixelora.png') }}" class="h-8 w-auto" alt="Pixelora">
+                        x-show="open"><img src="{{ asset('assets/img/Pixelora.png') }}" class="h-8 w-auto" alt="Pixelora">
                     </span>
                     <button @click="open = !open" class="flex items-center transition-all ease-in-out rounded">
                         <span class="material-symbols-outlined text-[32px]">left_panel_close</span>
