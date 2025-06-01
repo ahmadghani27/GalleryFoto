@@ -12,7 +12,7 @@
     @vite(['resources/css/styles.css', 'resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased font-inter">
+<body class="antialiased font-inter ">
     <div x-data="{show:false}" x-show="show" class="loader loadBarTop top-0 fixed w-full z-[99999]" x-cloak></div>
     <div class="flex h-dvh w-full">
         <div
