@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 @font-face {
     font-family: 'Inter';
-    src: url("{{ asset('asset/font/Inter-Regular.ttf') }}") format('truetype');
+    src: url("{{ asset('assets/font/Inter-Regular.ttf') }}") format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
