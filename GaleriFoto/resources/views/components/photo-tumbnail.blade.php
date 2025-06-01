@@ -6,7 +6,7 @@
     'isLoved' => false,
 ])
 
-<div class="bg-white  cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
+<div class="bg-white cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
     <div class="aspect-square rounded-sm overflow-hidden" @mouseenter="control = true">
         <template x-if="loved">
             <div class="p-4 absolute">
