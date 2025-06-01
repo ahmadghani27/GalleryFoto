@@ -88,11 +88,7 @@
             </div>
             @endif
             <div class="text-gray-500 text-md font-normal font-inter bg-white/80 backdrop-blur-lg">
-                @if ($photos->count() == 0)
-                Album kosong
-                @else
                 Menampilkan {{ $photos->count() }} Foto
-                @endif
             </div>
         </div>
 
@@ -404,36 +400,6 @@
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-
-        <!-- Tabs Section -->
-        <div class="self-stretch flex flex-col gap-6">
-            <!-- Search Form -->
-            <form id="searchForm" method="GET" class="flex justify-start items-center gap-4 w-full mr-3.5 bg-white p-4 rounded-lg">
-                <span class="material-symbols-outlined">
-                    search
-                </span>
-                <input
-                    id="searchFoto"
-                    name="search"
-                    type="text"
-                    value="{{ request('search') }}"
-                    class="searchAlbum text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                    placeholder="Cari foto..."
-                    x-data
-                    @input.debounce.500ms="filterPhotos()" />
-
-                <button
-                    id="clearSearchAlbumBtn"
-                    type="button"
-                    class="clearSearchBtn {{ request('search') ? '' : 'hidden' }}"
-                    aria-label="Clear search"
-                    @click="clearSearch()">
-                    <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">
-                        close
-                    </span>
-                </button>
-            </form>
-
             <!-- Photo Selection Form -->
             <form action="{{ route('album.add-photos', $folder->id_folder) }}" method="POST"
                 x-data="{ submitting: false, selectedPhotos: [] }"
@@ -441,7 +407,7 @@
                 @csrf
 
                 <!-- Photo Grid -->
-                <div class="block px-6 bg-gray-100">
+                <div class="block p-4 bg-gray-100">
                     @if($allPhotos->isEmpty())
                     <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
                         <div class="text-xl font-normal">
