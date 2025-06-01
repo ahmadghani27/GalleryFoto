@@ -269,6 +269,42 @@ class PhotoController extends Controller
         }
     }
 
+    public function arsipkanRaw(Request $request) {
+        try {
+            $foto = Photo::findOrFail($request->id_photo);
+            $foto->update(['is_archive' => true]);
+
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil diarsipkan'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal mengarsipkan foto: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteRaw(Request $request) {
+        try {
+            $foto = Photo::findOrFail($request->id_photo);
+            $foto->delete();
+
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => 'Foto berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal menghapus foto: ' . $e->getMessage()
+            ]);
+        }
+    }
+    
+
+
     public function massArsipkan(Request $request)
     {
         $request->validateWithBag("massArsipkan", [
@@ -438,5 +474,33 @@ class PhotoController extends Controller
         $file = file_get_contents($fullPath);
 
         return response($file, 200)->header('Content-Type', $mime);
+    }
+
+    public function api_get_detail_global_foto($foto_id) {
+        try {
+            $foto = Photo::findOrFail($foto_id);
+            
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil memuat foto',
+                'foto' => $foto
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Gagal memuat foto: ' . $e->getMessage(),
+            ]);
+        }
+
+    }
+
+    public function downloadFoto($path) {
+        if (!Storage::disk('local')->exists($path)) {
+            abort(404, 'File not found: ' . $path);
+        }
+
+        $absolutePath = Storage::disk('local')->path($path);
+        return response()->download($absolutePath);
     }
 }

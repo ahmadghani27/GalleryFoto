@@ -6,7 +6,7 @@
     'isLoved' => false,
 ])
 
-<div class="bg-white cardFoto rounded-lg overflow-hidden relative" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
+<div class="bg-white  cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }} }"  @mouseleave="if (!leave) control = false">
     <div class="aspect-square rounded-sm overflow-hidden" @mouseenter="control = true">
         <template x-if="loved">
             <div class="p-4 absolute">
@@ -19,7 +19,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <button type="button" x-show=" !leave " class="p-2 flex rounded-md bg-gray-200"  
-                    @click="
+                    @click.stop="
                         const el = $event.currentTarget.closest('.cardFoto');
 
                         loved = !loved;
@@ -45,7 +45,7 @@
                     </button>
                 </div>
                 <div class="p-2 flex">
-                    <label class="cursor-pointer label">
+                    <label class="cursor-pointer label" @click.stop>
                         <input type="checkbox" class="foto-multiple-selector p-3 rounded-md cursor-pointer bg-transparent border-white border-[2px]" />
                         <input type="hidden" class="id_carrier" value="{{ $photoId }}">
                     </label>
@@ -56,13 +56,13 @@
                     <div class="text-xl font-semibold text-white">{{ $title }}</div>
                     <div class="text-sm mt-1 font-light text-white opacity-80">{{ $date }}</div>
                 </div>
-                <div x-show=" !leave ">
+                <div x-show=" !leave " @click.stop>
                     {{ $slot }}
                 </div>
             </div>
         </div>
         
-        <img src="{{ route('foto.access', ['path' => $path ]) }}" alt="{{ $title }}" class="w-full h-full object-cover " loading="lazy">
+        <img src="{{ route('foto.access', ['path' => $path ]) }}" alt="{{ $title }}" class="w-full h-full object-cover object-center" loading="lazy">
     </div>
 </div>
 
