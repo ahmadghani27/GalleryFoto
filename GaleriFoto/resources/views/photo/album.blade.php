@@ -12,11 +12,15 @@
         </div>
     </div>
     @endif
-    <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white">
-        <article class="w-full flex justify-between items-center">
-            <div class="text-black text-2xl font-bold p-2">Album</div>
-        </article>
-        <div class="w-full h-16 flex justify-start items-center gap-4" x-data="{
+    <div class="sticky top-0 z-40 px-6 pt-6 pb-3 bg-white">
+        <nav class="font-bold" aria-label="breadcrumb">
+            <ol class="flex gap-4 items-center">
+                <li>
+                    <a href="{{ route('album') }}" class="hover:text-yellow-600 text-gray-500 text-2xl font-bold p-2">Album</a>
+                </li>
+            </ol>
+        </nav>
+        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-data="{
         isSearchFocused: false,
         isMobile: window.innerWidth < 768,
         init() {

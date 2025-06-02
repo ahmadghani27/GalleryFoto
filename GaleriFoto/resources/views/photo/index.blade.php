@@ -303,7 +303,7 @@
                             :date="$ft->created_at"
                             :photoId="$ft->id_photo"
                             :isLoved="$ft->is_favorite">
-                            <x-daisy-dropdown>
+                            <x-daisy-dropdown colorClass="default">
                                 <div class="flex-col py-1 gap-2">
                                     <button type="button" class="pindahAlbum flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
                                         <input type="hidden" class="id_foto" value="{{ $ft->id_photo }}">

@@ -2,20 +2,20 @@
 @section('title', 'Foto')
 @section('content')
 
-<div class="flex flex-col bg-white">
-    <div class="transition-all ease-in-out min-h-[130px] sticky top-0 z-40 px-6 py-3 pt-6 bg-white border-b-[1.5px] border-gray-200">
-        <nav class="text-black  font-bold" aria-label="breadcrumb">
+<div class="flex flex-col h-full bg-white">
+    <div class="sticky top-0 z-40 px-6 pt-6 pb-3 bg-white">
+        <nav class="font-bold" aria-label="breadcrumb">
             <ol class="flex gap-4 items-center">
                 <li>
-                    <a href="{{ route('album') }}" class="hover:underline text-inherit text-2xl">Album</a>
+                    <a href="{{ route('album') }}" class="hover:text-yellow-600 text-gray-500 text-2xl">Album</a>
                 </li>
                 <li class="flex items-center gap-4">
-                    <span class="material-symbols-outlined opacity-50">chevron_right</span>
-                    <a href="{{ route('album.show', $folder->id_folder) }}" aria-current="page" class="hover:underline text-inherit text-2xl">{{ $folder->name_folder }}</a>
+                    <span class="material-symbols-outlined opacity-50 text-yellow-600">chevron_right</span>
+                    <a href="{{ route('album.show', $folder->id_folder) }}" aria-current="page" class="hover:text-yellow-600 text-gray-500 text-2xl">{{ $folder->name_folder }}</a>
                 </li>
             </ol>
         </nav>
-        <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
+        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-cloak x-data="{ show: true }"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
             x-transition:enter-end="opacity-100 translate-x-0"
@@ -23,37 +23,42 @@
             x-transition:leave-start="opacity-100 translate-x-0"
             x-transition:leave-end="opacity-0 -translate-x-4"
             x-show="show">
-            <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
-                <div class="flex justify-start items-center gap-4 w-full mr-3.5">
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>
+            <div
+                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+                <div class="flex justify-start items-center gap-4 w-full h-12">
+                    <span class="material-symbols-outlined text-cyan-600">search</span>
                     <input
                         id="searchFotoField"
                         type="text"
                         value="{{ request('search') }}"
-                        class="searchFoto text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                        placeholder="Cari judul foto" />
-
+                        x-on:focus="isSearchFocused = true"
+                        x-on:blur="isSearchFocused = false"
+                        x-on:input="isSearchFocused = true"
+                        class="searchFoto text-neutral-900 font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-lg h-full"
+                        placeholder="Cari foto anda" />
                     <button
                         id="clearSearchBtn"
                         type="button"
-                        class="clearSearchBtn hidden"
+                        class="clearSearchBtn h-full {{ $search ? '' : 'hidden' }}"
                         aria-label="Clear search">
-                        <span class="material-symbols-outlined text-gray-500 hover:text-gray-800">
+                        <span class="material-symbols-outlined text-red-600 hover:text-cyan-600 h-full flex items-center px-2">
                             close
                         </span>
                     </button>
                 </div>
-                </div>
-            <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
+            </div>
+            <div
+                x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
+                x-transition
+                class="relative h-14">
                 <div
-                    @click="open = !open" :class="{'rounded-t-md': open, 'rounded-full': !open}"
-                    class="cursor-pointer px-5 py-3 !bg-white border-[1.5px] border-gray-300 rounded-full flex justify-start items-center gap-2">
-                    <span class="material-symbols-outlined cursor-pointer">
+                    @click="open = !open"
+                    :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
+                    class="cursor-pointer px-5 py-3 !bg-cyan-600 rounded-full flex justify-start items-center gap-2 h-full">
+                    <span class="material-symbols-outlined cursor-pointer text-white">
                         format_line_spacing
                     </span>
-                    <div x-text="selected" class="text-neutral-900 text-base font-normal font-inter group-hover:text-white"></div>
+                    <div x-text="selected" class="text-white text-base font-normal font-inter"></div>
                 </div>
                 <div
                     x-show="open"
@@ -64,7 +69,7 @@
                             <a
                                 href="{{ route('album.show', ['folder' => $folder->id_folder]) }}?sort=asc"
                                 @click="selected = 'Terlama'; open = false"
-                                class="text-center px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                class="text-center px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-cyan-600 hover:text-white transition-colors duration-200 bg-white rounded-b-2xl border-[1.5px] border-gray-300">
                                 Terlama
                             </a>
                         </template>
@@ -72,29 +77,32 @@
                             <a
                                 href="{{ route('album.show', ['folder' => $folder->id_folder]) }}?sort=desc"
                                 @click="selected = 'Terbaru'; open = false"
-                                class="text-center px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                class="text-center px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-cyan-600 hover:text-white transition-colors duration-200 bg-white rounded-b-2xl border-[1.5px] border-gray-300">
                                 Terbaru
                             </a>
                         </template>
                     </div>
                 </div>
             </div>
-                
+
+
+            <button type="button" class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2 h-14"
+                onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))">
+                <span class="material-symbols-outlined text-white" :class="open ? '' : 'w-8'">
+                    add
+                </span>
+                <span class="text-white font-semibold hidden md:inline">Tambah Foto</span>
+            </button>
+        </div>
+        <div class="flex items-center justify-start m-2 gap-4 pl-4">
             @if (!empty($search))
-            <div class="font-semibold  text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
+            <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
                 <span class="material-symbols-outlined">filter_alt</span>
                 <span class="pr-1">{{ $search }}</span>
             </div>
             @endif
-            <button type="button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4"
-                onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))">
-                <span class="material-symbols-outlined text-gray-300">
-                    add
-                </span>
-                <span class="text-gray-300 font-semibold">Tambah Foto</span>
-            </button>
+            <div class="text-gray-500 text-md font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
         </div>
-
         <div x-data="{ show : false }" x-show="show" x-cloak
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
@@ -266,10 +274,6 @@
         </div>
     </div>
 
-     @if($photos->count() > 0)
-        <div class="text-gray-500 text-md font-normal font-inter bg-gray-100 p-6 backdrop-blur-lg">Menampilkan <span class="cardShowCounter">{{ $photos->count() }}</span> Foto</div>
-    @endif
-
     @if($photos->isEmpty() && !empty($search))
     <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
         <div class="text-xl font-normal">
@@ -282,19 +286,19 @@
         </div>
     </div>
     @elseif($photos->isEmpty() && empty($search))
-    <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
-        <div class="text-xl font-normal">
+    <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
+        <div class="text-xl font-normal translate-y-[-15dvh]">
             Album kosong
         </div>
         <div>
-            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition">
+            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black">
                 Tambah foto
             </button>
         </div>
     </div>
     @else
 
-    <div class="block px-6 bg-gray-100">
+    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($photos as $ft)
             <x-photo-tumbnail
@@ -303,7 +307,7 @@
                 :date="$ft->created_at"
                 :photoId="$ft->id_photo"
                 :isLoved="$ft->is_favorite">
-                <x-daisy-dropdown>
+                <x-daisy-dropdown colorClass="default">
                     <div class="flex-col py-1 gap-2">
                         <button type="button" class="pindahAlbum flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
                             <input type="hidden" class="id_foto" value="{{ $ft->id_photo }}">

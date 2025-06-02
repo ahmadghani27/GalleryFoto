@@ -1,19 +1,21 @@
 @props([
 'colorClass' => 'dark',
 'hoverClass' => 'dark',
+'hoverBg' => 'dark',
 'contentClasses' => 'py-1 bg-white'
 ])
 
 @php
 $colorClass = match ($colorClass) {
 'dark' => 'text-cyan-600',
-default => 'text-white',
+'default' => 'text-white',
 };
 
 $hoverClass = match ($hoverClass) {
 'dark' => 'hover:text-white',
-default => 'hover:text-cyan-600',
+'default' => 'hover:text-cyan-600',
 };
+
 @endphp
 
 <div x-data="{ open: false }" {{ $attributes->merge(['class' => 'dropdown dropdown-top dropdown-end']) }}
