@@ -265,7 +265,7 @@
                     </div>
                 </div>
                 @if($foto->isEmpty() && !empty($search))
-                <div class="w-full h-full rounded-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black">
+                <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
                     <div class="text-xl font-normal translate-y-[-15dvh]">
                         Foto tidak ditemukan
                     </div>
@@ -276,7 +276,7 @@
                     </div>
                 </div>
                 @elseif($foto->isEmpty() && empty($search))
-                <div class="w-full h-full rounded-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black">
+                <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black ">
                     <div class="text-xl font-normal translate-y-[-15dvh]">
                         Belum upload foto
                     </div>
@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 @else
-                <div class="block px-6 w-full h-full rounded-3xl bg-stone-50">
+                <div class="block px-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
                     @foreach ($foto as $tanggal => $groupedPhotos)
                     <div class="flex items-center gap-4 mt-4 mb-3">
                         <div class="flex-1 border-t border-gray-300"></div>

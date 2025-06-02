@@ -12,7 +12,7 @@
     @vite(['resources/css/styles.css', 'resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased font-inter ">
+<body class="antialiased font-inter">
     <div x-data="{show:false}" x-show="show" class="loader loadBarTop top-0 fixed w-full z-[99999]" x-cloak></div>
     <div class="flex h-dvh w-full">
         <div
@@ -27,7 +27,7 @@
 
             <aside
                 :class="open ? 'w-56' : 'w-16'"
-                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col h-dvh z-[51]">
+                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col h-dvh z-[52]">
                 <div class="flex items-end justify-between px-4 py-6">
                     <span class="text-3xl font-bold"
                         x-transition:enter="transition ease-out duration-300"
