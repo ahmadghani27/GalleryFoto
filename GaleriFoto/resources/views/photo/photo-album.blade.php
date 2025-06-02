@@ -94,7 +94,14 @@
                 <span class="text-white font-semibold hidden md:inline">Tambah Foto</span>
             </button>
         </div>
-        <div class="flex items-center justify-start m-2 gap-4 pl-4">
+        <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 translate-x-4"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-4"
+            x-show="show">
             @if (!empty($search))
             <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
                 <span class="material-symbols-outlined">filter_alt</span>
@@ -102,175 +109,175 @@
             </div>
             @endif
             <div class="text-gray-500 text-md font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
+        </div>
 
-            <div x-data="{ show : false }" x-show="show" x-cloak
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 translate-x-4"
-                x-transition:enter-end="opacity-100 translate-x-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-x-0"
-                x-transition:leave-end="opacity-0 -translate-x-4"
-                class="massActionPanel flex justify-between items-center w-full mt-3">
-                <div class="flex items-center">
-                    <button class="cardBlockBtn flex p-2 hover:bg-gray-100 transition-all ease-in-out rounded-xl">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                    <div class="ml-2"><span class="cardCounter font-semibold"></span> foto diseleksi</div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button class="massPindahAlbumBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
-                        <span class="material-symbols-outlined">folder_open</span>
-                        <span class="md:inline sm:hidden">Pindah album</span>
-                    </button>
-                    <x-modal name="mass-pindah-album-modal" :show="$errors->massPindahAlbum->any()" :closeOnOutsideClick="false">
-                        <div class="wrapper mass-pindah-album-modal">
-                            <form method="post" action="{{ route('foto.multiplepindahalbum') }}" class="p-6"
-                                x-data="{ submitting: false }"
-                                @submit.prevent="submitting = true; $el.submit()">
-                                @csrf
-                                @method('patch')
+        <div x-data="{ show : false }" x-show="show" x-cloak
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 translate-x-4"
+            x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 -translate-x-4"
+            class="massActionPanel flex justify-between items-center w-full mt-3">
+            <div class="flex items-center">
+                <button class="cardBlockBtn flex p-2 hover:bg-gray-100 transition-all ease-in-out rounded-xl">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="ml-2"><span class="cardCounter font-semibold"></span> foto diseleksi</div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="massPindahAlbumBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
+                    <span class="material-symbols-outlined">folder_open</span>
+                    <span class="md:inline sm:hidden">Pindah album</span>
+                </button>
+                <x-modal name="mass-pindah-album-modal" :show="$errors->massPindahAlbum->any()" :closeOnOutsideClick="false">
+                    <div class="wrapper mass-pindah-album-modal">
+                        <form method="post" action="{{ route('foto.multiplepindahalbum') }}" class="p-6"
+                            x-data="{ submitting: false }"
+                            @submit.prevent="submitting = true; $el.submit()">
+                            @csrf
+                            @method('patch')
 
-                                <div class="flex-col gap-4">
-                                    <div class="text-[20px] font-semibold">Pindahkan <span style="font-weight:inherit; font-size:inherit" class="pindahCounter"></span> foto ke album</div>
-                                    <div class="mt-2 opacity-70">Kelompokan momen-momen berharga anda</div>
-                                </div>
+                            <div class="flex-col gap-4">
+                                <div class="text-[20px] font-semibold">Pindahkan <span style="font-weight:inherit; font-size:inherit" class="pindahCounter"></span> foto ke album</div>
+                                <div class="mt-2 opacity-70">Kelompokan momen-momen berharga anda</div>
+                            </div>
 
-                                <div class="mt-6" x-data="{show: false}">
-                                    <input type="hidden" class="id_foto" name="id_foto">
-                                    <label for="current_password" class="font-medium after:ml-0.5 after:text-red-500 after:content-['*']">Album aktif</label>
-                                    <select required id="mass-album-selector" name="folder_id" class="mt-2 select w-full select-md">
-                                        <option disabled selected>Pilih album tujuan</option>
-                                    </select>
-                                    @error('folder_id')
-                                    <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="flex justify-between gap-2 mt-4">
-                                    <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-pindah-album-modal'))" :disabled="submitting"
-                                        class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
-                                    <button type="submit" :disabled="submitting"
-                                        class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
-                                        <template x-if="!submitting">
-                                            <span class="text-white">Pindahkan</span>
-                                        </template>
+                            <div class="mt-6" x-data="{show: false}">
+                                <input type="hidden" class="id_foto" name="id_foto">
+                                <label for="current_password" class="font-medium after:ml-0.5 after:text-red-500 after:content-['*']">Album aktif</label>
+                                <select required id="mass-album-selector" name="folder_id" class="mt-2 select w-full select-md">
+                                    <option disabled selected>Pilih album tujuan</option>
+                                </select>
+                                @error('folder_id')
+                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="flex justify-between gap-2 mt-4">
+                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-pindah-album-modal'))" :disabled="submitting"
+                                    class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
+                                <button type="submit" :disabled="submitting"
+                                    class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
+                                    <template x-if="!submitting">
+                                        <span class="text-white">Pindahkan</span>
+                                    </template>
 
-                                        <template x-if="submitting">
+                                    <template x-if="submitting">
 
-                                            <div role="status">
-                                                <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                </svg>
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
+                                        <div role="status">
+                                            <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
 
-                                        </template>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </x-modal>
-                    <button class="massArsipkanBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
-                        <span class="material-symbols-outlined">archive</span>
-                        <span class="md:inline sm:hidden">Arsipkan</span>
-                    </button>
-                    <x-modal name="mass-arsipkan-modal" :show="$errors->massArsipkan->any()" :closeOnOutsideClick="false">
-                        <div class="wrapper mass-arsipkan-modal">
-                            <form method="post" action="{{ route('foto.multiplearsip') }}" class="p-6"
-                                x-data="{ submitting: false }"
-                                @submit.prevent="submitting = true; $el.submit()">
-                                @csrf
-                                @method('patch')
+                                    </template>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </x-modal>
+                <button class="massArsipkanBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
+                    <span class="material-symbols-outlined">archive</span>
+                    <span class="md:inline sm:hidden">Arsipkan</span>
+                </button>
+                <x-modal name="mass-arsipkan-modal" :show="$errors->massArsipkan->any()" :closeOnOutsideClick="false">
+                    <div class="wrapper mass-arsipkan-modal">
+                        <form method="post" action="{{ route('foto.multiplearsip') }}" class="p-6"
+                            x-data="{ submitting: false }"
+                            @submit.prevent="submitting = true; $el.submit()">
+                            @csrf
+                            @method('patch')
 
-                                <div class="flex-col gap-4">
-                                    <div class="text-[20px] font-semibold">Arsipkan <span style="font-weight:inherit; font-size:inherit" class="arsipCounter"></span> foto</div>
-                                    <div class="mt-2 opacity-70">Sembunyikan foto pribadi anda</div>
-                                </div>
+                            <div class="flex-col gap-4">
+                                <div class="text-[20px] font-semibold">Arsipkan <span style="font-weight:inherit; font-size:inherit" class="arsipCounter"></span> foto</div>
+                                <div class="mt-2 opacity-70">Sembunyikan foto pribadi anda</div>
+                            </div>
 
-                                <div class="mt-6" x-data="{show: false}">
-                                    <input type="hidden" class="id_foto" name="id_foto">
-                                    @error('id_foto')
-                                    <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="flex justify-between gap-2 mt-4">
-                                    <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-arsipkan-modal'))" :disabled="submitting"
-                                        class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
-                                    <button type="submit" :disabled="submitting"
-                                        class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
-                                        <template x-if="!submitting">
-                                            <span class="text-white">Arsipkan</span>
-                                        </template>
+                            <div class="mt-6" x-data="{show: false}">
+                                <input type="hidden" class="id_foto" name="id_foto">
+                                @error('id_foto')
+                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="flex justify-between gap-2 mt-4">
+                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-arsipkan-modal'))" :disabled="submitting"
+                                    class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
+                                <button type="submit" :disabled="submitting"
+                                    class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
+                                    <template x-if="!submitting">
+                                        <span class="text-white">Arsipkan</span>
+                                    </template>
 
-                                        <template x-if="submitting">
+                                    <template x-if="submitting">
 
-                                            <div role="status">
-                                                <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                </svg>
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
+                                        <div role="status">
+                                            <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
 
-                                        </template>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </x-modal>
-                    <button class="massDeleteBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
-                        <span class="material-symbols-outlined">delete</span>
-                        <span class="md:inline sm:hidden">Hapus foto</span>
-                    </button>
-                    <x-modal name="mass-delete-modal" :show="$errors->massDelete->any()" :closeOnOutsideClick="false">
-                        <div class="wrapper mass-delete-modal">
-                            <form method="post" action="{{ route('foto.multipledelete') }}" class="p-6"
-                                x-data="{ submitting: false }"
-                                @submit.prevent="submitting = true; $el.submit()">
-                                @csrf
-                                @method('patch')
+                                    </template>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </x-modal>
+                <button class="massDeleteBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
+                    <span class="material-symbols-outlined">delete</span>
+                    <span class="md:inline sm:hidden">Hapus foto</span>
+                </button>
+                <x-modal name="mass-delete-modal" :show="$errors->massDelete->any()" :closeOnOutsideClick="false">
+                    <div class="wrapper mass-delete-modal">
+                        <form method="post" action="{{ route('foto.multipledelete') }}" class="p-6"
+                            x-data="{ submitting: false }"
+                            @submit.prevent="submitting = true; $el.submit()">
+                            @csrf
+                            @method('patch')
 
-                                <div class="flex-col gap-4">
-                                    <div class="text-[20px] font-semibold">Hapus <span style="font-weight:inherit; font-size:inherit" class="deleteCounter"></span> foto</div>
-                                    <div class="mt-2 opacity-70">Perhatian! tindakan ini tidak dapat dikembalikan</div>
-                                </div>
+                            <div class="flex-col gap-4">
+                                <div class="text-[20px] font-semibold">Hapus <span style="font-weight:inherit; font-size:inherit" class="deleteCounter"></span> foto</div>
+                                <div class="mt-2 opacity-70">Perhatian! tindakan ini tidak dapat dikembalikan</div>
+                            </div>
 
-                                <div class="mt-6" x-data="{show: false}">
-                                    <input type="hidden" class="id_foto" name="id_foto">
-                                    @error('id_foto')
-                                    <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="flex justify-between gap-2 mt-4">
-                                    <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-delete-modal'))" :disabled="submitting"
-                                        class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
-                                    <button type="submit" :disabled="submitting"
-                                        class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
-                                        <template x-if="!submitting">
-                                            <span class="text-white">Hapus foto</span>
-                                        </template>
+                            <div class="mt-6" x-data="{show: false}">
+                                <input type="hidden" class="id_foto" name="id_foto">
+                                @error('id_foto')
+                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="flex justify-between gap-2 mt-4">
+                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-delete-modal'))" :disabled="submitting"
+                                    class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
+                                <button type="submit" :disabled="submitting"
+                                    class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
+                                    <template x-if="!submitting">
+                                        <span class="text-white">Hapus foto</span>
+                                    </template>
 
-                                        <template x-if="submitting">
+                                    <template x-if="submitting">
 
-                                            <div role="status">
-                                                <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                                </svg>
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
+                                        <div role="status">
+                                            <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
 
-                                        </template>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </x-modal>
-                    <button class="selectAllBtn border-[1.5px] transition-all ease-in-out border-sky-500 hover:bg-sky-100 px-4 active:bg-sky-100 focus:bg-sky-100  rounded-xl btn-primary flex gap-2 p-3  ">
-                        <span class="material-symbols-outlined text-sky-500">done_all</span>
-                        <span class="md:inline sm:hidden text-sky-500">Pilih semua</span>
-                    </button>
-                </div>
+                                    </template>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </x-modal>
+                <button class="selectAllBtn border-[1.5px] transition-all ease-in-out border-sky-500 hover:bg-sky-100 px-4 active:bg-sky-100 focus:bg-sky-100  rounded-xl btn-primary flex gap-2 p-3  ">
+                    <span class="material-symbols-outlined text-sky-500">done_all</span>
+                    <span class="md:inline sm:hidden text-sky-500">Pilih semua</span>
+                </button>
             </div>
         </div>
     </div>
