@@ -3,22 +3,22 @@
 
 @section('content')
 
-
-<div class="flex flex-col bg-white">
-    <div class="transition-all ease-in-out min-h-[148px] sticky top-0 z-40 px-6 py-3 pt-6 bg-white border-b-[1.5px] border-gray-200">
+<div class="flex flex-col w-full h-full bg-white">
+    <div class="transition-all ease-in-out w-full h-auto sticky top-0 z-19 px-[4%] py-3 pt-6 bg-white ">
         <div class="flex gap-5">
-            <div class="flex-1 py-1 px-5 bg-white rounded-full border-[1.5px] border-gray-300 flex justify-between items-center">
-                <div class="flex justify-start items-center gap-4 w-full mr-3.5">
-                    <span class="material-symbols-outlined">
+            <div
+                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center  focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+
+                <div class="flex justify-start items-center gap-4 w-full h-12">
+                    <span class="material-symbols-outlined text-cyan-600">
                         search
                     </span>
-                    {{-- wajib pakai class searchFoto yang sama --}}
                     <input
                         id="searchFotoField"
                         type="text"
                         value="{{ request('search') }}"
-                        class="searchFoto text-neutral-900 text-base font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0"
-                        placeholder="Cari judul foto" />
+                        class="searchFoto text-neutral-900 font-normal font-inter w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-lg h-full"
+                        placeholder="Cari foto anda" />
 
                     <button
                         id="clearSearchBtn"
@@ -31,12 +31,14 @@
                     </button>
                 </div>
             </div>
-            <button type="button" class="cursor-pointer p-3 !bg-black rounded-full flex items-center gap-2 pr-4"
-                onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))">
-                <span class="material-symbols-outlined text-gray-300">
+            <button type="button" class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2 "
+                onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" x-data="{ open: true }"
+                x-init="open = window.innerWidth >= 768"
+                @resize.window="open = window.innerWidth >= 900">
+                <span class="material-symbols-outlined text-white" :class="open ? '' : 'w-9'">
                     add
                 </span>
-                <span class="text-gray-300 font-semibold">Tambah Foto</span>
+                <span class="text-white font-semibold" :class="open ? 'pr-3' : 'hidden'">Tambah Foto</span>
             </button>
         </div>
         <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
@@ -50,13 +52,12 @@
             <div class="flex justify-end items-center gap-5">
                 <div x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }" class="relative">
                     <div
-                        @click="open = !open" :class="{'rounded-t-md': open, 'rounded-full': !open}"
-                        class="cursor-pointer px-5 py-3 !bg-white border-[1.5px] border-gray-300 rounded-full flex justify-start items-center gap-2
-                        ">
-                        <span class="material-symbols-outlined cursor-pointer">
+                        @click="open = !open" :class="{'rounded-t-2xl': open, 'rounded-full': !open}"
+                        class="cursor-pointer px-5 py-3 !bg-cyan-600 border-[1.5px] border-gray-300 rounded-full flex justify-start items-center gap-2">
+                        <span class="material-symbols-outlined cursor-pointer text-white">
                             format_line_spacing
                         </span>
-                        <div x-text="selected" class="text-neutral-900 text-base font-normal font-inter group-hover:text-white"></div>
+                        <div x-text="selected" class="text-neutral-900 text-base font-normal font-inter group-hover:text-white text-white"></div>
                     </div>
 
                     <div
@@ -68,7 +69,7 @@
                                 <a
                                     href="{{ route('foto', ['sort' => 'asc']) }}"
                                     @click="selected = 'Terlama'; open = false"
-                                    class="text-center px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300">
+                                    class="text-center px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-cyan-600 hover:text-white transition-colors duration-200 bg-white rounded-b-2xl border-[1.5px] border-gray-300 ">
                                     Terlama
                                 </a>
                             </template>
@@ -76,7 +77,7 @@
                                 <a
                                     href="{{ route('foto', ['sort' => 'desc']) }}"
                                     @click="selected = 'Terbaru'; open = false"
-                                    class="text-center px-5 py-2 text-neutral-900 text-base font-normal font-inter hover:bg-black hover:text-white transition-colors duration-200 bg-white rounded-b-md border-[1.5px] border-gray-300"">
+                                    class="text-center px-5 py-3 text-neutral-900 text-base font-normal font-inter hover:bg-cyan-600 hover:text-white transition-colors duration-200 bg-white rounded-b-2xl border-[1.5px] border-gray-300"">
                                     Terbaru
                                 </a>
                             </template>
