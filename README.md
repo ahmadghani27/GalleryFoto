@@ -51,38 +51,88 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 - **XAMPP** : Untuk server MySQL.
 - **PHP** : Versi kompatibel dengan Laravel (lihat dokumentasi).
 
-### Langkah-langkah
-1. Clone repository:
-   ```bash
-   git clone https://github.com/ahmadghani27/GalleryFoto.git
-   cd galeri-foto
-   ```
+# Galeri Foto
 
-2. Install dependensi:
-   ```bash
-   composer install
-   npm install
-   composer require intervention/image
-   ```
+Aplikasi Galeri Foto berbasis Laravel untuk mengelola dan menampilkan foto dengan pengolahan gambar menggunakan Intervention Image.
 
-3. Konfigurasi environment:
-   ```bash
-   cp .env.example .env
-   ```
-   Edit file `.env` untuk konfigurasi database (pastikan XAMPP sudah berjalan dan buat database bernama `galeri`).
+## Langkah-langkah Instalasi
 
-4. Jalankan migrasi database:
-   ```bash
-   php artisan migrate
-   ```
+### 1. Clone Repository
 
-5. Jalankan aplikasi:
-   ```bash
-   php artisan serve
-   npm run dev
-   ```
+Clone proyek dari GitHub dan masuk ke direktori proyek:
+```bash
+git clone https://github.com/ahmadghani27/PIXELORA.git
+cd galeri-foto
+```
+### 2. Install Dependensi
+Install dependensi PHP dan JavaScript:
 
-6. Buka browser di `http://localhost:8000` dan nikmati Galeri Foto! 🎉
+```bash
+Copy
+Edit
+composer install
+npm install
+```
+Tambahkan paket intervention/image untuk pengolahan gambar:
+
+```bash
+Copy
+Edit
+composer require intervention/image
+```
+3. Konfigurasi Environment
+Salin file .env.example ke .env:
+
+```bash
+Copy
+Edit
+cp .env.example .env
+```
+Buka file .env dan sesuaikan konfigurasi database. Contoh:
+```BASH
+dotenv
+Copy
+Edit
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database
+DB_USERNAME=root
+DB_PASSWORD=
+```
+Pastikan XAMPP sudah berjalan dan buat database bernama galeri di phpMyAdmin.
+
+### 4. Aktifkan Ekstensi Database (PHP)
+Edit file php.ini dan aktifkan ekstensi berikut dengan menghapus tanda ; jika ada:
+
+ini
+Copy
+Edit
+extension=mysqli
+extension=pdo_mysql
+5. Jalankan Migrasi
+Jalankan perintah untuk membuat tabel di database:
+
+bash
+Copy
+Edit
+php artisan migrate
+6. Jalankan Aplikasi
+Mulai server Laravel dan kompilasi aset frontend:
+
+bash
+Copy
+Edit
+php artisan serve
+npm run dev
+7. Akses Aplikasi
+Buka browser dan akses aplikasi di:
+
+arduino
+Copy
+Edit
+http://localhost:8000
+🎉 Selamat! Aplikasi Galeri Foto siap digunakan.
 
 ---
 
