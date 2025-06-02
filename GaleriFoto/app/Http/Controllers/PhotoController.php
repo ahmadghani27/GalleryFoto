@@ -78,7 +78,7 @@ class PhotoController extends Controller
             $path = "photos/{$folder}/{$fileName}";
 
             // Resize and compress image
-            $image = Image::make($request->file('photo'))->encode('jpg', 80);
+            $image = Image::make($request->file('photo'))->encode('jpg', 50);
             Storage::disk('local')->put("{$path}", $image);
 
 
@@ -147,7 +147,7 @@ class PhotoController extends Controller
                 $path = "photos/{$folder}/{$fileName}";
 
                 // Resize and compress image
-                $image = Image::make($photo)->encode('jpg', 80);
+                $image = Image::make($photo)->encode('jpg', 50);
                 Storage::disk('local')->put($path, $image);
 
                 Photo::create([
