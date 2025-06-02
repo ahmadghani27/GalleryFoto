@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\log;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PhotoController extends Controller
@@ -54,49 +55,58 @@ class PhotoController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-
         $request->validate([
             'title' => 'required|string|max:255',
             'photo' => 'required|file|mimes:jpg,jpeg,png|max:5048',
-        ], [
-            // Pesan error untuk title
-            'title.required' => 'Judul foto wajib diisi.',
-            'title.string'   => 'Judul foto harus berupa teks.',
-            'title.max'      => 'Judul foto tidak boleh lebih dari 255 karakter.',
-
-            // Pesan error untuk photo
-            'photo.required' => 'File foto wajib diunggah.',
-            'photo.file'     => 'File yang diunggah harus berupa file.',
-            'photo.mimes'    => 'Format file yang diperbolehkan adalah JPG, JPEG, atau PNG.',
-            'photo.max'      => 'Ukuran file maksimal adalah 5MB (5048 KB).',
         ]);
 
-
         try {
+            Log::info('Starting single photo upload', ['user_id' => $request->user()->id]);
+
+            ini_set('memory_limit', '256M');
+            set_time_limit(120);
+
             $folder = now()->format('Y/m');
             $fileName = 'foto-' . uniqid() . '.' . $request->photo->extension();
             $path = "photos/{$folder}/{$fileName}";
 
-            // Resize and compress image
-            $image = Image::make($request->file('photo'))->encode('jpg', 50);
-            Storage::disk('local')->put("{$path}", $image);
-
-
-            Photo::create([
-                'user_id'      => $request->user()->id,
-                'folder'       => null,
-                'is_archive'   => false,
-                'is_favorite'  => false,
-                'file_path'    => $path,
-                'photo_title'  => $request->title,
-                'created_at'   => now(),
-                'update_at'    => now(),
+            // Log before image processing
+            Log::debug('Processing image', [
+                'original_size' => $request->file('photo')->getSize(),
+                'mime_type' => $request->file('photo')->getMimeType()
             ]);
+
+            $image = Image::make($request->file('photo'))
+                ->resize(1920, 1080, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })
+                ->encode('jpg', 70);
+
+            Storage::disk('local')->put($path, $image);
+
+            $photo = Photo::create([
+                'user_id' => $request->user()->id,
+                'file_path' => $path,
+                'photo_title' => $request->title,
+            ]);
+
+            Log::info('Photo uploaded successfully', [
+                'photo_id' => $photo->id,
+                'file_path' => $path
+            ]);
+
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Foto berhasil diupload'
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            Log::error('Photo upload failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => $request->user()->id ?? null
+            ]);
+
             return redirect()->back()->with([
                 'status' => 'error',
                 'message' => 'Gagal upload foto: ' . $e->getMessage()
@@ -120,6 +130,11 @@ class PhotoController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::warning('Mass upload validation failed', [
+                'errors' => $validator->errors()->all(),
+                'user_id' => $request->user()->id
+            ]);
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Validasi gagal.',
@@ -127,59 +142,74 @@ class PhotoController extends Controller
             ], 422);
         }
 
-        // Batasi jumlah file
-        $maxFiles = 50;
+        $maxFiles = 20; // or 50 if you prefer
         if (count($request->file('photo')) > $maxFiles) {
             return response()->json([
                 'status' => 'error',
-                'message' => "Maksimum $maxFiles foto dapat diunggah sekaligus."
+                'message' => "Maksimum {$maxFiles} foto dapat diunggah sekaligus."
             ], 422);
         }
 
+        DB::beginTransaction();
         $uploadedFiles = [];
         $folder = now()->format('Y/m');
 
-        DB::beginTransaction();
         try {
+            ini_set('memory_limit', '512M');
+            set_time_limit(120);
+
             foreach ($request->file('photo') as $index => $photo) {
                 $judul = $request->input('title')[$index];
                 $fileName = 'foto-' . uniqid() . '.' . $photo->extension();
                 $path = "photos/{$folder}/{$fileName}";
 
-                // Resize and compress image
-                $image = Image::make($photo)->encode('jpg', 50);
+                $image = Image::make($photo)
+                    ->resize(1920, 1080, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    })
+                    ->interlace()
+                    ->encode('jpg', 70);
+
                 Storage::disk('local')->put($path, $image);
 
-                Photo::create([
-                    'user_id'           => $request->user()->id,
-                    'folder'            => null,
-                    'is_archive'        => false,
-                    'is_favorite'       => false,
-                    'file_path'         => $path,
-                    'photo_title'       => $judul,
-                    'created_at'        => now(),
-                    'updated_at'        => now(),
-                    'thumbnail_updated_at' => null
+                $uploadedPhoto = Photo::create([
+                    'user_id' => $request->user()->id,
+                    'file_path' => $path,
+                    'photo_title' => $judul,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
                 $uploadedFiles[] = [
+                    'id' => $uploadedPhoto->id,
                     'title' => $judul,
                     'filename' => $fileName,
+                    'path' => $path
                 ];
             }
 
             DB::commit();
+
             return response()->json([
                 'status' => 'success',
-                'message' => 'Semua foto berhasil diupload.',
+                'message' => count($uploadedFiles) . ' foto berhasil diupload.',
                 'uploadedFiles' => $uploadedFiles,
-                'redirect' => url()->previous() // URL halaman sebelumnya
+                'data' => $uploadedFiles, // For backward compatibility
+                'redirect' => url()->previous() // Crucial for closing modal
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
+
+            // Cleanup uploaded files
             foreach ($uploadedFiles as $file) {
-                Storage::disk('local')->delete("photos/{$folder}/{$file['filename']}");
+                try {
+                    Storage::disk('local')->delete($file['path']);
+                } catch (\Throwable $cleanupError) {
+                    Log::error('Cleanup failed: ' . $cleanupError->getMessage());
+                }
             }
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal upload foto: ' . $e->getMessage()
@@ -404,7 +434,7 @@ class PhotoController extends Controller
                 'status' => 'success',
                 'message' => 'Berhasil mengeluarkan foto dari arsip'
             ]);
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->with([
                 'status' => 'error',
                 'message' => 'Gagal mengeluarkan dari arsip: ' . $e->getMessage()
