@@ -27,7 +27,7 @@
 
             <aside
                 :class="open ? 'w-56' : 'w-16'"
-                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col h-dvh z-[52]">
+                class="bg-white text-black fixed top-0 transition-all ease-in-out flex flex-col h-dvh z-[42]">
                 <div class="flex items-end justify-between px-4 py-6">
                     <span class="text-3xl font-bold"
                         x-transition:enter="transition ease-out duration-300"

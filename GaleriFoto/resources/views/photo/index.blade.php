@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="flex flex-col w-full h-full bg-white">
-    <div class="transition-all ease-in-out w-full h-auto sticky top-0 z-50 px-[4%] py-3 pt-6 bg-white ">
+    <div class="transition-all ease-in-out w-full h-auto sticky top-0 z-40 px-[4%] py-3 pt-6 bg-white ">
         <div class="flex gap-5">
             <div
                 class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center  focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
