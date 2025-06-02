@@ -1,10 +1,10 @@
 <x-guest-layout>
-    <div class="w-full min-h-screen flex items-center justify-center bg-white">
+    <div class="w-full min-h-screen flex items-center justify-center bg-white font-inter">
         <div class="w-[454px] flex flex-col justify-center items-center gap-7">
             <!-- Header -->
             <div class="w-full flex flex-col gap-2">
                 <div class="text-2xl font-bold text-neutral-900 flex  justify-between">Buat akun <img src="{{ asset('assets/img/Pixelora.png') }}" alt="" srcset="" class="h-8 translate-y-[-4px]"></div>
-                <div class="text-base text-neutral-900/70">Masukkan informasi akun</div>
+                <div class=" text-neutral-900/70 ">Masukkan informasi akun</div>
             </div>
 
             <!-- Divider -->
@@ -16,7 +16,7 @@
 
                 <!-- Username -->
                 <div class="flex flex-col gap-3">
-                    <label for="username" class="text-base font-medium text-neutral-900">Username</label>
+                    <label for="username" class=" font-medium text-neutral-900">Username</label>
                     <input id="username" type="text" name="username" :value="old('username')" required autofocus
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan username">
@@ -26,7 +26,7 @@
 
                 <!-- Email -->
                 <div class="flex flex-col gap-3">
-                    <label for="email" class="text-base font-medium text-neutral-900">Email</label>
+                    <label for="email" class=" font-medium text-neutral-900">Email</label>
                     <input id="email" type="email" name="email" :value="old('email')" required
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan email">
@@ -35,7 +35,7 @@
 
                 <!-- Password -->
                 <div class="flex flex-col gap-3">
-                    <label for="password" class="text-base font-medium text-neutral-900">Kata sandi</label>
+                    <label for="password" class=" font-medium text-neutral-900">Kata sandi</label>
                     <input id="password" type="password" name="password" required
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan kata sandi">
@@ -44,7 +44,7 @@
 
                 <!-- Confirm Password -->
                 <div class="flex flex-col gap-3">
-                    <label for="password_confirmation" class="text-base font-medium text-neutral-900">Konfirmasi kata sandi</label>
+                    <label for="password_confirmation" class=" font-medium text-neutral-900">Konfirmasi kata sandi</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" required
                         class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
                         placeholder="Masukkan lagi kata sandi">
@@ -53,13 +53,13 @@
 
                 <!-- Register Button -->
                 <button type="submit"
-                    class="btn btn-neutral w-full py-6 bg-cyan-600 text-white font-bold text-base rounded-2xl hover:bg-cyan-600 border-none transition">
+                    class="btn btn-neutral w-full py-6 bg-cyan-600 text-white font-bold  rounded-2xl hover:bg-cyan-600 border-none transition">
                     Daftar
                 </button>
             </form>
 
             <!-- Login Link -->
-            <div class="mt-4 text-base text-neutral-900">
+            <div class="mt-4  text-neutral-900">
                 Sudah punya akun?
                 <a href="{{ route('login') }}" class="font-semibold hover:underline">Masuk</a>
             </div>
