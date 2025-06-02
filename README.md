@@ -4,9 +4,9 @@ Selamat datang di **PIXELORA**, aplikasi web super keren berbasis **Laravel** un
 
 ---
 
-## 🌟 Apa Itu Galeri Foto?
+## 🌟 Apa Itu PIXELORA?
 
-**Galeri Foto** adalah aplikasi web untuk menyimpan dan menampilkan foto dengan judul dan URL yang tersimpan rapi di database. Dibuat dengan teknologi modern, aplikasi ini memudahkan kamu untuk mengelola foto dengan gaya! 💻✨
+**PIXELORA** adalah aplikasi web untuk menyimpan dan menampilkan foto dengan judul dan URL yang tersimpan rapi di database. Dibuat dengan teknologi modern, aplikasi ini memudahkan kamu untuk mengelola foto dengan gaya! 💻✨
 
 Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel Breeze** untuk autentikasi, **Blade Components** untuk antarmuka yang rapi, dan **Alpine.js** untuk interaktivitas yang ringan. Desainnya yang responsif didukung oleh **Tailwind CSS**, membuatnya tampak keren di semua perangkat! 📱💻
 
@@ -113,7 +113,7 @@ Buka browser dan akses aplikasi di:
 ```bash
 http://localhost:8000
 ```
-🎉 Selamat! Aplikasi Galeri Foto siap digunakan.
+🎉 Selamat! Aplikasi PIXELORA siap digunakan.
 
 ---
 
