@@ -1,8 +1,8 @@
 @props(['folder'])
 
 <div class="relative">
-    <div class="aspect-square rounded-lg overflow-hidden bg-gray-300">
-        <div class="absolute bottom-0 flex items-center justify-between bg-white w-full p-4">
+    <div class="aspect-square rounded-lg overflow-hidden">
+        <div class="absolute bottom-0 flex items-center justify-between bg-yellow-50 w-full p-4">
             <div class="flex flex-col">
                 <div class="text-xl font-semibold text-black">{{ $folder->name_folder }}</div>
                 <div class="text-sm mt-1 font-light text-black opacity-80">
@@ -12,7 +12,7 @@
             <x-daisy-dropdown hoverClass="dark" colorClass="dark" x-data="{ isOpen: false }">
                 <x-daisy-dropdown-link
                     href="#"
-                    onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-nama-album-{{ $folder->id_folder }}' }))">
+                    onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-nama-album-{{ $folder->id_folder }}' }))" class="hover:text-white">
                     <span class="material-symbols-outlined p-2">edit</span>
                     <span>Ganti nama</span>
                 </x-daisy-dropdown-link>

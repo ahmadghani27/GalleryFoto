@@ -1,1 +1,1 @@
-<li><a {{ $attributes->merge(['class' => 'flex gap-3', 'btn']) }}>{{ $slot }}</a></li>
+<li class="hover:bg-cyan-50 text-white rounded-md"><a {{ $attributes->merge(['class' => 'flex gap-3', 'btn']) }}>{{ $slot }}</a></li>

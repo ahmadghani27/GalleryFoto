@@ -270,7 +270,7 @@
                         Foto tidak ditemukan
                     </div>
                     <div>
-                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black">
                             Upload foto
                         </button>
                     </div>
@@ -281,7 +281,7 @@
                         Belum upload foto
                     </div>
                     <div>
-                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
+                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-photo' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black">
                             Upload foto
                         </button>
                     </div>

@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 @section('title', 'Album')
 @section('content')
-<div class="flex flex-col  bg-gray-100">
+<div class="flex flex-col h-full bg-white">
     @if (session('status'))
     <div class="toast toast-center" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
         <div class="flex items-center alert bg-green-300 border-none">
@@ -12,7 +12,7 @@
         </div>
     </div>
     @endif
-    <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white border-b-[1.5px] border-gray-200">
+    <div class="sticky top-0 z-40 px-6 pt-3 pb-3 bg-white">
         <article class="w-full flex justify-between items-center">
             <div class="text-black text-2xl font-bold p-2">Album</div>
         </article>
@@ -105,27 +105,26 @@
             </button>
         </div>
     </div>
-    <div class="block p-6">
-        @if ($album->isEmpty())
-        <div class="w-full h-60 flex flex-col justify-center items-center gap-4 text-black">
-            <div class="text-xl font-normal">
-                Belum ada album yang Anda buat
-            </div>
-            <div>
-                <button class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))">
-                    Buat Album
-                </button>
-            </div>
+    @if ($album->isEmpty())
+    <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
+        <div class="text-xl font-normal translate-y-[-15dvh]">
+            Belum ada album
         </div>
-        @else
+        <div>
+            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black">
+                Upload foto
+            </button>
+        </div>
+    </div>
+    @else
+    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach ($album as $item)
             <x-album-tumbnail :folder="$item" />
             @endforeach
         </div>
-        @endif
-
     </div>
+    @endif
 </div>
 <x-modal name="tambah-album" :show="$errors->any()" :closeOnOutsideClick="false" maxWidth="lg">
     <form method="POST" action="{{ route('album.store') }}">
@@ -144,10 +143,10 @@
                 <div class="text-red-500 text-sm">{{ $message }}</div>
                 @enderror
                 <div class="self-stretch inline-flex justify-start items-start gap-2">
-                    <button type="button" @click="$dispatch('close-modal', 'tambah-album')" class="flex-1 h-14 px-2.5 py-5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-gray-200 transition-all ease-in-out">
+                    <button type="button" @click="$dispatch('close-modal', 'tambah-album')" class="flex-1 h-14 px-2.5 py-5 rounded-2xl flex justify-center items-center gap-2.5 hover:bg-red-100 transition-all ease-in-out">
                         <div class="justify-start text-neutral-900 text-base font-bold">Batal</div>
                     </button>
-                    <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-gray-900 rounded-2xl text-white flex justify-center items-center gap-2.5 hover:bg-black transition-all ease-in-out">
+                    <button type="submit" class="flex-1 h-14 px-2.5 py-5 rounded-2xl text-white flex justify-center items-center gap-2.5 bg-cyan-600 transition-all ease-in-out">
                         <div style="color: inherit" class="justify-start text-neutral-900 text-base font-bold">Buat album</div>
                     </button>
                 </div>
