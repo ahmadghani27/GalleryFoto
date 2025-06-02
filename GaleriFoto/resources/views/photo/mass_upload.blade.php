@@ -2,7 +2,7 @@
     <form action="{{ route('foto.multiupload') }}" method="POST" enctype="multipart/form-data" @submit.prevent="submitForm()">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <div class="self-stretch flex flex-col justify-start items-start gap-3">
-            <label class="self-stretch text-black text-base font-medium">Foto anda*</label>
+            <label class="self-stretch text-black text-base font-medium">Foto anda<span class="text-yellow-400">*</span></label>
             <div class="drop-zone self-stretch p-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/5 flex justify-between items-center"
 
                 :class="{ 'bg-gray-200': isDragging }"
@@ -16,7 +16,7 @@
                     </div>
                     <p class="self-stretch text-black/70 text-sm font-normal">Tipe file yang diterima: jpg, jpeg, png</p>
                 </div>
-                <label class="w-48 h-14 px-2.5 py-5 rounded-2xl outline outline-[1.5px] outline-offset-[-1.5px] hover:text-white hover:bg-black outline-neutral-900 flex justify-center items-center gap-2.5 cursor-pointer transition-all duration-100 hover:bg-neutral-900 hover:text-white">
+                <label class="w-48 h-14 px-2.5 py-5 rounded-2xl outline outline-[1.5px] outline-offset-[-1.5px] hover:text-white hover:bg-cyan-600 outline-neutral-900 flex justify-center items-center gap-2.5 cursor-pointer transition-all duration-100 hover:bg-neutral-900 ">
                     <span class="text-neutral-900 text-base font-bold hover:text-white w-48 h-14 flex justify-center items-center">Upload</span>
                     <input type="file" x-ref="input" accept="image/png, image/jpeg, image/jpg" multiple name="foto" id="photo-upload" accept=".jpg,.jpeg,.png" class="hidden" @change="handleFiles">
                 </label>
@@ -32,8 +32,8 @@
             {{-- </template> --}}
             <template x-for="(file, index) in files" :key="index">
                 <div x-transition class="self-stretch flex flex-col justify-start items-start overflow-hidden">
-                    <div @click="togglePreview(index)" class="cursor-pointer self-stretch px-5 py-3.5 bg-zinc-100 inline-flex justify-between items-center" :class="{'rounded-lg': activeIndex !== index, 'rounded-t-lg': activeIndex === index}">
-                        <div class="flex justify-start items-center gap-3">
+                    <div @click="togglePreview(index)" class="cursor-pointer self-stretch px-5 bg-zinc-100 inline-flex justify-between items-center" :class="{'rounded-lg': activeIndex !== index, 'rounded-t-lg': activeIndex === index}">
+                        <div class="flex justify-start items-center gap-3 py-3.5">
                             <span class="material-symbols-outlined">
                                 image
                             </span>
@@ -42,16 +42,18 @@
                                 <div class="justify-start text-black text-base font-medium " x-text="formatSize(file.size)"></div>
                             </div>
                         </div>
-                        <button type="button" @click="files.splice(index, 1)" class="flex p-1.5 rounded-full flex justify-start items-center gap-2.5">
-                            <span class="material-symbols-outlined">
+                        <button type="button" @click="files.splice(index, 1)" class="px-1.5 flex = justify-start items-center gap-2.5 ">
+                            <span class="material-symbols-outlined py-3.5 text-red-600 hover:text-cyan-600">
                                 close
                             </span>
                         </button>
                     </div>
                     <div x-show="activeIndex === index" x-transition.scale.origin.top class="self-stretch bg-zinc-100 rounded-b-lg relative flex items-center justify-center overflow-hidden">
-                        <div class="w-full flex justify-center items-center h-40">
+                        <div class="w-full flex justify-center items-center">
                             <div class="flex justify-center items-center h-full">
-                                <img :src="URL.createObjectURL(file.file)" :class="file.width > file.height ? 'max-h-40 w-auto' : 'h-auto max-w-40'" />
+                                <img
+                                    :src="URL.createObjectURL(file.file)"
+                                    :class="getImageClass(file)"/>
                             </div>
                         </div>
                         <div class="absolute w-40 h-40 border-2 border-dashed border-black/50 rounded-lg pointer-events-none"></div>
@@ -67,9 +69,9 @@
         </div>
         <!-- Submit Button -->
         <div class="self-stretch flex justify-start items-start mt-2">
-            <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-neutral-900 rounded-2xl flex justify-center items-center gap-2.5 transition-all duration-100 bg-black hover:bg-white hover:text-neutral-900 hover:outline hover:outline-[1.5px] hover:outline-neutral-900">
+            <button type="submit" class="flex-1 h-14 px-2.5 py-5 bg-neutral-900 rounded-2xl flex justify-center items-center gap-2.5 transition-all duration-100 bg-cyan-600 hover:bg-white hover:text-neutral-900 hover:outline hover:outline-[1.5px] hover:outline-cyan-600">
                 <template x-if="!submitting">
-                    <span class="text-white flex-1 h-14 flex justify-center items-center text-base font-bold hover:text-black">Upload</span>
+                    <span class="text-white flex-1 h-14 flex justify-center items-center text-base font-bold hover:text-cyan-600">Upload</span>
                 </template>
 
                 <template x-if="submitting">
@@ -100,15 +102,18 @@
             },
             handleFiles(event) {
                 const selectedFiles = Array.from(event.target.files);
+
                 for (const file of selectedFiles) {
-                    if (/\.(jpg|jpeg|png)$/i.test(file.name)) {
+                    if (['image/jpeg', 'image/png'].includes(file.type)) {
+                        // Tambahkan file ke array files
                         this.files.push({
                             file,
                             nama: file.name,
                             size: file.size,
-                            width: 0, // Akan diisi setelah load gambar
+                            width: 0,
                             height: 0
                         });
+
                         // Load gambar untuk mendapatkan dimensi
                         const img = new Image();
                         img.src = URL.createObjectURL(file);
@@ -126,8 +131,33 @@
                 const i = Math.floor(Math.log(bytes) / Math.log(1024));
                 return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
             },
+            getImageClass(file) {
+                const isSmall = file.width <= 160 && file.height <= 160;
+                const isLandscape = file.width > file.height;
+                const isPortrait = file.height > file.width;
+
+                if (isSmall) {
+                    return 'h-40 w-auto object-contain';
+                } else if (isLandscape) {
+                    return 'max-h-40 w-auto object-contain';
+                } else if (isPortrait) {
+                    return 'max-w-40 h-auto object-contain';
+                } else {
+                    return 'max-w-40 max-h-40 object-contain';
+                }
+            },
             togglePreview(index) {
                 this.activeIndex = this.activeIndex === index ? null : index;
+
+                this.$nextTick(() => {
+                    const targetImg = document.getElementById('preview-image-' + index);
+                    if (targetImg) {
+                        targetImg.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'start'
+                        });
+                    }
+                });
             },
             handleDrop(e) {
                 e.preventDefault();
@@ -188,11 +218,9 @@
                 } catch (error) {
                     this.submitting = false;
                     if (error.errors) {
-                        // Tampilkan error validasi
                         const errorMessages = Object.values(error.errors).flat().join(' ');
                         this.emptyDataError = errorMessages || "Validasi gagal.";
                     } else {
-                        // Tampilkan error umum
                         this.emptyDataError = error.message || "Terjadi kesalahan saat mengunggah.";
                     }
                 }
