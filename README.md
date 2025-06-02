@@ -51,11 +51,7 @@ Menggunakan **Laravel** untuk backend, **XAMPP** untuk database MySQL, **Laravel
 - **XAMPP** : Untuk server MySQL.
 - **PHP** : Versi kompatibel dengan Laravel (lihat dokumentasi).
 
-# Galeri Foto
-
-Aplikasi Galeri Foto berbasis Laravel untuk mengelola dan menampilkan foto dengan pengolahan gambar menggunakan Intervention Image.
-
-## Langkah-langkah Instalasi
+## Langkah-langkah
 
 ### 1. Clone Repository
 
@@ -68,31 +64,22 @@ cd galeri-foto
 Install dependensi PHP dan JavaScript:
 
 ```bash
-Copy
-Edit
 composer install
 npm install
 ```
 Tambahkan paket intervention/image untuk pengolahan gambar:
 
 ```bash
-Copy
-Edit
 composer require intervention/image
 ```
 3. Konfigurasi Environment
 Salin file .env.example ke .env:
 
 ```bash
-Copy
-Edit
 cp .env.example .env
 ```
 Buka file .env dan sesuaikan konfigurasi database. Contoh:
 ```BASH
-dotenv
-Copy
-Edit
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -104,34 +91,27 @@ Pastikan XAMPP sudah berjalan dan buat database bernama galeri di phpMyAdmin.
 
 ### 4. Aktifkan Ekstensi Database (PHP)
 Edit file php.ini dan aktifkan ekstensi berikut dengan menghapus tanda ; jika ada:
-
-ini
-Copy
-Edit
+```bash
 extension=mysqli
 extension=pdo_mysql
-5. Jalankan Migrasi
+extension=gd
+```
+### 5. Jalankan Migrasi
 Jalankan perintah untuk membuat tabel di database:
-
-bash
-Copy
-Edit
+```bash
 php artisan migrate
+```
 6. Jalankan Aplikasi
 Mulai server Laravel dan kompilasi aset frontend:
-
-bash
-Copy
-Edit
+```bash
 php artisan serve
 npm run dev
-7. Akses Aplikasi
+```
+### 8. Akses Aplikasi
 Buka browser dan akses aplikasi di:
-
-arduino
-Copy
-Edit
+```bash
 http://localhost:8000
+```
 🎉 Selamat! Aplikasi Galeri Foto siap digunakan.
 
 ---
