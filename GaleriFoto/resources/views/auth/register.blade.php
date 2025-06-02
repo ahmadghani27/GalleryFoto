@@ -3,7 +3,7 @@
         <div class="w-[454px] flex flex-col justify-center items-center gap-7">
             <!-- Header -->
             <div class="w-full flex flex-col gap-2">
-                <div class="text-2xl font-bold text-neutral-900">Buat akun Galeri Foto</div>
+                <div class="text-2xl font-bold text-neutral-900 flex  justify-between">Buat akun <img src="{{ asset('assets/img/Pixelora.png') }}" alt="" srcset="" class="h-8 translate-y-[-4px]"></div>
                 <div class="text-base text-neutral-900/70">Masukkan informasi akun</div>
             </div>
 
@@ -53,7 +53,7 @@
 
                 <!-- Register Button -->
                 <button type="submit"
-                    class="btn btn-neutral w-full py-6 bg-neutral-900 text-white font-bold text-base rounded-2xl hover:bg-neutral-800 transition">
+                    class="btn btn-neutral w-full py-6 bg-cyan-600 text-white font-bold text-base rounded-2xl hover:bg-cyan-600 border-none transition">
                     Daftar
                 </button>
             </form>
