@@ -77,10 +77,6 @@ class PhotoController extends Controller
             ]);
 
             $image = Image::make($request->file('photo'))
-                ->resize(1920, 1080, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
                 ->encode('jpg', 70);
 
             Storage::disk('local')->put($path, $image);
@@ -164,10 +160,6 @@ class PhotoController extends Controller
                 $path = "photos/{$folder}/{$fileName}";
 
                 $image = Image::make($photo)
-                    ->resize(1920, 1080, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
                     ->interlace()
                     ->encode('jpg', 70);
 
