@@ -23,8 +23,8 @@ $hoverClass = match ($hoverClass) {
     @click.outside="open = false">
     <div class="dropdown dropdown-top dropdown-end group bg-cyan">
         <div tabindex="0" role="button"
-            class="w-10 flex items-center justify-center rounded-md hover:bg-cyan-600 transition-all ease-in-out">
-            <span class="material-symbols-outlined {{ $colorClass }} {{ $hoverClass }} transition-all ease-in-out w-full h-full p-2">
+            class="w-10 flex items-center justify-end transition-all ease-in-out x-33">
+            <span class="material-symbols-outlined {{ $colorClass }} {{ $hoverClass }} transition-all ease-in-out w-full h-10 p-2 hover:bg-cyan-600 rounded-md">
                 more_vert
             </span>
         </div>
