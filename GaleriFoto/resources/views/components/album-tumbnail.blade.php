@@ -6,7 +6,7 @@
             <div class="flex flex-col">
                 <div class="text-xl font-semibold text-black">{{ $folder->name_folder }}</div>
                 <div class="text-sm mt-1 font-light text-black opacity-80">
-                    {{ $folder->created_at->format('d M Y h:m:s') }}
+                    {{ $folder->created_at->format('d M Y H:m:s') }}
                 </div>
             </div>
             <x-daisy-dropdown hoverClass="dark" colorClass="dark" x-data="{ isOpen: false }">
