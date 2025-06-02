@@ -283,12 +283,12 @@
     </div>
 
     @if($photos->isEmpty() && !empty($search))
-    <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
-        <div class="text-xl font-normal">
+    <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
+        <div class="text-xl font-normal translate-y-[-15dvh]">
             Foto tidak ditemukan
         </div>
         <div>
-            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition">
+            <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))" class="px-6 py-3 translate-y-[-15dvh] rounded-2xl border border-gray-500 text-base font-bold hover:bg-cyan-600 hover:text-white transition text-black">
                 Tambah foto
             </button>
         </div>
@@ -392,39 +392,40 @@
 
 
 <x-modal name="tambah-foto" :show="$errors->any()" :closeOnOutsideClick="false" maxWidth="2xl">
-    <div class="px-8 py-8 w-full bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
+    <div class="p-6 w-full bg-white rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 flex flex-col justify-start items-start gap-4 overflow-y-auto">
 
         <!-- Header Section -->
-        <div class="self-stretch flex justify-between items-center gap-5">
+        <div class="self-stretch flex justify-between items-start gap-5">
             <div class="flex-1 flex flex-col justify-start items-start gap-2">
                 <h2 class="self-stretch text-black text-xl font-semibold">Tambah Foto ke Album</h2>
-                <p class="self-stretch text-black/70 text-base font-normal">Pilih foto untuk ditambahkan ke album {{ $folder->name_folder }}</p>
+                <p class="self-stretch text-black/70 text-base font-normal">Pilih foto untuk ditambahkan ke album "{{ $folder->name_folder }}"</p>
             </div>
-            <button type="button" @click="$dispatch('close-modal', 'tambah-foto')" class="p-1.5 bg-zinc-100 rounded-full flex justify-start items-center gap-2.5">
-                <span class="material-symbols-outlined">close</span>
+            <button type="button" @click="$dispatch('close-modal', 'upload-photo')" class="p-1.5 bg-zinc-100 rounded-full flex justify-end items-start gap-2.5">
+                <span class="material-symbols-outlined text-red-600 hover:text-cyan-600">close</span>
             </button>
         </div>
+        <div class="w-full h-[1.5px] bg-cyan-600"></div>
         <!-- Photo Selection Form -->
         <form action="{{ route('album.add-photos', $folder->id_folder) }}" method="POST"
             x-data="{ submitting: false, selectedPhotos: [] }"
-            @submit.prevent="submitting = true; $el.submit()" class="w-full">
+            @submit.prevent="submitting = true; $el.submit()" class="w-full rounded-2xl">
             @csrf
 
             <!-- Photo Grid -->
-            <div class="block p-4 bg-gray-100">
+            <div class="block p-4 bg-stone-50 rounded-2xl">
                 @if($allPhotos->isEmpty())
-                <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
+                <div class="w-full py-12 bg-stone-50 flex flex-col justify-center items-center gap-4 text-black">
                     <div class="text-xl font-normal">
                         Tidak ada foto yang tersedia
                     </div>
                     <div>
-                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-foto' }))" class="px-6 py-3 rounded-2xl border border-black text-base font-bold hover:bg-black hover:text-white transition">
+                        <button onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'upload-foto' }))" class="px-6 py-3 rounded-2xl border border-black hover:border-cyan-600 text-base font-bold hover:bg-cyan-600 hover:text-white transition">
                             Upload foto baru
                         </button>
                     </div>
                 </div>
                 @else
-                <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
+                <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch ">
                     @foreach ($allPhotos as $ft)
                     <div
                         x-data="{ isSelected: false }"
@@ -436,8 +437,8 @@
                             selectedPhotos = selectedPhotos.filter(id => id !== '{{ $ft->id_photo }}');
                         }
                     "
-                        :class="isSelected ? 'ring-2 ring-blue-500' : ''"
-                        class="relative cursor-pointer flex flex-col items-center">
+                        :class="isSelected ? 'ring-2 ring-yellow-500' : ''"
+                        class="relative cursor-pointer flex flex-col items-center p-1">
 
                         <x-tambah-foto
                             :path="$ft->file_path"
@@ -455,7 +456,7 @@
                                 x-transition:leave="transition ease-in duration-200"
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-75"
-                                class="absolute top-2 right-2 z-10 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                class="absolute top-2 right-2 z-10 w-6 h-6 bg-yellow-600 rounded-full flex items-center justify-center">
                                 <span class="material-symbols-outlined text-white text-sm">check</span>
                             </div>
                         </x-tambah-foto>
@@ -477,13 +478,13 @@
             <div class="sticky bottom-0 bg-white p-4 border-t">
                 <button
                     type="submit"
-                    class="w-full h-14 px-4 py-2 bg-blue-600 text-white rounded-lg flex justify-center items-center gap-2 transition-all"
+                    class="w-full h-14 px-4 py-2 bg-yellow-500 text-white rounded-lg flex justify-center items-center gap-2 transition-all"
                     :disabled="selectedPhotos.length === 0"
                     :class="selectedPhotos.length === 0 ? 'opacity-50 cursor-not-allowed' : ''">
 
-                    <template x-if="!submitting">
-                        <span>
-                            Tambahkan <span x-text="selectedPhotos.length"></span> Foto ke Album
+                    <template x-if="!submitting" class="text-white">
+                        <span class="text-white">
+                            Tambahkan <span x-text="selectedPhotos.length" class="text-cyan-600"></span> Foto ke Album
                         </span>
                     </template>
 
@@ -546,3 +547,5 @@
 @include('photo.modal-detail-foto')
 
 @endsection
+
+

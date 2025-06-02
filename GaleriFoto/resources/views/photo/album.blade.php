@@ -109,7 +109,7 @@
             </button>
         </div>
     </div>
-    @if ($album->isEmpty())
+    @if ($album->isEmpty() )
     <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
         <div class="text-xl font-normal translate-y-[-15dvh]">
             Belum ada album

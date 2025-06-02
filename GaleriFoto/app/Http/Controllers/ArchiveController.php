@@ -59,18 +59,12 @@ class ArchiveController extends Controller
 
         $arsipFoto = $query->orderBy('created_at', $sortOrder)
             ->get();
-            // ->groupBy(function ($photo) {
-            //     $date = Carbon::parse($photo->created_at);
-
-            //     if ($date->isToday()) return 'Hari ini';
-            //     if ($date->isYesterday()) return 'Kemarin';
-            //     return $date->translatedFormat('d M Y');
-            // });
 
         return view('photo.arsip-content', [
             'arsipFoto' => $arsipFoto,
             'search' => $search,
-            'currentSort' => $sortOrder
+            'currentSort' => $sortOrder,
+            'user' => Auth::user(), // Ganti dengan Auth::user()
         ]);
     }
 }

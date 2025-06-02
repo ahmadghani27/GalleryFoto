@@ -1,12 +1,12 @@
 @props([
-    'path' => 'sample-photo.jpg',
-    'title' => 'Judul Default',
-    'photoId' => 'ss',
-    'date' => now()->format('d M Y'),
-    'isLoved' => false,
+'path' => 'sample-photo.jpg',
+'title' => 'Judul Default',
+'photoId' => 'ss',
+'date' => now()->format('d M Y'),
+'isLoved' => false,
 ])
 
-<div class="bg-white cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }}, isArsip: window.location.pathname.startsWith('/arsip') }"  @mouseleave="if (!leave) control = false">
+<div class="bg-white cardFoto cursor-pointer rounded-lg overflow-hidden relative" @click="if (leave) $event.stopImmediatePropagation()" x-data="{ leave : false, control : false, loved: {{ $isLoved ? 'true' : 'false' }}, isArsip: window.location.pathname.startsWith('/arsip') }" @mouseleave="if (!leave) control = false">
     <div class="aspect-square rounded-sm overflow-hidden" @mouseenter="control = true">
         <template x-if="loved">
             <div class="p-4 absolute">
@@ -15,11 +15,12 @@
                 </div>
             </div>
         </template>
-        <div x-show="control" x-transition class="flex justify-between flex-col p-4 absolute bg-gradient-to-t from-gray-900/50 from-10% via-gray-900/0 via-30% to-gray-900/50 to-90% w-full h-full ">
+        <div x-show="control" x-transition class="flex justify-between flex-col p-4 absolute w-full h-full bg-gradient-to-t from-black/50 via-black/0 to-black/50 from-10% via-40% to-90%">
+
             <div class="flex items-center justify-between">
                 <div>
-                    <button type="button" x-show=" !isArsip && !leave " class="p-2 flex rounded-md bg-gray-200"  
-                    @click.stop="
+                    <button type="button" x-show=" !isArsip && !leave " class="p-2 flex rounded-md bg-gray-200"
+                        @click.stop="
                         const el = $event.currentTarget.closest('.cardFoto');
 
                         loved = !loved;
@@ -61,8 +62,7 @@
                 </div>
             </div>
         </div>
-        
+
         <img src="{{ route('foto.access', ['path' => $path ]) }}" alt="{{ $title }}" class="w-full h-full object-cover object-center" loading="lazy">
     </div>
 </div>
-

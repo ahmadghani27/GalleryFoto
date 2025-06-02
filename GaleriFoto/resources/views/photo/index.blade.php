@@ -304,30 +304,30 @@
                             :photoId="$ft->id_photo"
                             :isLoved="$ft->is_favorite">
                             <x-daisy-dropdown colorClass="default">
-                                <div class="flex-col py-1 gap-2">
-                                    <button type="button" class="pindahAlbum flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
+                                <div class="flex-col">
+                                    <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
                                         <input type="hidden" class="id_foto" value="{{ $ft->id_photo }}">
                                         <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                                         <input type="hidden" class="album_id" value="{{ $ft->folder }}">
-                                        <span class="material-symbols-outlined">folder_open</span>
+                                        <span class="material-symbols-outlined p-1">folder_open</span>
                                         <span>Pindah ke album</span>
                                     </button>
-                                    <button type="button" class="editJudul flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
+                                    <button type="button" class="editJudul items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
                                         <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                                         <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                        <span class="material-symbols-outlined">edit</span>
+                                        <span class="material-symbols-outlined  p-1">edit</span>
                                         <span>Ganti judul</span>
                                     </button>
-                                    <button type="button" class="arsipkanFoto flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalArsip').showModal()">
+                                    <button type="button" class="arsipkanFoto flex items-center gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalArsip').showModal()">
                                         <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                                         <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                        <span class="material-symbols-outlined">archive</span>
+                                        <span class="material-symbols-outlined p-1">archive</span>
                                         <span>Arsipkan</span>
                                     </button>
-                                    <button type="button" class="deleteFoto flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
+                                    <button type="button" class="deleteFoto items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
                                         <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                                         <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
-                                        <span class="material-symbols-outlined">delete</span>
+                                        <span class="material-symbols-outlined p-1">delete</span>
                                         <span>Hapus foto</span>
                                     </button>
                                 </div>

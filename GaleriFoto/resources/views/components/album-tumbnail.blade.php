@@ -13,13 +13,13 @@
                 <x-daisy-dropdown-link
                     href="#"
                     onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'edit-nama-album-{{ $folder->id_folder }}' }))" class="hover:text-white">
-                    <span class="material-symbols-outlined p-2">edit</span>
+                    <span class="material-symbols-outlined p-1">edit</span>
                     <span>Ganti nama</span>
                 </x-daisy-dropdown-link>
                 <x-daisy-dropdown-link
                     href="#"
                     onclick="event.preventDefault(); window.dispatchEvent(new CustomEvent('open-modal', { detail: 'hapus-album-{{ $folder->id_folder }}' }))">
-                    <span class="material-symbols-outlined p-2">delete</span>
+                    <span class="material-symbols-outlined p-1">delete</span>
                     <span>Hapus album</span>
                 </x-daisy-dropdown-link>
             </x-daisy-dropdown>

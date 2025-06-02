@@ -3,10 +3,6 @@
 
 @section('content')
 
-<!-- 
-
--->
-<!-- resources/views/photo/arsip.blade.php -->
 <div x-data="{
     password: '',
     showPassword: false,
@@ -43,7 +39,7 @@
         }
     }
 }">
-    <div class="flex items-center justify-center w-full min-h-screen bg-gray-200 p-4">
+    <div class="flex items-center justify-center w-full min-h-screen bg-stone-50 p-4">
         <div class="flex flex-col justify-center items-center gap-6 max-w-md w-full bg-white p-8 rounded-2xl shadow-sm">
             <!-- Header Section -->
             <div class="w-full flex flex-col justify-start items-start gap-4">
@@ -58,7 +54,7 @@
             <!-- Password Input Section -->
             <div class="w-full flex flex-col gap-3">
                 <label for="password" class="text-base font-medium text-neutral-900">Kata sandi</label>
-                <div class="relative">
+                <div class="relative border border-yellow-500 rounded-2xl">
                     <input
                         x-model="password"
                         :type="showPassword ? 'text' : 'password'"
@@ -66,14 +62,8 @@
                         name="password"
                         required
                         @keyup.enter="checkPassword"
-                        class="w-full px-5 py-5 rounded-2xl outline outline-1 outline-offset-[-1px] outline-black/10 text-black/80 placeholder-black/50"
+                        class="w-full px-5 py-5 rounded-2xl text-black/80 placeholder-black/50"
                         placeholder="Masukkan kata sandi">
-                    <button
-                        type="button"
-                        @click="showPassword = !showPassword"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-700">
-                        <span x-text="showPassword ? 'visibility_off' : 'visibility'" class="material-symbols-outlined"></span>
-                    </button>
                 </div>
             </div>
 
@@ -81,8 +71,8 @@
             <button
                 @click="checkPassword"
                 :disabled="isLoading"
-                class="w-full px-6 py-4 bg-neutral-900 hover:bg-neutral-800 rounded-2xl transition-colors duration-200 disabled:opacity-50 bg-black">
-                <span x-show="!isLoading" class="text-white text-base font-bold">Masuk</span>
+                class="w-full px-6 py-4 bg-neutral-900 hover:bg-neutral-800 rounded-2xl transition-colors duration-200 disabled:opacity-50 bg-cyan-600">
+                <span x-show="!isLoading" class="text-white text-base font-bold ">Masuk</span>
                 <span x-show="isLoading" class="text-white text-base font-bold">Memverifikasi...</span>
             </button>
         </div>
