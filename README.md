@@ -72,7 +72,7 @@ Tambahkan paket intervention/image untuk pengolahan gambar:
 ```bash
 composer require intervention/image
 ```
-3. Konfigurasi Environment
+###3. Konfigurasi Environment
 Salin file .env.example ke .env:
 
 ```bash
@@ -101,7 +101,7 @@ Jalankan perintah untuk membuat tabel di database:
 ```bash
 php artisan migrate
 ```
-6. Jalankan Aplikasi
+### 6. Jalankan Aplikasi
 Mulai server Laravel dan kompilasi aset frontend:
 ```bash
 php artisan serve
