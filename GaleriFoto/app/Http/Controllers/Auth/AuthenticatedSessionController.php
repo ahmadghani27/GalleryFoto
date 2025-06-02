@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         return back()->withErrors([
-            'username' => 'Username atau password salah.',
+            'username' => 'Username atau kata sandi salah.',
         ]);
     }
 
