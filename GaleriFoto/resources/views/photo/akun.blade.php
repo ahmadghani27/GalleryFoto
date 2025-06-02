@@ -33,7 +33,7 @@
                 </button>
                 <button type="button" class="flex items-center gap-4 p-4 bg-black rounded-md" onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'reset-password' }))">
                     <span class="material-symbols-outlined text-white">cached</span>
-                    <span class="text-white">Reset password</span>
+                    <span class="text-white">Reset kata sandi</span>
                 </button>
                 
             </div>
