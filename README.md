@@ -72,7 +72,7 @@ Tambahkan paket intervention/image untuk pengolahan gambar:
 ```bash
 composer require intervention/image
 ```
-###3. Konfigurasi Environment
+### 3. Konfigurasi Environment
 Salin file .env.example ke .env:
 
 ```bash
@@ -90,7 +90,8 @@ DB_PASSWORD=
 Pastikan XAMPP sudah berjalan dan buat database bernama galeri di phpMyAdmin.
 
 ### 4. Aktifkan Ekstensi Database (PHP)
-Edit file php.ini dan aktifkan ekstensi berikut dengan menghapus tanda ; jika ada:
+Edit file php.ini dengan cara buka XAMPP klik config pada apache dan cari PHP (php.ini)
+aktifkan ekstensi berikut dengan menghapus tanda ; jika ada:
 ```bash
 extension=mysqli
 extension=pdo_mysql
