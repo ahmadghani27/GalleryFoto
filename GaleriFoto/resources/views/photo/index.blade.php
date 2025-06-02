@@ -389,7 +389,7 @@
                             <p class="self-stretch text-black/70 text-base font-normal">Simpan momen terbaik anda</p>
                         </div>
                         <button type="button" @click="$dispatch('close-modal', 'upload-photo')" class="p-1.5 bg-zinc-100 rounded-full flex justify-start items-center gap-2.5">
-                            <span class="material-symbols-outlined">close</span>
+                            <span class="material-symbols-outlined text-red-600 hover:text-cyan-600">close</span>
                         </button>
                     </div>
 
@@ -400,15 +400,15 @@
                         <div class="self-stretch flex justify-start items-end flex-wrap content-end">
                             <div class="self-stretch flex justify-start items-end gap-7 flex-wrap content-end">
                                 <div class="w-28 flex flex-col justify-start items-start gap-2 cursor-pointer" @click="tab = 'single'">
-                                    <span :class="tab === 'single' ? 'font-semibold' : 'font-normal'" class="self-stretch text-neutral-900 text-base">Single upload</span>
-                                    <div :class="tab === 'single' ? 'bg-black' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
+                                    <span :class="tab === 'single' ? 'font-semibold text-cyan-600' : 'font-normal'" class="self-stretch text-neutral-900 text-base">Single upload</span>
+                                    <div :class="tab === 'single' ? 'bg-cyan-600' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
                                 </div>
                                 <div class="flex flex-col justify-start items-start gap-2 cursor-pointer" @click="tab = 'multi'">
-                                    <span :class="tab === 'multi' ? 'font-semibold' : 'font-normal'" class="text-neutral-900 text-base">Multiple upload</span>
-                                    <div :class="tab === 'multi' ? 'bg-black' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
+                                    <span :class="tab === 'multi' ? 'font-semibold text-cyan-600' : 'font-normal'" class="text-neutral-900 text-base">Multiple upload</span>
+                                    <div :class="tab === 'multi' ? 'bg-cyan-600' : ''" class="self-stretch h-1.5 rounded-tl-[99px] rounded-tr-[99px]"></div>
                                 </div>
                             </div>
-                            <div class="w-full h-[1.5px] bg-zinc-300"></div>
+                            <div class="w-full h-[1.5px] bg-cyan-600"></div>
                         </div>
                         <!-- File Upload Section -->
                         <div x-show="tab === 'single'">
