@@ -2,7 +2,7 @@
 @section('title', 'Arsip Foto')
 
 @section('content')
-<div class="flex flex-col f-full bg-white">
+<div class="flex flex-col h-full bg-white">
     @if (session('status'))
     <div class="toast toast-center" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
         <div class="flex items-center alert bg-green-300 border-none">
@@ -281,12 +281,12 @@
         </div>
     </div>
 
-    <div class="block px-6 bg-gray-100">
-        @if(!$arsipFoto->count() > 0)
-        <div class="text-center py-10">
-            <p class="text-gray-500">Tidak ada foto di arsip</p>
-        </div>
-        @else
+    @if(!$arsipFoto->count() > 0)
+    <div class="w-full h-full rounded-t-3xl bg-stone-50 flex flex-col justify-center items-center gap-4 text-black overflow-y-auto">
+        <div class="text-xl font-normal translate-y-[-15dvh]">Tidak ada foto di arsip</div>
+    </div>
+    @else
+    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($arsipFoto as $photo)
             <x-photo-tumbnail
@@ -295,24 +295,24 @@
                 :date="$photo->created_at"
                 :photoId="$photo->id_photo"
                 :isLoved="$photo->is_favorite">
-                <x-daisy-dropdown>
+                <x-daisy-dropdown colorClass="default">
                     <div class="flex-col py-1 gap-2">
-                        <button type="button" class="editJudul flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalEdit').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
-                            <span class="material-symbols-outlined">edit</span>
+                            <span class="material-symbols-outlined p-1">edit</span>
                             <span>Ganti judul</span>
                         </button>
                         <button type="submit"
-                            class="unarsipkanFoto flex gap-3 items-center px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out text-sm" onclick="document.getElementById('modalUnarsip').showModal()">
+                           class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalUnarsip').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
-                            <span class="material-symbols-outlined">unarchive</span>
+                            <span class="material-symbols-outlined p-1">unarchive</span>
                             <span>Un-arsip</span>
                         </button>
-                        <button type="button" class="deleteFoto flex gap-3 px-3 py-2 w-full hover:bg-gray-200 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalDelete').showModal()">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($photo->id_photo) }}">
-                            <span class="material-symbols-outlined">delete</span>
+                            <span class="material-symbols-outlined p-1">delete</span>
                             <span>Hapus foto</span>
                         </button>
                     </div>
@@ -320,8 +320,8 @@
             </x-photo-tumbnail>
             @endforeach
         </div>
-        @endif
     </div>
+    @endif
 
     @include('photo.modal-edit-foto')
     @include('photo.modal-delete-foto')
