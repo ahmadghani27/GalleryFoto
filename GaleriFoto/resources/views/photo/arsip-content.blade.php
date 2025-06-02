@@ -296,21 +296,21 @@
                 :photoId="$photo->id_photo"
                 :isLoved="$photo->is_favorite">
                 <x-daisy-dropdown colorClass="default">
-                    <div class="flex-col py-1 gap-2">
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalEdit').showModal()">
+                    <div class="flex-col gap-2">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">edit</span>
                             <span>Ganti judul</span>
                         </button>
                         <button type="submit"
-                           class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalUnarsip').showModal()">
+                            class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalUnarsip').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">unarchive</span>
                             <span>Un-arsip</span>
                         </button>
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out"  onclick="document.getElementById('modalDelete').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">delete</span>
                             <span>Hapus foto</span>
