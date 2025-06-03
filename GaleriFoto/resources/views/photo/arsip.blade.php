@@ -40,7 +40,7 @@
     }
 }">
     <div class="flex items-center justify-center w-full min-h-screen bg-stone-50 p-4">
-        <div class="flex flex-col justify-center items-center gap-6 max-w-md w-full bg-white p-8 rounded-2xl shadow-sm">
+        <div class="flex flex-col justify-center items-center gap-6 max-w-md w-full p-8 rounded-2xl shadow-sm">
             <!-- Header Section -->
             <div class="w-full flex flex-col justify-start items-start gap-4">
                 <h1 class="text-2xl font-bold text-neutral-900">Masukkan kata sandi akun anda</h1>

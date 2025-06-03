@@ -282,7 +282,7 @@
     @else
     <div class="block px-6 pb-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
 
-        <div cclass="text-gray-500 text-md text-center font-normal w-full my-3 font-inter bg-transparent backdrop-blur-lg">Menampilkan <span class="cardShowCounter">{{ $foto->count() }}</span> Foto</div>
+        <div class="text-gray-500 text-md text-center font-normal w-full my-3 font-inter bg-transparent backdrop-blur-lg">Menampilkan <span class="cardShowCounter">{{ $foto->count() }}</span> Foto</div>
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($foto as $ft)
             <x-photo-tumbnail

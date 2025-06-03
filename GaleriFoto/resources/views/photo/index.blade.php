@@ -488,13 +488,13 @@
         </div>
 
         @foreach ($foto as $tanggal => $groupedPhotos)
-        <div class="mb-3 flex items-center gap-4">
-            <div class="flex-1 border-t border-gray-300"></div>
+        <div class="my-3 flex items-center gap-4">
+            <div class="flex-1 border-t border-cyan-600"></div>
             <span
-                class="whitespace-nowrap text-lg font-bold text-black">
+                class="whitespace-nowrap font-bold text-2xl text-black">
                 {{ $tanggal }}
             </span>
-            <div class="flex-1 border-t border-gray-300"></div>
+            <div class="flex-1 border-t border-cyan-600"></div>
         </div>
 
         <div

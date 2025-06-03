@@ -121,7 +121,7 @@
         </div>
     </div>
     @else
-    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
+    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto ">
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach ($album as $item)
             <x-album-tumbnail :folder="$item" />

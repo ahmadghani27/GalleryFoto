@@ -1,6 +1,6 @@
 @props(['folder'])
 
-<div class="relative group">
+<div class="relative group shadow-md">
     <div class="aspect-square rounded-lg overflow-hidden">
         <div class="absolute bottom-0 flex items-center justify-between bg-yellow-50 w-full p-4">
             <div class="flex flex-col">
