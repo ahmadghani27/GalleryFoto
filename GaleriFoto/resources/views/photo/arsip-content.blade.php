@@ -13,7 +13,7 @@
         </div>
     </div>
     @endif
-    <div class="sticky top-0 z-40 px-6 pt-6 pb-3 bg-white">
+    <div class="sticky min-h-[130px] h-auto top-0 z-40 px-6 pt-6 pb-3 bg-white">
         <nav class="font-bold" aria-label="breadcrumb">
             <ol class="flex gap-4 items-center">
                 <li>
@@ -21,7 +21,7 @@
                 </li>
             </ol>
         </nav>
-        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-cloak x-data="{ show: true }"
+        <div class="infoFilter w-full flex items-center mt-3 gap-3" x-cloak x-data="{ show: true }"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
             x-transition:enter-end="opacity-100 translate-x-0"
@@ -30,7 +30,7 @@
             x-transition:leave-end="opacity-0 -translate-x-4"
             x-show="show">
             <div
-                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+                class="flex-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
                 <div class="flex justify-start items-center gap-4 w-full h-12">
                     <span class="material-symbols-outlined text-cyan-600">search</span>
                     <input
@@ -54,10 +54,16 @@
                     </button>
                 </div>
             </div>
+            @if (!empty($search))
+            <div class=" font-semibold text-md flex gap-2 px-4 py-3 bg-slate-100 rounded-full">
+                <span class="material-symbols-outlined">filter_alt</span>
+                <span class="pr-1">{{ $search }}</span>
+            </div>
+            @endif
             <div
                 x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
                 x-transition
-                class="relative h-14">
+                class="relative">
                 <div
                     @click="open = !open"
                     :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
@@ -91,23 +97,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-        <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 translate-x-4"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-4"
-            x-show="show">
-            @if (!empty($search))
-            <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
-                <span class="material-symbols-outlined">filter_alt</span>
-                <span class="pr-1">{{ $search }}</span>
-            </div>
-            @endif
-            <div class="text-gray-500 text-md font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span class="cardShowCounter"> {{ $arsipFoto->count() }}</span> Foto</div>
         </div>
 
         <div x-data="{ show : false }" x-show="show" x-cloak
@@ -125,58 +114,6 @@
                 <div class="ml-2"><span class="cardCounter font-semibold"></span> foto diseleksi</div>
             </div>
             <div class="flex items-center gap-3">
-                <button class="massPindahAlbumBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
-                    <span class="material-symbols-outlined">folder_open</span>
-                    <span class="md:inline sm:hidden">Pindah album</span>
-                </button>
-                <x-modal name="mass-pindah-album-modal" :show="$errors->massPindahAlbum->any()" :closeOnOutsideClick="false">
-                    <div class="wrapper mass-pindah-album-modal">
-                        <form method="post" action="{{ route('foto.multiplepindahalbum') }}" class="p-6"
-                            x-data="{ submitting: false }"
-                            @submit.prevent="submitting = true; $el.submit()">
-                            @csrf
-                            @method('patch')
-
-                            <div class="flex-col gap-4">
-                                <div class="text-[20px] font-semibold">Pindahkan <span style="font-weight:inherit; font-size:inherit" class="pindahCounter"></span> foto ke album</div>
-                                <div class="mt-2 opacity-70">Kelompokan momen-momen berharga anda</div>
-                            </div>
-
-                            <div class="mt-6" x-data="{show: false}">
-                                <input type="hidden" class="id_foto" name="id_foto">
-                                <label for="current_password" class="font-medium after:ml-0.5 after:text-red-500 after:content-['*']">Album aktif</label>
-                                <select required id="mass-album-selector" name="folder_id" class="mt-2 select w-full select-md">
-                                    <option disabled selected>Pilih album tujuan</option>
-                                </select>
-                                @error('folder_id')
-                                <p class="text-red-600 text-sm mt-1 " x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="flex justify-between gap-2 mt-4">
-                                <button type="button" @click="show = false; window.dispatchEvent(new CustomEvent('mass-pindah-album-modal'))" :disabled="submitting"
-                                    class="disabled:text-gray-500 disabled:pointer-none font-bold px-4 w-full py-3 rounded-md hover:bg-gray-200 transition-all ease-in-out">Batal</button>
-                                <button type="submit" :disabled="submitting"
-                                    class="flex items-center justify-center font-bold px-4 w-full py-3 bg-gray-900 text-white rounded-md hover:bg-black transition-all ease-in-out">
-                                    <template x-if="!submitting">
-                                        <span class="text-white">Pindahkan</span>
-                                    </template>
-
-                                    <template x-if="submitting">
-
-                                        <div role="status">
-                                            <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-                                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-                                            </svg>
-                                            <span class="sr-only">Loading...</span>
-                                        </div>
-
-                                    </template>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </x-modal>
                 <button class="massArsipkanBtn rounded-xl flex gap-2 p-3 px-4 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 transition-all ease-in-out">
                     <span class="material-symbols-outlined">unarchive</span>
                     <span class="md:inline sm:hidden">Un-arsip</span>
@@ -287,6 +224,7 @@
     </div>
     @else
     <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
+        <div class="text-gray-500 text-md mb-3 font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span class="cardShowCounter"> {{ $arsipFoto->count() }}</span> Foto</div>
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($arsipFoto as $photo)
             <x-photo-tumbnail
@@ -297,20 +235,20 @@
                 :isLoved="$photo->is_favorite">
                 <x-daisy-dropdown colorClass="default">
                     <div class="flex-col gap-2">
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">edit</span>
                             <span>Ganti judul</span>
                         </button>
                         <button type="submit"
-                            class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalUnarsip').showModal()">
+                            class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalUnarsip').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $photo->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">unarchive</span>
                             <span>Un-arsip</span>
                         </button>
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($photo->id_photo) }}">
                             <span class="material-symbols-outlined p-1">delete</span>
                             <span>Hapus foto</span>

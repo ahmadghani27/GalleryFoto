@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="flex flex-col h-full bg-white">
-    <div class="sticky top-0 z-40 px-6 pt-6 pb-3 bg-white">
+    <div class="sticky min-h-[130px] h-auto top-0 z-40 px-6 pt-6 pb-3 bg-white">
         <nav class="font-bold" aria-label="breadcrumb">
             <ol class="flex gap-4 items-center">
                 <li>
@@ -15,7 +15,8 @@
                 </li>
             </ol>
         </nav>
-        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-cloak x-data="{ show: true }"
+        
+        <div class="infoFilter w-full flex items-center mt-3 gap-3" x-cloak x-data="{ show: true }"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
             x-transition:enter-end="opacity-100 translate-x-0"
@@ -24,7 +25,7 @@
             x-transition:leave-end="opacity-0 -translate-x-4"
             x-show="show">
             <div
-                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+                class="flex-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
                 <div class="flex justify-start items-center gap-4 w-full h-12">
                     <span class="material-symbols-outlined text-cyan-600">search</span>
                     <input
@@ -47,14 +48,20 @@
                     </button>
                 </div>
             </div>
+            @if (!empty($search))
+            <div class=" font-semibold text-md flex gap-2 px-4 py-3 bg-slate-100 rounded-full">
+                <span class="material-symbols-outlined">filter_alt</span>
+                <span class="pr-1">{{ $search }}</span>
+            </div>
+            @endif
             <div
                 x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
                 x-transition
-                class="relative h-14">
+            class="relative">
                 <div
                     @click="open = !open"
                     :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
-                    class="cursor-pointer px-5 py-3 !bg-cyan-600 rounded-full flex justify-start items-center gap-2 h-full">
+                    class="cursor-pointer px-5 py-3 !bg-cyan-600 rounded-full flex justify-start items-center gap-2">
                     <span class="material-symbols-outlined cursor-pointer text-white">
                         format_line_spacing
                     </span>
@@ -84,31 +91,13 @@
                     </div>
                 </div>
             </div>
-
-
-            <button type="button" class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2 h-14"
+            <button type="button" class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2"
                 onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-foto' }))">
                 <span class="material-symbols-outlined text-white" :class="open ? '' : 'w-8'">
                     add
                 </span>
                 <span class="text-white font-semibold hidden md:inline">Tambah Foto</span>
             </button>
-        </div>
-        <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 translate-x-4"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-4"
-            x-show="show">
-            @if (!empty($search))
-            <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
-                <span class="material-symbols-outlined">filter_alt</span>
-                <span class="pr-1">{{ $search }}</span>
-            </div>
-            @endif
-            <div class="text-gray-500 text-md font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
         </div>
 
         <div x-data="{ show : false }" x-show="show" x-cloak
@@ -307,6 +296,7 @@
     @else
 
     <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
+        <div class="text-gray-500 text-md mb-3 font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($photos as $ft)
             <x-photo-tumbnail
@@ -400,7 +390,7 @@
                 <h2 class="self-stretch text-black text-xl font-semibold">Tambah Foto ke Album</h2>
                 <p class="self-stretch text-black/70 text-base font-normal">Pilih foto untuk ditambahkan ke album "{{ $folder->name_folder }}"</p>
             </div>
-            <button type="button" @click="$dispatch('close-modal', 'upload-photo')" class="p-1.5 bg-zinc-100 rounded-full flex justify-end items-start gap-2.5">
+            <button type="button" @click="$dispatch('close-modal', 'tambah-foto')" class="p-1.5 bg-zinc-100 rounded-full flex justify-end items-start gap-2.5">
                 <span class="material-symbols-outlined text-red-600 hover:text-cyan-600">close</span>
             </button>
         </div>
