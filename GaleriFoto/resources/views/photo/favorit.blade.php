@@ -15,7 +15,7 @@
         </div>
     </div>
     @endif
-    <div class="sticky top-0 z-40 px-6 pt-6 pb-3 bg-white">
+    <div class="sticky min-h-[130px] h-auto top-0 z-40 px-6 pt-6 pb-3 bg-white">
         <nav class="font-bold" aria-label="breadcrumb">
             <ol class="flex gap-4 items-center">
                 <li>
@@ -23,7 +23,7 @@
                 </li>
             </ol>
         </nav>
-        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-cloak x-data="{ show: true }"
+        <div class="infoFilter w-full flex items-center mt-3 gap-3" x-cloak x-data="{ show: true }"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
             x-transition:enter-end="opacity-100 translate-x-0"
@@ -32,7 +32,7 @@
             x-transition:leave-end="opacity-0 -translate-x-4"
             x-show="show">
             <div
-                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+                class="flex-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
                 <div class="flex justify-start items-center gap-4 w-full h-12">
                     <span class="material-symbols-outlined text-cyan-600">search</span>
                     <input
@@ -57,10 +57,16 @@
                     </button>
                 </div>
             </div>
+            @if (!empty($search))
+            <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
+                <span class="material-symbols-outlined">filter_alt</span>
+                <span class="pr-1">{{ $search }}</span>
+            </div>
+            @endif
             <div
                 x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
                 x-transition
-                class="relative h-14">
+                class="relative">
                 <div
                     @click="open = !open"
                     :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
@@ -94,22 +100,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="infoFilter w-full flex items-center mt-3 gap-4" x-cloak x-data="{ show: true }"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 translate-x-4"
-            x-transition:enter-end="opacity-100 translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-x-0"
-            x-transition:leave-end="opacity-0 -translate-x-4"
-            x-show="show">
-            @if (!empty($search))
-            <div class=" font-semibold text-md flex gap-2 px-4 py-2 bg-slate-100 rounded-full">
-                <span class="material-symbols-outlined">filter_alt</span>
-                <span class="pr-1">{{ $search }}</span>
-            </div>
-            @endif
-            <div class="text-gray-500 text-md font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span class="cardShowCounter">{{ $foto->count() }}</span> Foto</div>
         </div>
         <div x-data=" { show : false }" x-show="show" x-cloak
             x-transition:enter="transition ease-out duration-200"
@@ -284,13 +274,14 @@
 
     {{-- foto content --}}
     @if($foto->isEmpty())
-    <div class="w-full py-12 bg-gray-100 flex flex-col justify-center items-center gap-4 text-black">
+    <div class="w-full h-full py-12 bg-stone-50 flex flex-col  items-center gap-4 text-black">
         <div class="text-xl font-normal">
             Tidak ada foto favorit
         </div>
     </div>
     @else
     <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
+        <div class="text-gray-500 text-md mb-3 font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span class="cardShowCounter">{{ $foto->count() }}</span> Foto</div>
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($foto as $ft)
             <x-photo-tumbnail
@@ -301,26 +292,26 @@
                 :isLoved="$ft->is_favorite">
                 <x-daisy-dropdown colorClass="default">
                     <div class="flex-col gap-2">
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalPindahAlbum').showModal()">
                             <input type="hidden" class="id_foto" value="{{ $ft->id_photo }}">
                             <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                             <input type="hidden" class="album_id" value="{{ $ft->folder }}">
                             <span class="material-symbols-outlined p-1">folder_open</span>
                             <span>Pindah ke album</span>
                         </button>
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalEdit').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                             <input type="hidden" class="id_foto" value="{{ Crypt::encryptString($ft->id_photo) }}">
                             <span class="material-symbols-outlined p-1">edit</span>
                             <span>Ganti judul</span>
                         </button>
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalArsip').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalArsip').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
                             <span class="material-symbols-outlined p-1">archive</span>
                             <span>Arsipkan</span>
                         </button>
-                        <button type="button" class="pindahAlbum items-center flex gap-3 px-3 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
+                        <button type="button" class="pindahAlbum items-center flex gap-3 px-2 py-2 w-full hover:bg-gray-100 rounded-md transition-all ease-in-out" onclick="document.getElementById('modalDelete').showModal()">
                             <input type="hidden" class="title_foto" value="{{ $ft->photo_title }}">
                             <input type="hidden" class="jj" value="{{ Crypt::encryptString($ft->id_photo) }}">
                             <span class="material-symbols-outlined p-1">delete</span>

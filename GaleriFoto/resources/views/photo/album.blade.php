@@ -20,17 +20,17 @@
                 </li>
             </ol>
         </nav>
-        <div class="w-full h-16 flex justify-start items-center gap-4 mt-3" x-data="{
-        isSearchFocused: false,
-        isMobile: window.innerWidth < 768,
-        init() {
-            const updateWidth = () => this.isMobile = window.innerWidth < 768;
-            window.addEventListener('resize', updateWidth);
-        }
-    }"
+        <div class="w-full flex justify-start items-center gap-3 mt-3" x-data="{
+                isSearchFocused: false,
+                isMobile: window.innerWidth < 768,
+                init() {
+                    const updateWidth = () => this.isMobile = window.innerWidth < 768;
+                    window.addEventListener('resize', updateWidth);
+                }
+            }"
             x-init="init()">
             <div
-                class="flex-1 py-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
+                class="flex-1 pl-5 pr-3 bg-white rounded-full border-[1.5px] border-cyan-600 flex justify-between items-center focus-within:border-cyan-600 focus-within:ring-1 focus-within:ring-cyan-600 focus-within:outline-none">
                 <div class="flex justify-start items-center gap-4 w-full h-12">
                     <span class="material-symbols-outlined text-cyan-600">search</span>
                     <input
@@ -59,7 +59,7 @@
                 x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
                 x-show="!(isSearchFocused && isMobile)"
                 x-transition
-                class="relative h-14">
+                class="relative">
                 <div
                     @click="open = !open"
                     :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
@@ -100,7 +100,7 @@
                 x-show="!(isSearchFocused && isMobile)"
                 x-transition
                 type="button"
-                class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2 h-14"
+                class="cursor-pointer p-3 !bg-cyan-600 rounded-full flex items-center justify-center gap-2"
                 onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'tambah-album' }))"
                 x-init="open = window.innerWidth >= 768"
                 @resize.window="open = window.innerWidth >= 900">

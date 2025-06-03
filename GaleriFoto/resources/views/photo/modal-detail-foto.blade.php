@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between">
             <span class="ml-4 font-semibold text-xl detail-foto-modal-title"></span>
             <div class="flex gap-3">
-                <button type="button" class="modal-detail-favorit-btn flex gap-3 px-5 py-3 w-full hover:bg-gray-200 border-2 border-gray-100 rounded-md transition-all ease-in-out"
+                <button x-show=" !isArsip " type="button" class="modal-detail-favorit-btn flex gap-3 px-5 py-3 w-full hover:bg-gray-200 border-2 border-gray-100 rounded-md transition-all ease-in-out"
                     @click.stop="
                         const el = $event.currentTarget.closest('.detail-foto-modal');
                         const id = el.querySelector('.detail-foto-modal-id-foto').content;
