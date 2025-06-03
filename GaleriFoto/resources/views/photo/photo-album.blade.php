@@ -15,7 +15,7 @@
                 </li>
             </ol>
         </nav>
-        
+
         <div class="infoFilter w-full flex items-center mt-3 gap-3" x-cloak x-data="{ show: true }"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 translate-x-4"
@@ -57,7 +57,7 @@
             <div
                 x-data="{ open: false, selected: new URLSearchParams(window.location.search).get('sort') === 'asc' ? 'Terlama' : 'Terbaru' }"
                 x-transition
-            class="relative">
+                class="relative">
                 <div
                     @click="open = !open"
                     :class="{ 'rounded-t-2xl': open, 'rounded-full': !open }"
@@ -295,8 +295,8 @@
     </div>
     @else
 
-    <div class="block p-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
-        <div class="text-gray-500 text-md mb-3 font-normal bg-white/80 backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
+    <div class="block px-6 pb-6 w-full h-full rounded-t-3xl bg-stone-50 overflow-y-auto">
+        <div class="text-gray-500 text-md text-center font-normal w-full my-3 font-interbg-transparent backdrop-blur-lg">Menampilkan <span>{{ $photos->flatten()->count() }}</span> Foto</div>
         <div class="foto-group grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-3 justify-items-start max-w-full md:justify-items-stretch">
             @foreach($photos as $ft)
             <x-photo-tumbnail
@@ -537,5 +537,3 @@
 @include('photo.modal-detail-foto')
 
 @endsection
-
-
