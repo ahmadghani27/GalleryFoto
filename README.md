@@ -78,6 +78,10 @@ Salin file .env.example ke .env:
 ```bash
 cp .env.example .env
 ```
+Generate app encryption key
+```bash
+php artisan key:generate
+```
 Buka file .env dan sesuaikan konfigurasi database. Contoh:
 ```BASH
 DB_CONNECTION=mysql
