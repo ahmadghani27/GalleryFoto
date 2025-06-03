@@ -46,7 +46,7 @@
             </h1>
             
             <p class="text-lg sm:text-xl text-gray-600 text-center max-w-2xl mb-12">
-                Platform galeri digital <span class="text-yellow-500 font-semibold"> PIXELORA </span> untuk mengatur, berbagi, dan mengabadikan momen berharga Anda.
+                Platform galeri digital <span class="text-yellow-500 font-semibold"> PIXELORA </span> untuk mengatur dan mengabadikan momen berharga Anda.
             </p>
 
             <!-- Action buttons container -->
