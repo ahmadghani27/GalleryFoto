@@ -10,7 +10,8 @@ use App\Http\Controllers\FavoriteController;
 
 // redirect agar langsung menuju ke halaman dashboard
 Route::get('/', function () {
-    return redirect('/login');
+    return view('welcome'); 
+    // return redirect('/login');
 });
 
 
