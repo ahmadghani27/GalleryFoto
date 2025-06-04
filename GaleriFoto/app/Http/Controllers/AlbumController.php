@@ -131,13 +131,15 @@ class AlbumController extends Controller
 
     public function getActiveAlbum($id)
     {
-        $items = Folder::where('id_folder', '!=', $id)->get();
+        $items = Folder::where('id_folder', '!=', $id)
+            ->where('user_id', Auth::id())
+            ->get();
         return response()->json($items);
     }
 
     public function getAllActiveAlbum()
     {
-        $items = Folder::all();
+        $items = Folder::where('user_id', Auth::id())->get();
         return response()->json($items);
     }
 
