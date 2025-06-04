@@ -402,7 +402,7 @@
             @csrf
 
             <!-- Photo Grid -->
-            <div class="block p-4 bg-stone-50 rounded-2xl">
+            <div class="block p-4 bg-stone-50 rounded-2xl max-h-[560px] overflow-y-auto">
                 @if($allPhotos->isEmpty())
                 <div class="w-full py-12 bg-stone-50 flex flex-col justify-center items-center gap-4 text-black">
                     <div class="text-xl font-normal">
